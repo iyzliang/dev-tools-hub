@@ -1,0 +1,278 @@
+[
+  {
+    "category": "页面布局开发",
+    "description": "初始化 Next.js 16 + Tailwind CSS v4 项目基础结构，配置 App Router、全局布局与基础设计系统变量。",
+    "steps": [
+      "使用 pnpm 和 Next.js 16 创建项目骨架，启用 App Router 目录结构（app/）",
+      "集成 Tailwind CSS v4，配置基础色板、字体与间距系统，与设计系统描述保持一致",
+      "在 app/layout.tsx 中配置全局字体（Geist Sans/Mono）、背景色、文字颜色与基础 meta",
+      "实现主布局骨架：顶部导航区域、内容区域与页脚区域的基本结构和响应式网格",
+      "为移动端、平板和桌面端设置基础断点与容器宽度，保证无横向滚动"
+    ],
+    "passes": false
+  },
+  {
+    "category": "页面布局开发",
+    "description": "实现全局导航栏组件结构与搜索占位，确保与设计系统风格一致并具备基础响应式表现。",
+    "steps": [
+      "在 app 目录下定义共享布局组件，将顶部导航栏提取为独立组件（如 components/Header）",
+      "在导航栏左侧加入站点标识文案（Dev Tools Hub），支持点击回到首页",
+      "在导航栏右侧预留搜索输入框区域，采用统一输入框样式（圆角、边框、focus ring）",
+      "实现移动端下导航的简化布局（Logo + 搜索入口或折叠菜单），并验证不同断点布局正常",
+      "为导航栏添加基础交互动效（hover、focus 状态），确保可访问性与无布局抖动"
+    ],
+    "passes": false
+  },
+  {
+    "category": "页面布局开发",
+    "description": "实现全局页脚组件，展示备案或版权信息，并与整体 UI 风格统一。",
+    "steps": [
+      "创建独立页脚组件（如 components/Footer），在全局布局中引用",
+      "设计页脚背景、分割线与文字样式，使其与顶部导航和主体内容风格统一",
+      "预留备案信息与简单链接区域，保证在移动端也能正常显示",
+      "验证在不同页面内容高度下页脚显示正常，不覆盖主要内容",
+      "为页脚中的链接添加 hover/focus 状态与 aria-label（如有图标）"
+    ],
+    "passes": false
+  },
+  {
+    "category": "页面开发",
+    "description": "实现首页工具列表页，基于配置文件渲染工具卡片列表并支持搜索过滤。",
+    "steps": [
+      "设计并创建工具配置文件（如 config/tools.ts），包含 id、icon、名称、描述、是否热门等字段",
+      "在首页路由（app/page.tsx）中加载配置列表并渲染为网格卡片布局",
+      "为每个工具卡片实现合适的阴影、圆角与 hover 动画，热门标签增加呼吸动画效果",
+      "在工具列表末尾添加“持续更新中，敬请期待”占位卡片，样式与其他卡片协调",
+      "实现与顶部搜索框联动的过滤逻辑，可按工具名与描述进行模糊搜索"
+    ],
+    "passes": false
+  },
+  {
+    "category": "组件开发",
+    "description": "抽象可复用的卡片、按钮与输入组件库，用于工具列表与后续页面统一使用。",
+    "steps": [
+      "实现基础 Button 组件，支持 primary 与 secondary 变体及不同尺寸",
+      "实现 Input/TextArea 组件，统一边框、圆角、焦点状态与错误状态样式",
+      "实现通用 Card 组件，包含阴影、圆角与内边距，可用于工具卡片与统计卡片",
+      "为上述组件补充 hover、active、disabled 状态，并校验对比度与可访问性要求",
+      "整理组件导出与类型定义，便于在 app 路由中统一导入使用"
+    ],
+    "passes": false
+  },
+  {
+    "category": "组件开发",
+    "description": "集成代码编辑器（Monaco 或 CodeMirror）并封装为 JSON 编辑/查看组件。",
+    "steps": [
+      "选择并安装合适的代码编辑器库（Monaco 或 CodeMirror），配置与 Next.js 兼容的按需加载方式",
+      "为 JSON 输入区域创建 Editor 组件，启用 JSON 语言语法高亮、自动缩进与折叠支持",
+      "为结果查看区域创建只读 Viewer 组件，使用等宽字体并支持滚动与复制操作",
+      "统一编辑器主题与站点 UI（浅色 VS Code 风格），调整背景色、行高与字体大小",
+      "处理客户端渲染与 SSR 差异问题，确保在 Next.js App Router 中稳定运行"
+    ],
+    "passes": false
+  },
+  {
+    "category": "页面开发",
+    "description": "实现 JSON 格式化与压缩工具主页面的双栏布局与交互逻辑。",
+    "steps": [
+      "在 app/json 或首页主区域构建左右双栏布局（移动端为上下布局），左侧输入、右侧结果",
+      "添加操作栏，包含模式切换（格式化/压缩）、执行按钮与复制结果按钮",
+      "实现前端 JSON 解析与错误捕获逻辑，更新右侧结果区域内容",
+      "根据当前选中模式执行格式化（pretty print）或压缩（minify），保持输入不被覆盖",
+      "实现一键复制结果到剪贴板的功能，并提供成功/失败的轻量提示"
+    ],
+    "passes": false
+  },
+  {
+    "category": "公共方法开发",
+    "description": "实现 JSON 解析、格式化、压缩与错误信息提取的纯函数工具库，并为其编写单元测试。",
+    "steps": [
+      "编写解析与格式化工具函数（如 parseJsonWithLocation、formatJson、minifyJson），仅依赖标准库",
+      "在解析失败时返回包含错误类型、消息与大致行列位置的数据结构",
+      "根据错误位置信息提供可在 UI 中高亮或提示的片段索引",
+      "为上述函数编写 Jest 或 Vitest 单元测试，覆盖正常、异常与边界场景（空输入、大输入等）",
+      "确保工具函数与 UI 解耦，便于未来在后端或其他工具中复用"
+    ],
+    "passes": false
+  },
+  {
+    "category": "页面开发",
+    "description": "在 JSON 工具页面中接入键盘快捷键和错误提示展示逻辑，完善交互体验。",
+    "steps": [
+      "在前端页面中监听 Cmd/Ctrl + Enter 快捷键以触发当前选中的操作（默认格式化）",
+      "当输入为空时禁用执行按钮或提示“请输入 JSON”，避免无意义请求",
+      "在解析失败时于结果区域上方展示错误提示条，包含错误类型与大致位置说明",
+      "确保错误提示条为非阻塞式，支持关闭或在成功操作后自动消失",
+      "在移动端与桌面端分别验证快捷键、按钮状态与错误提示行为"
+    ],
+    "passes": false
+  },
+  {
+    "category": "公共方法开发",
+    "description": "实现前端匿名访客 ID 与会话 ID 管理工具，并提供轻量埋点 SDK 封装。",
+    "steps": [
+      "实现生成匿名 ID 的工具函数（使用 crypto.randomUUID），并在 localStorage 中持久化 anonymous_id",
+      "实现基于时间窗口的 session_id 管理逻辑（如超 30 分钟无交互视为新会话），存储于 sessionStorage 或内存",
+      "封装 trackEvent(name, payload) 前端 SDK，自动附带 anonymous_id、session_id、UA、语言与时区等信息",
+      "为 SDK 增加基础错误处理与退避策略，避免上报失败导致前端报错",
+      "在 JSON 工具与管理页面中引入 SDK，留出统一埋点接口调用位置"
+    ],
+    "passes": false
+  },
+  {
+    "category": "页面开发",
+    "description": "在前端页面中集成埋点 SDK，上报核心用户行为事件。",
+    "steps": [
+      "在应用入口或布局初始化阶段生成/读取 anonymous_id 与 session_id，并记录 page_view 事件",
+      "在 JSON 工具页面中为格式化、压缩、复制结果等操作调用 trackEvent，上报 json_format、json_minify、copy_result 等事件",
+      "在解析失败时调用 trackEvent 上报 json_error 事件，附带错误类型与输入大小区间等元信息（不上传完整内容）",
+      "在工具卡片点击、工具页面打开时上报工具打开事件，记录 tool_name 等字段",
+      "验证在不同浏览器与隐私模式下的行为，确保在不可用环境中 graceful degradation"
+    ],
+    "passes": false
+  },
+  {
+    "category": "数据库与 ORM 开发",
+    "description": "使用 Prisma 建模 analytics_events 与预留 tool_usage_daily 表，并生成数据库迁移。",
+    "steps": [
+      "在项目中安装并初始化 Prisma，配置 PostgreSQL 连接字符串（DATABASE_URL）",
+      "在 Prisma schema 中定义 analytics_events 表字段结构，与规格中的字段与类型保持一致",
+      "定义 tool_usage_daily 聚合表的 schema，包括联合索引与时间维度字段",
+      "为关键查询创建适当索引（如 created_at、tool_name + created_at、anonymous_id + created_at）",
+      "运行 prisma migrate 生成并应用初始迁移，验证数据库表结构正确"
+    ],
+    "passes": false
+  },
+  {
+    "category": "后端接口开发",
+    "description": "实现埋点事件上报 API：POST /api/events，接收单条或多条事件并写入数据库。",
+    "steps": [
+      "在 Next.js Route Handlers 中创建 /api/events 路由，支持 POST 方法",
+      "定义请求体结构，支持接收单条或数组形式的事件数据，进行基础输入校验与清洗",
+      "实现事件持久化逻辑，使用 Prisma 将数据写入 analytics_events 表",
+      "对敏感字段进行限制，不允许上传完整 JSON 内容，仅保留长度区间等元信息",
+      "为接口添加基础错误处理与日志记录，并预留速率限制或防滥用策略"
+    ],
+    "passes": false
+  },
+  {
+    "category": "后端接口开发",
+    "description": "实现统计汇总 API：GET /api/events/summary，用于管理页面按时间范围与工具聚合数据。",
+    "steps": [
+      "在 Next.js Route Handlers 中创建 /api/events/summary 路由，支持 GET 方法与查询参数（时间范围、tool_name、event_name 等）",
+      "基于 analytics_events 或 tool_usage_daily 表实现分组聚合查询，返回按日期与工具/事件类型汇总的数据结构",
+      "为接口增加基础校验与访问控制（仅在管理员会话有效时返回数据）",
+      "优化查询逻辑与索引使用，保证在事件量增加时仍有可接受性能",
+      "为统计接口编写基础集成测试或手工测试脚本，覆盖常见筛选组合"
+    ],
+    "passes": false
+  },
+  {
+    "category": "后端接口开发",
+    "description": "实现管理登录与会话控制 API：/api/admin/login 与 /api/admin/session。",
+    "steps": [
+      "在 /api/admin/login 实现 POST 处理，读取环境变量 ADMIN_DASHBOARD_PASSWORD 校验提交密码",
+      "登录成功后生成短期 token 或会话标记，并通过 HttpOnly Cookie 返回给前端",
+      "在 /api/admin/session 实现 GET 逻辑，用于校验当前管理会话是否有效",
+      "为管理相关接口添加基础速率限制与错误返回规范，避免暴力尝试",
+      "确保管理密码不写入数据库、不在前端硬编码，所有日志中不泄露明文密码"
+    ],
+    "passes": false
+  },
+  {
+    "category": "页面开发",
+    "description": "实现隐藏管理统计页面 /admin/analytics，包括登录视图与主仪表盘布局。",
+    "steps": [
+      "在 app/admin/analytics 路由下创建页面文件，标记为不在公开导航中展示",
+      "实现登录视图，包括密码输入框、提交按钮、错误提示信息区域，与全站设计系统统一",
+      "在登录成功后切换为仪表盘视图，包含关键指标卡片（总访问量、总格式化次数、最近 7 天趋势等）",
+      "集成统计 API，拉取默认时间范围内的数据并以卡片、图表与列表形式展示",
+      "在页面上明确标注为内部管理页面，并确保 robots 与 meta 设置不被搜索引擎索引"
+    ],
+    "passes": false
+  },
+  {
+    "category": "组件开发",
+    "description": "为管理统计页面实现基础图表与筛选控件组件。",
+    "steps": [
+      "选型并集成轻量级图表库，或基于 SVG/canvas 自行实现简单折线/柱状图组件",
+      "实现时间范围选择器组件（最近 24 小时 / 7 天 / 30 天等），支持在管理页面复用",
+      "实现工具/事件类型过滤下拉或标签组件，与统计数据查询参数联动",
+      "保证图表与筛选组件在移动端与桌面端的布局与交互合理",
+      "为关键交互添加 aria-label 与键盘可访问支持"
+    ],
+    "passes": false
+  },
+  {
+    "category": "页面布局开发",
+    "description": "完善响应式布局与移动端适配，确保 JSON 工具与管理页面在不同设备上体验良好。",
+    "steps": [
+      "针对 JSON 工具页面，实现在宽屏下左右双栏、在窄屏下上下堆叠的布局切换",
+      "调整编辑器与结果区域在不同断点下的高度与内边距，避免滚动条重叠或过于拥挤",
+      "为管理仪表盘在移动端下重新排版统计卡片与图表，避免横向滚动",
+      "验证所有按钮、输入框与链接在移动端触控区域足够大，便于点击",
+      "通过浏览器 DevTools 的设备模拟器检查主流程在常见设备尺寸上的表现"
+    ],
+    "passes": false
+  },
+  {
+    "category": "公共方法开发",
+    "description": "实现基础安全与校验工具函数，用于后端 API 输入验证与速率限制。",
+    "steps": [
+      "实现通用请求体校验逻辑（可使用轻量 schema 校验库或自定义校验函数）",
+      "为埋点事件与管理登录请求定义类型与校验规则，过滤非法或超大输入",
+      "实现基于 IP hash 或匿名标识的简单频率限制或防暴力尝试逻辑（可先以内存实现）",
+      "在 API 中复用安全与校验工具，统一错误响应结构与状态码",
+      "为关键安全逻辑编写基础单元测试或集成测试，覆盖常见攻击尝试场景"
+    ],
+    "passes": false
+  },
+  {
+    "category": "基础设施与脚本开发",
+    "description": "编写 Docker 与 Docker Compose 配置，支撑 Next.js 应用与 PostgreSQL 数据库部署。",
+    "steps": [
+      "编写应用 Dockerfile，支持生产构建与运行，合理拆分构建与运行阶段以减小镜像体积",
+      "编写 docker-compose.yml，定义 Next.js 应用服务与 PostgreSQL 数据库服务，并配置网络与卷",
+      "在 Compose 配置中管理基础环境变量（如 DATABASE_URL），并确保敏感信息不提交到仓库",
+      "本地通过 Docker Compose 启动服务，验证应用可访问与数据库连接正常",
+      "为不同环境（开发/生产）准备示例配置或覆盖文件，简化部署流程"
+    ],
+    "passes": false
+  },
+  {
+    "category": "基础设施与脚本开发",
+    "description": "配置 GitHub Actions CI，用于代码检查、构建与镜像构建。",
+    "steps": [
+      "创建 GitHub Actions 工作流文件，配置在 push/PR 时运行",
+      "在工作流中添加安装依赖、运行 Lint 与测试用例步骤，保证基础质量",
+      "添加 Next.js 构建步骤，确保生产构建可在 CI 环境顺利通过",
+      "配置 Docker 镜像构建与推送步骤（如推送到容器仓库），为部署做准备",
+      "根据需要添加手动触发的部署前检查或辅助脚本执行步骤"
+    ],
+    "passes": false
+  },
+  {
+    "category": "文档与测试开发",
+    "description": "编写 README、部署文档与埋点文档，并补充关键测试用例。",
+    "steps": [
+      "撰写 README，说明项目简介、技术栈、启动方式与基础环境变量配置",
+      "编写部署文档，详细描述 Docker Compose 配置与生产环境部署步骤、回滚策略",
+      "整理埋点事件文档，列出事件名、字段含义与典型查询示例，便于后续分析与扩展",
+      "为 JSON 工具核心逻辑与埋点/统计接口补充单元测试与集成测试",
+      "为核心用户流程（JSON 格式化与管理统计查看）编写少量 e2e 用例（如 Playwright/Cypress）"
+    ],
+    "passes": false
+  },
+  {
+    "category": "质量与性能优化",
+    "description": "进行 UI/UX 打磨、性能与可访问性优化，达到可上线的生产级质量。",
+    "steps": [
+      "根据设计系统检查各页面字体、颜色、间距与阴影是否一致，修正对齐与视觉问题",
+      "优化首屏加载与交互性能，按需拆分代码、减少不必要依赖与重渲染",
+      "通过 Lighthouse 或浏览器工具检查性能指标（FCP/LCP/CLS）并做针对性优化",
+      "检查所有交互控件的 hover/focus/active 状态与键盘导航路径，提升可访问性",
+      "根据手工验收用例执行一轮完整测试，修复发现的问题并整理已知限制"
+    ],
+    "passes": false
+  }
+]
