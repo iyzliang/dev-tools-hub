@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { SiteHeader } from "@/components/site-header";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -26,28 +27,7 @@ export default function RootLayout({
   return (
     <html lang="zh-CN">
       <body className={`${geistSans.variable} ${geistMono.variable} app-shell`}>
-        <header className="app-header">
-          <div className="app-container h-14 sm:h-16 flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <span className="inline-flex h-7 w-7 items-center justify-center rounded-md bg-slate-900 text-xs font-semibold text-white">
-                D
-              </span>
-              <div className="flex flex-col">
-                <span className="text-sm font-semibold tracking-tight text-slate-900">
-                  Dev Tools Hub
-                </span>
-                <span className="hidden text-xs text-slate-500 sm:inline">
-                  面向开发者的轻量工具集
-                </span>
-              </div>
-            </div>
-            {/* 搜索区域占位，后续功能点中完善 */}
-            <div className="hidden w-64 max-w-xs items-center gap-2 rounded-md border border-slate-200 bg-white px-3 py-1.5 text-xs text-slate-400 shadow-sm sm:flex">
-              <span className="h-1.5 w-1.5 rounded-full bg-slate-300" />
-              <span>搜索工具名称或描述…</span>
-            </div>
-          </div>
-        </header>
+        <SiteHeader />
 
         <main className="app-main">
           <div className="app-container app-main-inner">{children}</div>
