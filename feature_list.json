@@ -33,7 +33,7 @@
       "验证在不同页面内容高度下页脚显示正常，不覆盖主要内容",
       "为页脚中的链接添加 hover/focus 状态与 aria-label（如有图标）"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "页面开发",

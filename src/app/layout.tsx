@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 
 const geistSans = Geist({
@@ -33,14 +34,7 @@ export default function RootLayout({
           <div className="app-container app-main-inner">{children}</div>
         </main>
 
-        <footer className="app-footer">
-          <div className="app-container py-4 text-center text-xs text-slate-500 sm:flex sm:items-center sm:justify-between sm:text-left">
-            <span>© {new Date().getFullYear()} Dev Tools Hub.</span>
-            <span className="mt-1 block sm:mt-0">
-              在线开发者工具集 · JSON 工具优先上线
-            </span>
-          </div>
-        </footer>
+        <SiteFooter />
       </body>
     </html>
   );
