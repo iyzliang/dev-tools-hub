@@ -1,1 +1,59 @@
 @import "tailwindcss";
+
+/* Design system tokens */
+:root {
+  /* Brand & semantic colors */
+  --color-primary: #2563eb;
+  --color-secondary: #10b981;
+  --color-background: #f3f4f6;
+  --color-text-primary: #111827;
+  --color-text-secondary: #4b5563;
+  --color-text-disabled: #9ca3af;
+  --color-border: #e5e7eb;
+  --color-success: #16a34a;
+  --color-warning: #f97316;
+  --color-error: #dc2626;
+  --color-info: #0ea5e9;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  @apply antialiased;
+  background-color: var(--color-background);
+  color: var(--color-text-primary);
+}
+
+/* App layout shell */
+.app-shell {
+  @apply flex min-h-screen flex-col bg-slate-50 text-slate-900;
+}
+
+.app-header {
+  @apply sticky top-0 z-20 border-b border-slate-200 bg-white/80 backdrop-blur;
+}
+
+.app-main {
+  @apply flex-1;
+}
+
+.app-footer {
+  @apply border-t border-slate-200 bg-white/80;
+}
+
+.app-container {
+  @apply mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8;
+}
+
+.app-main-inner {
+  @apply py-6 sm:py-8 lg:py-10;
+}
