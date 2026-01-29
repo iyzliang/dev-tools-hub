@@ -19,10 +19,12 @@ export function SearchProvider({ children }: { children: ReactNode }) {
   );
 }
 
-export function useSearch() {
+const defaultSearchValue: SearchContextValue = {
+  searchQuery: "",
+  setSearchQuery: () => {},
+};
+
+export function useSearch(): SearchContextValue {
   const context = useContext(SearchContext);
-  if (context === undefined) {
-    throw new Error("useSearch must be used within a SearchProvider");
-  }
-  return context;
+  return context ?? defaultSearchValue;
 }

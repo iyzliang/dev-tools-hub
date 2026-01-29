@@ -33,6 +33,12 @@ body {
   color: var(--color-text-primary);
 }
 
+/* 可访问性：全局 focus 可见，避免仅用 outline 被覆盖 */
+:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
 /* App layout shell */
 .app-shell {
   @apply flex min-h-screen flex-col bg-slate-50 text-slate-900;

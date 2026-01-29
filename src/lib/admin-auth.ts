@@ -16,10 +16,18 @@ export function isAdminPasswordValid(password: string | undefined): boolean {
   return password === expected;
 }
 
+type CookieOptions = {
+  httpOnly: boolean;
+  secure: boolean;
+  sameSite: "lax" | "strict" | "none";
+  path: string;
+  expires: Date;
+};
+
 export function createAdminSessionCookie(): {
   name: string;
   value: string;
-  options: Parameters<ReturnType<typeof cookies>["set"]>[2];
+  options: CookieOptions;
 } {
   const token = `admin-${Math.random().toString(36).slice(2)}-${Date.now().toString(36)}`;
   const expires = new Date(Date.now() + ADMIN_SESSION_TTL_MS);
@@ -41,8 +49,9 @@ export function hasValidAdminSessionFromCookie(cookieValue: string | undefined):
   return typeof cookieValue === "string" && cookieValue.length > 0;
 }
 
-export function hasValidAdminSession(): boolean {
-  const cookie = cookies().get(ADMIN_SESSION_COOKIE);
+export async function hasValidAdminSession(): Promise<boolean> {
+  const cookieStore = await cookies();
+  const cookie = cookieStore.get(ADMIN_SESSION_COOKIE);
   return hasValidAdminSessionFromCookie(cookie?.value);
 }
 

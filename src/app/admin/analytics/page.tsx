@@ -30,15 +30,6 @@ type SummaryResponse = {
 type ViewState = "checking" | "login" | "dashboard";
 type RangePreset = "24h" | "7d" | "30d";
 
-export const metadata = {
-  title: "管理统计 - Dev Tools Hub",
-  description: "仅供站点维护者使用的访问统计页面。",
-  robots: {
-    index: false,
-    follow: false,
-  },
-};
-
 export default function AdminAnalyticsPage() {
   const router = useRouter();
   const [view, setView] = useState<ViewState>("checking");

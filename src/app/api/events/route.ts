@@ -79,7 +79,7 @@ export async function POST(req: NextRequest) {
 
   if (Array.isArray(json)) {
     incomingEvents = json;
-  } else if (isRecord(json) && Array.isArray(json.events)) {
+  } else if (isRecord(json) && "events" in json && Array.isArray(json.events)) {
     incomingEvents = json.events;
   } else if (isRecord(json)) {
     incomingEvents = [json as IncomingEvent];
@@ -125,7 +125,7 @@ export async function POST(req: NextRequest) {
         session_id: sessionId,
         event_name: eventName,
         tool_name: toolName ?? null,
-        properties: properties ?? null,
+        properties: properties ?? undefined,
         user_agent: userAgent ?? null,
         locale: locale ?? null,
         timezone: timezone ?? null,

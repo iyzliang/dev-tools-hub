@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { AnalyticsPageView } from "@/components/analytics-page-view";
@@ -20,6 +20,13 @@ export const metadata: Metadata = {
   title: "Dev Tools Hub - 在线开发者工具集",
   description:
     "Dev Tools Hub 是面向开发者的轻量在线工具集，提供 JSON 格式化与校验等常用开发辅助工具。",
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+  themeColor: "#f3f4f6",
 };
 
 export default function RootLayout({
