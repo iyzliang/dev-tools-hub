@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { JsonEditor } from "@/components/json/json-editor";
 import { JsonViewer } from "@/components/json/json-viewer";
 import { Button } from "@/components/ui/button";
@@ -20,16 +20,19 @@ export default function JsonToolPage() {
   const [error, setError] = useState<string | null>(null);
   const [copyMessage, setCopyMessage] = useState<string | null>(null);
 
-  function handleRun() {
+  const canRun = Boolean(input.trim());
+
+  const handleRun = useCallback(() => {
     setCopyMessage(null);
 
-    if (!input.trim()) {
+    const trimmed = input.trim();
+    if (!trimmed) {
       setError("请输入 JSON 内容后再执行。");
       setOutput("");
       return;
     }
 
-    const parsed = parseJsonWithLocation(input);
+    const parsed = parseJsonWithLocation(trimmed);
 
     if (!parsed.ok) {
       const { message, location } = parsed.error;
@@ -46,7 +49,7 @@ export default function JsonToolPage() {
 
     try {
       const result =
-        mode === "format" ? formatJson(input) : minifyJson(input);
+        mode === "format" ? formatJson(trimmed) : minifyJson(trimmed);
       setOutput(result);
       setError(null);
     } catch (e) {
@@ -55,7 +58,7 @@ export default function JsonToolPage() {
       setError(message);
       setOutput("");
     }
-  }
+  }, [input, mode]);
 
   async function handleCopy() {
     setCopyMessage(null);
@@ -71,6 +74,23 @@ export default function JsonToolPage() {
     }
   }
 
+  useEffect(() => {
+    function onKeyDown(event: KeyboardEvent) {
+      const isCmdOrCtrl = event.metaKey || event.ctrlKey;
+      if (!isCmdOrCtrl || event.key !== "Enter") return;
+
+      event.preventDefault();
+      if (canRun) {
+        handleRun();
+      }
+    }
+
+    window.addEventListener("keydown", onKeyDown);
+    return () => {
+      window.removeEventListener("keydown", onKeyDown);
+    };
+  }, [canRun, handleRun]);
+
   return (
     <div className="space-y-6">
       <section className="space-y-3">
@@ -84,30 +104,36 @@ export default function JsonToolPage() {
 
       <section className="space-y-3">
         <Card className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-          <div className="flex items-center gap-2 text-sm text-slate-700">
-            <span className="font-medium">模式：</span>
-            <div className="inline-flex rounded-md border border-slate-200 bg-slate-50 p-0.5">
-              <Button
-                variant={mode === "format" ? "primary" : "ghost"}
-                size="sm"
-                className="px-3 text-xs"
-                onClick={() => setMode("format")}
-              >
-                格式化
-              </Button>
-              <Button
-                variant={mode === "minify" ? "primary" : "ghost"}
-                size="sm"
-                className="px-3 text-xs"
-                onClick={() => setMode("minify")}
-              >
-                压缩
-              </Button>
+          <div className="space-y-1">
+            <div className="flex items-center gap-2 text-sm text-slate-700">
+              <span className="font-medium">模式：</span>
+              <div className="inline-flex rounded-md border border-slate-200 bg-slate-50 p-0.5">
+                <Button
+                  variant={mode === "format" ? "primary" : "ghost"}
+                  size="sm"
+                  className="px-3 text-xs"
+                  onClick={() => setMode("format")}
+                >
+                  格式化
+                </Button>
+                <Button
+                  variant={mode === "minify" ? "primary" : "ghost"}
+                  size="sm"
+                  className="px-3 text-xs"
+                  onClick={() => setMode("minify")}
+                >
+                  压缩
+                </Button>
+              </div>
             </div>
+            <p className="text-xs text-slate-500">
+              支持快捷键 <span className="font-mono">Cmd/Ctrl + Enter</span>{" "}
+              触发当前操作。
+            </p>
           </div>
 
-          <div className="flex gap-2">
-            <Button size="sm" onClick={handleRun}>
+          <div className="flex flex-col items-stretch gap-2 sm:flex-row sm:items-center">
+            <Button size="sm" onClick={handleRun} disabled={!canRun}>
               {mode === "format" ? "格式化 JSON" : "压缩 JSON"}
             </Button>
             <Button
