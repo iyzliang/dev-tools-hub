@@ -1,6 +1,11 @@
+"use client";
+
 import Link from "next/link";
+import { useSearch } from "@/contexts/search-context";
 
 export function SiteHeader() {
+  const { searchQuery, setSearchQuery } = useSearch();
+
   return (
     <header className="app-header">
       <div className="app-container flex h-14 items-center justify-between sm:h-16">
@@ -29,6 +34,8 @@ export function SiteHeader() {
             <input
               type="search"
               placeholder="搜索工具名称或描述…"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full border-0 bg-transparent text-xs text-slate-700 placeholder:text-slate-400 focus:outline-none"
               aria-label="搜索工具"
             />

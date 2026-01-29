@@ -1,6 +1,13 @@
+"use client";
+
+import { useSearch } from "@/contexts/search-context";
+import { ToolsGrid } from "@/components/tools-grid";
+
 export default function Home() {
+  const { searchQuery } = useSearch();
+
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <section className="space-y-3">
         <h1 className="text-2xl font-semibold tracking-tight text-slate-900 sm:text-3xl">
           欢迎使用 Dev Tools Hub
@@ -11,10 +18,18 @@ export default function Home() {
         </p>
       </section>
 
-      <section className="rounded-lg border border-slate-200 bg-white/80 p-4 shadow-sm sm:p-5">
-        <p className="text-sm text-slate-700">
-          JSON 工具页面、工具列表与统计功能会在后续开发阶段逐步完善。当前阶段主要完成了全局布局骨架和设计系统基础配置。
-        </p>
+      <section className="space-y-4">
+        <div className="flex items-center justify-between">
+          <h2 className="text-lg font-semibold text-slate-900 sm:text-xl">
+            可用工具
+          </h2>
+          {searchQuery && (
+            <p className="text-xs text-slate-500">
+              找到 {searchQuery ? "相关" : "所有"} 工具
+            </p>
+          )}
+        </div>
+        <ToolsGrid searchQuery={searchQuery} />
       </section>
     </div>
   );
