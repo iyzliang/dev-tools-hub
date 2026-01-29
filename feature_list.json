@@ -550,5 +550,35 @@
       "确保搜索功能可通过'二维码'、'qrcode'、'扫码'等关键词找到该工具"
     ],
     "passes": true
+  },
+  {
+    "category": "公共方法开发",
+    "description": "实现 JSON Key 命名风格转换核心工具函数，支持蛇形、驼峰、帕斯卡之间的相互转换。",
+    "steps": [
+      "在 src/lib/key-transform.ts 中创建 Key 转换工具模块",
+      "实现 snakeToCamel 函数，将 snake_case 转换为 camelCase（如 user_name → userName）",
+      "实现 camelToSnake 函数，将 camelCase 转换为 snake_case（如 userName → user_name）",
+      "实现 snakeToPascal 函数，将 snake_case 转换为 PascalCase（如 user_name → UserName）",
+      "实现 transformKeys 递归函数，接收 JSON 对象与转换函数，递归转换所有层级的对象键（包括数组中的对象）",
+      "定义 KeyTransformType 类型（'snakeToCamel' | 'camelToSnake' | 'snakeToPascal'）与统一的 transformJsonKeys 入口函数",
+      "处理边界情况：空对象、空数组、非对象类型、已是目标格式的键、包含数字的键（如 user_id_2）",
+      "为所有转换函数编写单元测试，覆盖嵌套对象、数组、边界场景与特殊字符"
+    ],
+    "passes": true
+  },
+  {
+    "category": "页面开发",
+    "description": "在 JSON 工具页面中集成 Key 转换模式，扩展现有模式切换功能并提供转换类型子选项。",
+    "steps": [
+      "在 src/app/json/page.tsx 中扩展 Mode 类型，新增 'keyTransform' 模式",
+      "扩展模式切换按钮组，添加"Key 转换"按钮，与现有格式化/压缩按钮风格一致",
+      "当选择 Key 转换模式时，显示转换类型子选项（蛇形转驼峰/驼峰转蛇形/蛇形转帕斯卡），使用下拉选择或按钮组",
+      "在 handleRun 函数中集成 Key 转换逻辑，调用 transformJsonKeys 函数处理输入 JSON",
+      "更新执行按钮文案，在 Key 转换模式下显示"转换"",
+      "集成埋点 SDK，上报 json_key_transform 事件，附带 transform_type（转换类型）与 input_size_range",
+      "验证在不同设备尺寸下 Key 转换模式的 UI 布局正常",
+      "更新页面说明文案，提示 Key 转换功能的使用方式"
+    ],
+    "passes": false
   }
 ]
