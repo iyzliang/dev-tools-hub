@@ -57,7 +57,7 @@
       "为上述组件补充 hover、active、disabled 状态，并校验对比度与可访问性要求",
       "整理组件导出与类型定义，便于在 app 路由中统一导入使用"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "组件开发",

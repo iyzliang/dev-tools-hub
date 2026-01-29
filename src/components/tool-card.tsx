@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { Tool } from "@/config/tools";
+import { Card } from "@/components/ui/card";
 
 interface ToolCardProps {
   tool: Tool;
@@ -8,8 +9,8 @@ interface ToolCardProps {
 export function ToolCard({ tool }: ToolCardProps) {
   const isPlaceholder = tool.href === "#";
 
-  const cardContent = (
-    <div className="group relative flex h-full flex-col rounded-lg border border-slate-200 bg-white p-4 shadow-sm transition-all duration-200 ease-out hover:border-slate-300 hover:shadow-md sm:p-5">
+  const content = (
+    <>
       {/* 热门标签 */}
       {tool.isHot && (
         <span className="absolute right-3 top-3 inline-flex items-center rounded-full bg-emerald-100 px-2 py-0.5 text-[10px] font-medium text-emerald-700 animate-pulse">
@@ -36,14 +37,17 @@ export function ToolCard({ tool }: ToolCardProps) {
           即将上线
         </div>
       )}
-    </div>
+    </>
   );
 
   if (isPlaceholder) {
     return (
-      <div className="cursor-not-allowed opacity-60" aria-label={`${tool.name}（即将上线）`}>
-        {cardContent}
-      </div>
+      <Card
+        className="group relative flex h-full flex-col cursor-not-allowed opacity-60"
+        aria-label={`${tool.name}（即将上线）`}
+      >
+        {content}
+      </Card>
     );
   }
 
@@ -53,7 +57,10 @@ export function ToolCard({ tool }: ToolCardProps) {
       className="block h-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
       aria-label={`打开 ${tool.name}`}
     >
-      {cardContent}
+      <Card className="group relative flex h-full flex-col" interactive>
+        {content}
+      </Card>
     </Link>
   );
 }
+

@@ -2,6 +2,8 @@
 
 import Link from "next/link";
 import { useSearch } from "@/contexts/search-context";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 export function SiteHeader() {
   const { searchQuery, setSearchQuery } = useSearch();
@@ -31,12 +33,12 @@ export function SiteHeader() {
         <div className="hidden w-64 max-w-xs sm:block">
           <label className="group flex items-center gap-2 rounded-md border border-slate-200 bg-white px-3 py-1.5 text-xs text-slate-400 shadow-sm transition duration-150 ease-out focus-within:border-slate-300 focus-within:text-slate-500 focus-within:shadow-md">
             <span className="h-1.5 w-1.5 rounded-full bg-slate-300 transition group-focus-within:bg-slate-400" />
-            <input
+            <Input
               type="search"
               placeholder="搜索工具名称或描述…"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full border-0 bg-transparent text-xs text-slate-700 placeholder:text-slate-400 focus:outline-none"
+              className="h-auto border-0 bg-transparent px-0 text-xs text-slate-700 shadow-none ring-0 focus:ring-0"
               aria-label="搜索工具"
             />
             <span className="rounded-md border border-slate-200 bg-slate-50 px-1.5 py-0.5 text-[10px] font-medium text-slate-400">
@@ -46,15 +48,18 @@ export function SiteHeader() {
         </div>
 
         {/* 移动端搜索入口占位：后续可扩展为实际搜索面板 */}
-        <button
+        <Button
           type="button"
-          className="inline-flex h-8 w-8 items-center justify-center rounded-md border border-slate-200 bg-white text-[11px] font-medium text-slate-500 shadow-sm transition-colors duration-150 ease-out hover:bg-slate-50 active:bg-slate-100 sm:hidden focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-900/10 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
+          variant="secondary"
+          size="sm"
+          className="h-8 w-8 px-0 text-[11px] sm:hidden"
           aria-label="打开搜索"
         >
           搜
-        </button>
+        </Button>
       </div>
     </header>
   );
 }
+
 
