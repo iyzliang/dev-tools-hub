@@ -41,8 +41,10 @@ export default function RootLayout({
         <SearchProvider>
           <SiteHeader />
 
-          <main className="app-main">
-            <div className="app-container app-main-inner">{children}</div>
+          <main className="app-main flex flex-col">
+            <div className="app-container app-main-inner flex min-h-0 flex-1 flex-col">
+              {children}
+            </div>
           </main>
 
           <SiteFooter />

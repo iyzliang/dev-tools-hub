@@ -23,15 +23,20 @@ pnpm install
 # 生成 Prisma Client（需已配置 DATABASE_URL）
 pnpm prisma:generate
 
+# 首次运行或使用埋点/管理页前：配置 .env 中的 DATABASE_URL 后执行迁移，创建表
+pnpm prisma:migrate
+
 # 开发服务器（默认 http://localhost:3000）
 pnpm dev
 ```
+
+**说明**：未配置 `DATABASE_URL` 或未执行迁移时，页面可打开，但访问埋点会报错（表不存在）。请先配置环境变量并执行 `pnpm prisma:migrate`。
 
 ### 环境变量
 
 | 变量 | 说明 | 必填 |
 |------|------|------|
-| `DATABASE_URL` | PostgreSQL 连接串，供 Prisma 使用 | 本地开发若不用埋点可暂不配置 |
+| `DATABASE_URL` | PostgreSQL 连接串，供 Prisma 使用 | 使用埋点或管理统计页时必填 |
 | `ADMIN_DASHBOARD_PASSWORD` | 管理统计页 `/admin/analytics` 登录密码 | 访问管理页时必填 |
 
 示例（`.env`，勿提交仓库）：
@@ -41,11 +46,7 @@ DATABASE_URL="postgresql://user:pass@localhost:5432/devtools"
 ADMIN_DASHBOARD_PASSWORD="your-secret-password"
 ```
 
-首次使用数据库时执行：
-
-```bash
-pnpm prisma:migrate
-```
+首次使用数据库时执行一次：`pnpm prisma:migrate`。
 
 ## 脚本说明
 

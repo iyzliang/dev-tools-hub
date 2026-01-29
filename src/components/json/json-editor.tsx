@@ -9,31 +9,53 @@ import { cn } from "@/lib/utils";
 const jsonEditorTheme = EditorView.theme(
   {
     "&": {
-      backgroundColor: "#f9fafb",
-      color: "#111827",
+      height: "100%",
+      backgroundColor: "#ffffff",
+      color: "#0f172a",
       fontSize: "13px",
     },
     ".cm-scroller": {
       fontFamily:
         'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
-      lineHeight: 1.45,
+      lineHeight: 1.55,
+      overflow: "auto",
     },
     ".cm-gutters": {
-      backgroundColor: "#f3f4f6",
-      color: "#9ca3af",
-      borderRight: "1px solid #e5e7eb",
+      backgroundColor: "#f8fafc",
+      color: "#94a3b8",
+      borderRight: "1px solid #e2e8f0",
+    },
+    ".cm-lineNumbers .cm-gutterElement": {
+      padding: "0 12px 0 8px",
+      minWidth: "3em",
     },
     ".cm-content": {
-      padding: "8px 0",
+      padding: "12px 0",
+    },
+    ".cm-line": {
+      padding: "0 12px",
+    },
+    ".cm-activeLine": {
+      backgroundColor: "#f1f5f9",
+    },
+    ".cm-activeLineGutter": {
+      backgroundColor: "#f1f5f9",
     },
     "&.cm-focused .cm-cursor": {
       borderLeftColor: "#2563eb",
+      borderLeftWidth: "2px",
     },
     "&.cm-focused": {
       outline: "none",
     },
+    ".cm-selectionBackground": {
+      backgroundColor: "#bfdbfe !important",
+    },
+    "&.cm-focused .cm-selectionBackground": {
+      backgroundColor: "#93c5fd !important",
+    },
   },
-  { dark: false },
+  { dark: false }
 );
 
 export interface JsonEditorProps {
@@ -60,19 +82,23 @@ export function JsonEditor({
   return (
     <div
       className={cn(
-        "h-full min-h-[220px] overflow-hidden rounded-lg border border-slate-200 bg-slate-50",
-        "shadow-sm",
-        className,
+        "flex h-full min-h-0 flex-col overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm",
+        "transition-shadow duration-150 focus-within:border-blue-300 focus-within:ring-2 focus-within:ring-blue-100",
+        className
       )}
     >
       <CodeMirror
         value={internalValue}
         height="100%"
+        style={{ height: "100%", overflow: "hidden" }}
         extensions={[json(), jsonEditorTheme]}
         basicSetup={{
           lineNumbers: true,
           foldGutter: true,
           highlightActiveLine: true,
+          highlightSelectionMatches: true,
+          bracketMatching: true,
+          autocompletion: true,
         }}
         editable={!readOnly}
         theme="light"
@@ -85,4 +111,3 @@ export function JsonEditor({
     </div>
   );
 }
-

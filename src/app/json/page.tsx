@@ -4,7 +4,6 @@ import { useCallback, useEffect, useState } from "react";
 import { JsonEditor } from "@/components/json/json-editor";
 import { JsonViewer } from "@/components/json/json-viewer";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
 import { trackEvent, getInputSizeRange } from "@/lib/analytics";
 import {
   formatJson,
@@ -18,7 +17,7 @@ type Mode = "format" | "minify";
 
 export default function JsonToolPage() {
   const [mode, setMode] = useState<Mode>("format");
-  const [input, setInput] = useState<string>("{\n  \"hello\": \"world\"\n}");
+  const [input, setInput] = useState<string>('{\n  "hello": "world"\n}');
   const [output, setOutput] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
   const [copyMessage, setCopyMessage] = useState<string | null>(null);
@@ -27,7 +26,11 @@ export default function JsonToolPage() {
 
   // 工具页打开时上报 tool_open
   useEffect(() => {
-    trackEvent("tool_open", { tool_name: JSON_TOOL_NAME }, { toolName: JSON_TOOL_NAME });
+    trackEvent(
+      "tool_open",
+      { tool_name: JSON_TOOL_NAME },
+      { toolName: JSON_TOOL_NAME }
+    );
   }, []);
 
   const handleRun = useCallback(() => {
@@ -47,7 +50,7 @@ export default function JsonToolPage() {
       const { message, location } = parsed.error;
       if (location) {
         setError(
-          `${message}（约在第 ${location.line} 行，第 ${location.column} 列）`,
+          `${message}（约在第 ${location.line} 行，第 ${location.column} 列）`
         );
       } else {
         setError(message);
@@ -56,7 +59,7 @@ export default function JsonToolPage() {
       trackEvent(
         "json_error",
         { error_type: message, input_size_range: sizeRange },
-        { toolName: JSON_TOOL_NAME },
+        { toolName: JSON_TOOL_NAME }
       );
       return;
     }
@@ -70,13 +73,13 @@ export default function JsonToolPage() {
         trackEvent(
           "json_format",
           { success: true, input_size_range: sizeRange },
-          { toolName: JSON_TOOL_NAME },
+          { toolName: JSON_TOOL_NAME }
         );
       } else {
         trackEvent(
           "json_minify",
           { success: true, input_size_range: sizeRange },
-          { toolName: JSON_TOOL_NAME },
+          { toolName: JSON_TOOL_NAME }
         );
       }
     } catch (e) {
@@ -87,7 +90,7 @@ export default function JsonToolPage() {
       trackEvent(
         "json_error",
         { error_type: message, input_size_range: sizeRange },
-        { toolName: JSON_TOOL_NAME },
+        { toolName: JSON_TOOL_NAME }
       );
     }
   }, [input, mode]);
@@ -125,97 +128,181 @@ export default function JsonToolPage() {
   }, [canRun, handleRun]);
 
   return (
-    <div className="space-y-6">
-      <section className="space-y-3">
-        <h1 className="text-2xl font-semibold tracking-tight text-slate-900 sm:text-3xl">
-          JSON 格式化与压缩
-        </h1>
-        <p className="max-w-2xl text-sm leading-relaxed text-slate-600">
-          在左侧输入原始 JSON 文本，选择格式化或压缩模式后点击执行，结果会显示在右侧区域。
-        </p>
-      </section>
+    <div className="flex h-full flex-col overflow-hidden">
+      {/* Header Section - 固定高度 */}
+      <header className="shrink-0 space-y-4 pb-4">
+        {/* 标题区域 */}
+        <div className="space-y-1.5">
+          <h1 className="text-xl font-semibold tracking-tight text-slate-900 sm:text-2xl">
+            JSON 格式化与压缩
+          </h1>
+          <p className="text-sm leading-relaxed text-slate-500">
+            在左侧输入 JSON，选择模式后执行。支持快捷键{" "}
+            <kbd className="inline-flex items-center rounded border border-slate-200 bg-slate-100 px-1.5 py-0.5 font-mono text-[11px] text-slate-600">
+              ⌘/Ctrl + Enter
+            </kbd>
+          </p>
+        </div>
 
-      <section className="space-y-3">
-        <Card className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-          <div className="space-y-1">
-            <div className="flex items-center gap-2 text-sm text-slate-700">
-              <span className="font-medium">模式：</span>
-              <div className="inline-flex rounded-md border border-slate-200 bg-slate-50 p-0.5">
-                <Button
-                  variant={mode === "format" ? "primary" : "ghost"}
-                  size="sm"
-                  className="px-3 text-xs"
-                  onClick={() => setMode("format")}
-                >
-                  格式化
-                </Button>
-                <Button
-                  variant={mode === "minify" ? "primary" : "ghost"}
-                  size="sm"
-                  className="px-3 text-xs"
-                  onClick={() => setMode("minify")}
-                >
-                  压缩
-                </Button>
-              </div>
+        {/* 工具栏 */}
+        <div className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-slate-200 bg-white p-3 shadow-sm">
+          {/* 模式切换 */}
+          <div className="flex items-center gap-3">
+            <span className="text-xs font-medium text-slate-500">模式</span>
+            <div className="inline-flex rounded-lg border border-slate-200 bg-slate-50 p-0.5">
+              <button
+                type="button"
+                onClick={() => setMode("format")}
+                className={`cursor-pointer rounded-md px-3 py-1.5 text-xs font-medium transition-all duration-150 ${
+                  mode === "format"
+                    ? "bg-blue-600 text-white shadow-sm"
+                    : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"
+                }`}
+              >
+                格式化
+              </button>
+              <button
+                type="button"
+                onClick={() => setMode("minify")}
+                className={`cursor-pointer rounded-md px-3 py-1.5 text-xs font-medium transition-all duration-150 ${
+                  mode === "minify"
+                    ? "bg-blue-600 text-white shadow-sm"
+                    : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"
+                }`}
+              >
+                压缩
+              </button>
             </div>
-            <p className="text-xs text-slate-500">
-              支持快捷键 <span className="font-mono">Cmd/Ctrl + Enter</span>{" "}
-              触发当前操作。
-            </p>
           </div>
 
-          <div className="flex flex-col items-stretch gap-2 sm:flex-row sm:items-center">
-            <Button size="sm" onClick={handleRun} disabled={!canRun}>
-              {mode === "format" ? "格式化 JSON" : "压缩 JSON"}
-            </Button>
+          {/* 操作按钮 */}
+          <div className="flex items-center gap-2">
             <Button
               size="sm"
-              variant="secondary"
-              onClick={handleCopy}
+              onClick={handleRun}
+              disabled={!canRun}
+              className="gap-1.5"
             >
-              复制结果
+              <svg
+                className="h-3.5 w-3.5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={2}
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M5 3l14 9-14 9V3z"
+                />
+              </svg>
+              {mode === "format" ? "格式化" : "压缩"}
+            </Button>
+            <Button size="sm" variant="secondary" onClick={handleCopy}>
+              <svg
+                className="mr-1.5 h-3.5 w-3.5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={2}
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
+                />
+              </svg>
+              复制
             </Button>
           </div>
-        </Card>
+        </div>
 
+        {/* 消息提示 */}
         {error && (
-          <div className="rounded-md border border-red-200 bg-red-50 px-3 py-2 text-xs text-red-700">
-            <span className="font-medium">解析错误：</span>
-            <span className="ml-1">{error}</span>
+          <div className="flex items-start gap-2 rounded-lg border border-red-200 bg-red-50 px-3 py-2.5">
+            <svg
+              className="mt-0.5 h-4 w-4 shrink-0 text-red-500"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2}
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
+            <div className="text-xs text-red-700">
+              <span className="font-medium">解析错误：</span>
+              <span className="ml-1">{error}</span>
+            </div>
           </div>
         )}
 
         {copyMessage && (
-          <div className="rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-xs text-slate-600">
-            {copyMessage}
+          <div className="flex items-center gap-2 rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-2.5">
+            <svg
+              className="h-4 w-4 shrink-0 text-emerald-500"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2}
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
+            <span className="text-xs text-emerald-700">{copyMessage}</span>
           </div>
         )}
-      </section>
+      </header>
 
-      <section className="grid grid-cols-1 gap-4 lg:grid-cols-2">
-        <div className="space-y-2 h-[320px] sm:h-[380px] lg:h-[520px]">
-          <div className="flex items-center justify-between text-xs text-slate-500">
-            <span className="font-medium text-slate-700">原始 JSON</span>
-          </div>
-          <JsonEditor
-            value={input}
-            onChange={setInput}
-            placeholder='在此粘贴或输入 JSON，例如：{"hello": "world"}'
-          />
-        </div>
-
-        <div className="space-y-2 h-[320px] sm:h-[380px] lg:h-[520px]">
-          <div className="flex items-center justify-between text-xs text-slate-500">
-            <span className="font-medium text-slate-700">结果</span>
-            <span className="text-[11px]">
-              {mode === "format" ? "已格式化输出" : "已压缩输出"}
+      {/* Editor Section - 填充剩余空间，内部滚动 */}
+      <section className="grid min-h-0 flex-1 grid-cols-1 gap-4 lg:grid-cols-2">
+        {/* 输入面板 */}
+        <div className="flex min-h-0 flex-col">
+          <div className="mb-2 flex shrink-0 items-center justify-between">
+            <div className="flex items-center gap-2">
+              <div className="h-2 w-2 rounded-full bg-blue-500" />
+              <span className="text-xs font-medium text-slate-700">
+                输入 JSON
+              </span>
+            </div>
+            <span className="text-[11px] text-slate-400">
+              {input.length.toLocaleString()} 字符
             </span>
           </div>
-          <JsonViewer value={output} />
+          <div className="min-h-0 flex-1">
+            <JsonEditor
+              value={input}
+              onChange={setInput}
+              placeholder='在此粘贴或输入 JSON，例如：{"hello": "world"}'
+            />
+          </div>
+        </div>
+
+        {/* 输出面板 */}
+        <div className="flex min-h-0 flex-col">
+          <div className="mb-2 flex shrink-0 items-center justify-between">
+            <div className="flex items-center gap-2">
+              <div className="h-2 w-2 rounded-full bg-emerald-500" />
+              <span className="text-xs font-medium text-slate-700">
+                输出结果
+              </span>
+            </div>
+            <span className="text-[11px] text-slate-400">
+              {mode === "format" ? "格式化" : "压缩"} ·{" "}
+              {output.length.toLocaleString()} 字符
+            </span>
+          </div>
+          <div className="min-h-0 flex-1">
+            <JsonViewer value={output} />
+          </div>
         </div>
       </section>
     </div>
   );
 }
-

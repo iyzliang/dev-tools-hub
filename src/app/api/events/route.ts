@@ -157,7 +157,17 @@ export async function POST(req: NextRequest) {
       { status: 201 },
     );
   } catch (error) {
-    // 预留错误日志与后续监控集成
+    const prismaError = error as { code?: string };
+    if (prismaError.code === "P2021") {
+      return NextResponse.json(
+        {
+          error:
+            "Database table not found. Run: pnpm prisma:migrate (after setting DATABASE_URL)",
+        },
+        { status: 503 },
+      );
+    }
+
     console.error("[api/events] Failed to store events", error);
 
     return NextResponse.json(

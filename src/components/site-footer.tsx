@@ -10,12 +10,16 @@ export function SiteFooter() {
           <div className="flex flex-col gap-1 text-xs text-slate-500">
             <span>© {year} Dev Tools Hub.</span>
             <span className="text-slate-400">
-              在线开发者工具集 · JSON 工具优先上线
+              2025 开发者工具集 | 让开发更简单
             </span>
-            {/* 备案信息占位，上线时填入实际备案号 */}
-            <span className="mt-1 text-[11px] text-slate-400">
-              备案信息预留
-            </span>
+            <a
+              href="https://beian.miit.gov.cn/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-1 text-[11px] text-slate-400"
+            >
+              京ICP备17053706号
+            </a>
           </div>
 
           <nav

@@ -41,19 +41,19 @@ body {
 
 /* App layout shell */
 .app-shell {
-  @apply flex min-h-screen flex-col bg-slate-50 text-slate-900;
+  @apply flex h-screen flex-col overflow-hidden bg-slate-50 text-slate-900;
 }
 
 .app-header {
-  @apply sticky top-0 z-20 border-b border-slate-200 bg-white/80 backdrop-blur;
+  @apply sticky top-0 z-20 shrink-0 border-b border-slate-200 bg-white/95 backdrop-blur-sm;
 }
 
 .app-main {
-  @apply flex-1;
+  @apply flex min-h-0 flex-1 flex-col overflow-hidden;
 }
 
 .app-footer {
-  @apply border-t border-slate-200 bg-white/80;
+  @apply shrink-0 border-t border-slate-200 bg-white/95;
 }
 
 .app-container {
@@ -61,5 +61,21 @@ body {
 }
 
 .app-main-inner {
-  @apply py-6 sm:py-8 lg:py-10;
+  @apply flex min-h-0 flex-1 flex-col overflow-hidden py-4 sm:py-5 lg:py-6;
+}
+
+/* 首页欢迎区入场动画 */
+@keyframes hero-fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hero-animate {
+  animation: hero-fade-in-up 0.5s ease-out forwards;
 }
