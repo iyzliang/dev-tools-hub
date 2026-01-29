@@ -22,7 +22,9 @@ export function ToolCard({ tool }: ToolCardProps) {
       )}
 
       {/* 图标 */}
-      <div className="mb-3 text-2xl sm:text-3xl">{tool.icon}</div>
+      <div className="mb-3 text-slate-700">
+        <tool.icon className="h-7 w-7 sm:h-8 sm:w-8" strokeWidth={1.5} />
+      </div>
 
       {/* 工具名称 */}
       <h3 className="mb-1.5 text-base font-semibold text-slate-900 sm:text-lg">
