@@ -240,18 +240,6 @@
     "passes": true
   },
   {
-    "category": "基础设施与脚本开发",
-    "description": "配置 GitHub Actions CI，用于代码检查、构建与镜像构建。",
-    "steps": [
-      "创建 GitHub Actions 工作流文件，配置在 push/PR 时运行",
-      "在工作流中添加安装依赖、运行 Lint 与测试用例步骤，保证基础质量",
-      "添加 Next.js 构建步骤，确保生产构建可在 CI 环境顺利通过",
-      "配置 Docker 镜像构建与推送步骤（如推送到容器仓库），为部署做准备",
-      "根据需要添加手动触发的部署前检查或辅助脚本执行步骤"
-    ],
-    "passes": false
-  },
-  {
     "category": "文档与测试开发",
     "description": "编写 README、部署文档与埋点文档，并补充关键测试用例。",
     "steps": [
@@ -261,7 +249,7 @@
       "为 JSON 工具核心逻辑与埋点/统计接口补充单元测试与集成测试",
       "为核心用户流程（JSON 格式化与管理统计查看）编写少量 e2e 用例（如 Playwright/Cypress）"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "质量与性能优化",
