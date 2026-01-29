@@ -16,5 +16,10 @@ export {
   type ContentFormWrapperProps,
 } from "./content-form-wrapper";
 
+export {
+  StyleConfig,
+  type StyleConfigProps,
+} from "./style-config";
+
 // Re-export individual forms
 export * from "./content-forms";
