@@ -214,3 +214,15 @@ export async function trackEvent(
   }
 }
 
+/**
+ * 将输入长度映射为大小区间，用于埋点元信息（不上传完整内容）。
+ */
+export function getInputSizeRange(length: number): string {
+  if (length === 0) return "empty";
+  if (length <= 100) return "0-100";
+  if (length <= 1000) return "100-1k";
+  if (length <= 10000) return "1k-10k";
+  if (length <= 100000) return "10k-100k";
+  return "100k+";
+}
+

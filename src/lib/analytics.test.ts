@@ -1,5 +1,10 @@
 import { beforeEach, afterEach, describe, expect, it, vi } from "vitest";
-import { getAnonymousId, getSessionId, trackEvent } from "./analytics";
+import {
+  getAnonymousId,
+  getInputSizeRange,
+  getSessionId,
+  trackEvent,
+} from "./analytics";
 
 type StorageLike = {
   getItem: (key: string) => string | null;
@@ -114,6 +119,21 @@ describe("trackEvent", () => {
     return expect(
       trackEvent("page_view", { from: "test" }),
     ).resolves.toBeUndefined();
+  });
+});
+
+describe("getInputSizeRange", () => {
+  it("returns size range labels for input length", () => {
+    expect(getInputSizeRange(0)).toBe("empty");
+    expect(getInputSizeRange(50)).toBe("0-100");
+    expect(getInputSizeRange(100)).toBe("0-100");
+    expect(getInputSizeRange(101)).toBe("100-1k");
+    expect(getInputSizeRange(1000)).toBe("100-1k");
+    expect(getInputSizeRange(1001)).toBe("1k-10k");
+    expect(getInputSizeRange(10000)).toBe("1k-10k");
+    expect(getInputSizeRange(10001)).toBe("10k-100k");
+    expect(getInputSizeRange(100000)).toBe("10k-100k");
+    expect(getInputSizeRange(100001)).toBe("100k+");
   });
 });
 

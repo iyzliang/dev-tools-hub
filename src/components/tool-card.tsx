@@ -1,6 +1,9 @@
+"use client";
+
 import Link from "next/link";
 import type { Tool } from "@/config/tools";
 import { Card } from "@/components/ui/card";
+import { trackEvent } from "@/lib/analytics";
 
 interface ToolCardProps {
   tool: Tool;
@@ -51,11 +54,20 @@ export function ToolCard({ tool }: ToolCardProps) {
     );
   }
 
+  function handleClick() {
+    trackEvent(
+      "tool_open",
+      { tool_name: tool.id },
+      { toolName: tool.id },
+    );
+  }
+
   return (
     <Link
       href={tool.href}
       className="block h-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
       aria-label={`打开 ${tool.name}`}
+      onClick={handleClick}
     >
       <Card className="group relative flex h-full flex-col" interactive>
         {content}

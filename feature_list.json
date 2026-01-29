@@ -129,7 +129,7 @@
       "在工具卡片点击、工具页面打开时上报工具打开事件，记录 tool_name 等字段",
       "验证在不同浏览器与隐私模式下的行为，确保在不可用环境中 graceful degradation"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "数据库与 ORM 开发",

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { AnalyticsPageView } from "@/components/analytics-page-view";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { SearchProvider } from "@/contexts/search-context";
@@ -29,6 +30,7 @@ export default function RootLayout({
   return (
     <html lang="zh-CN">
       <body className={`${geistSans.variable} ${geistMono.variable} app-shell`}>
+        <AnalyticsPageView />
         <SearchProvider>
           <SiteHeader />
 

@@ -5,11 +5,14 @@ import { JsonEditor } from "@/components/json/json-editor";
 import { JsonViewer } from "@/components/json/json-viewer";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { trackEvent, getInputSizeRange } from "@/lib/analytics";
 import {
   formatJson,
   minifyJson,
   parseJsonWithLocation,
 } from "@/lib/json-utils";
+
+const JSON_TOOL_NAME = "json-formatter";
 
 type Mode = "format" | "minify";
 
@@ -22,6 +25,11 @@ export default function JsonToolPage() {
 
   const canRun = Boolean(input.trim());
 
+  // 工具页打开时上报 tool_open
+  useEffect(() => {
+    trackEvent("tool_open", { tool_name: JSON_TOOL_NAME }, { toolName: JSON_TOOL_NAME });
+  }, []);
+
   const handleRun = useCallback(() => {
     setCopyMessage(null);
 
@@ -33,6 +41,7 @@ export default function JsonToolPage() {
     }
 
     const parsed = parseJsonWithLocation(trimmed);
+    const sizeRange = getInputSizeRange(trimmed.length);
 
     if (!parsed.ok) {
       const { message, location } = parsed.error;
@@ -44,6 +53,11 @@ export default function JsonToolPage() {
         setError(message);
       }
       setOutput("");
+      trackEvent(
+        "json_error",
+        { error_type: message, input_size_range: sizeRange },
+        { toolName: JSON_TOOL_NAME },
+      );
       return;
     }
 
@@ -52,11 +66,29 @@ export default function JsonToolPage() {
         mode === "format" ? formatJson(trimmed) : minifyJson(trimmed);
       setOutput(result);
       setError(null);
+      if (mode === "format") {
+        trackEvent(
+          "json_format",
+          { success: true, input_size_range: sizeRange },
+          { toolName: JSON_TOOL_NAME },
+        );
+      } else {
+        trackEvent(
+          "json_minify",
+          { success: true, input_size_range: sizeRange },
+          { toolName: JSON_TOOL_NAME },
+        );
+      }
     } catch (e) {
       const message =
         e instanceof Error ? e.message : "解析 JSON 时发生未知错误。";
       setError(message);
       setOutput("");
+      trackEvent(
+        "json_error",
+        { error_type: message, input_size_range: sizeRange },
+        { toolName: JSON_TOOL_NAME },
+      );
     }
   }, [input, mode]);
 
@@ -69,6 +101,7 @@ export default function JsonToolPage() {
     try {
       await navigator.clipboard.writeText(output);
       setCopyMessage("已复制到剪贴板。");
+      trackEvent("copy_result", {}, { toolName: JSON_TOOL_NAME });
     } catch {
       setCopyMessage("复制失败，请手动选择复制。");
     }
