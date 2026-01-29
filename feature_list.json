@@ -326,7 +326,7 @@
       "通过 props 回调将配置变更与生成操作传递给父组件",
       "确保所有控件有合适的 label、hover/focus 状态与键盘可访问性"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "组件开发",
