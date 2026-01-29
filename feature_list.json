@@ -356,7 +356,7 @@
       "集成埋点 SDK，上报 tool_open、password_generate、password_copy、password_copy_all 事件",
       "验证页面在不同设备尺寸下的响应式表现"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "配置更新",
