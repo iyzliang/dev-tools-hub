@@ -7,11 +7,14 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "test": "vitest"
+    "test": "vitest",
+    "prisma:generate": "prisma generate",
+    "prisma:migrate": "prisma migrate dev"
   },
   "dependencies": {
     "@codemirror/lang-json": "^6.0.2",
     "@codemirror/view": "^6.39.11",
+    "@prisma/client": "^5.19.0",
     "@uiw/react-codemirror": "^4.25.4",
     "next": "16.1.6",
     "react": "19.2.3",
@@ -26,6 +29,7 @@
     "@vitest/ui": "^4.0.18",
     "eslint": "^9",
     "eslint-config-next": "16.1.6",
+    "prisma": "^5.19.0",
     "tailwindcss": "^4",
     "typescript": "^5",
     "vitest": "^4.0.18"

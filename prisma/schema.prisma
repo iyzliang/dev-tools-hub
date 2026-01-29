@@ -1,0 +1,46 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+/// 记录所有前端埋点事件数据，用于统计分析。
+model AnalyticsEvent {
+  id              String   @id @default(uuid()) @db.Uuid
+  anonymous_id    String
+  session_id      String
+  event_name      String
+  tool_name       String?
+  properties      Json?    @db.JsonB
+  user_agent      String?
+  locale          String?
+  timezone        String?
+  soft_fingerprint String?
+  ip_hash         String?
+  created_at      DateTime @default(now()) @db.Timestamptz(6)
+  received_at     DateTime @default(now()) @db.Timestamptz(6)
+  updated_at      DateTime @default(now()) @db.Timestamptz(6)
+
+  @@map("analytics_events")
+  @@index([created_at], map: "idx_events_created_at")
+  @@index([tool_name, created_at], map: "idx_events_tool_name_created_at")
+  @@index([anonymous_id, created_at], map: "idx_events_anonymous_id_created_at")
+}
+
+/// 按天与工具维度聚合的汇总表，用于提升统计页面查询性能。
+model ToolUsageDaily {
+  id         String   @id @default(uuid()) @db.Uuid
+  date       DateTime @db.Date
+  tool_name  String
+  event_name String
+  count      Int
+  created_at DateTime @default(now()) @db.Timestamptz(6)
+  updated_at DateTime @default(now()) @db.Timestamptz(6)
+
+  @@map("tool_usage_daily")
+  @@index([date, tool_name, event_name], map: "idx_tool_usage_daily_date_tool_event")
+}
+

@@ -141,7 +141,7 @@
       "为关键查询创建适当索引（如 created_at、tool_name + created_at、anonymous_id + created_at）",
       "运行 prisma migrate 生成并应用初始迁移，验证数据库表结构正确"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "后端接口开发",
