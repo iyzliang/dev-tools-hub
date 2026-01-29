@@ -42,29 +42,4 @@ export const tools: Tool[] = [
     isHot: true,
     href: "/qrcode",
   },
-  // 后续工具占位，待开发
-  {
-    id: "regex-tester",
-    name: "正则表达式测试",
-    description: "测试和调试正则表达式，支持多行匹配与分组捕获",
-    icon: Regex,
-    isHot: false,
-    href: "#",
-  },
-  {
-    id: "url-encoder",
-    name: "URL 编码/解码",
-    description: "快速进行 URL 编码与解码转换，支持批量处理",
-    icon: Link,
-    isHot: false,
-    href: "#",
-  },
-  {
-    id: "diff-viewer",
-    name: "文本对比工具",
-    description: "对比两段文本的差异，支持行级高亮与合并视图",
-    icon: GitCompare,
-    isHot: false,
-    href: "#",
-  },
 ];
