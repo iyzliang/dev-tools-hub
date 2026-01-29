@@ -10,13 +10,20 @@ import {
   minifyJson,
   parseJsonWithLocation,
 } from "@/lib/json-utils";
+import {
+  transformJsonString,
+  getTransformTypeLabel,
+  type KeyTransformType,
+} from "@/lib/key-transform";
 
 const JSON_TOOL_NAME = "json-formatter";
 
-type Mode = "format" | "minify";
+type Mode = "format" | "minify" | "keyTransform";
 
 export default function JsonToolPage() {
   const [mode, setMode] = useState<Mode>("format");
+  const [keyTransformType, setKeyTransformType] =
+    useState<KeyTransformType>("snakeToCamel");
   const [input, setInput] = useState<string>('{\n  "hello": "world"\n}');
   const [output, setOutput] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
@@ -65,23 +72,35 @@ export default function JsonToolPage() {
     }
 
     try {
-      const result =
-        mode === "format" ? formatJson(trimmed) : minifyJson(trimmed);
-      setOutput(result);
-      setError(null);
+      let result: string;
       if (mode === "format") {
+        result = formatJson(trimmed);
         trackEvent(
           "json_format",
           { success: true, input_size_range: sizeRange },
           { toolName: JSON_TOOL_NAME }
         );
-      } else {
+      } else if (mode === "minify") {
+        result = minifyJson(trimmed);
         trackEvent(
           "json_minify",
           { success: true, input_size_range: sizeRange },
           { toolName: JSON_TOOL_NAME }
         );
+      } else {
+        result = transformJsonString(trimmed, keyTransformType);
+        trackEvent(
+          "json_key_transform",
+          {
+            success: true,
+            transform_type: keyTransformType,
+            input_size_range: sizeRange,
+          },
+          { toolName: JSON_TOOL_NAME }
+        );
       }
+      setOutput(result);
+      setError(null);
     } catch (e) {
       const message =
         e instanceof Error ? e.message : "解析 JSON 时发生未知错误。";
@@ -93,7 +112,7 @@ export default function JsonToolPage() {
         { toolName: JSON_TOOL_NAME }
       );
     }
-  }, [input, mode]);
+  }, [input, mode, keyTransformType]);
 
   async function handleCopy() {
     setCopyMessage(null);
@@ -134,10 +153,10 @@ export default function JsonToolPage() {
         {/* 标题区域 */}
         <div className="space-y-1.5">
           <h1 className="text-xl font-semibold tracking-tight text-slate-900 sm:text-2xl">
-            JSON 格式化与压缩
+            JSON 工具
           </h1>
           <p className="text-sm leading-relaxed text-slate-500">
-            在左侧输入 JSON，选择模式后执行。支持快捷键{" "}
+            支持格式化、压缩与 Key 命名风格转换。快捷键{" "}
             <kbd className="inline-flex items-center rounded border border-slate-200 bg-slate-100 px-1.5 py-0.5 font-mono text-[11px] text-slate-600">
               ⌘/Ctrl + Enter
             </kbd>
@@ -147,7 +166,7 @@ export default function JsonToolPage() {
         {/* 工具栏 */}
         <div className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-slate-200 bg-white p-3 shadow-sm">
           {/* 模式切换 */}
-          <div className="flex items-center gap-3">
+          <div className="flex flex-wrap items-center gap-3">
             <span className="text-xs font-medium text-slate-500">模式</span>
             <div className="inline-flex rounded-lg border border-slate-200 bg-slate-50 p-0.5">
               <button
@@ -172,7 +191,42 @@ export default function JsonToolPage() {
               >
                 压缩
               </button>
+              <button
+                type="button"
+                onClick={() => setMode("keyTransform")}
+                className={`cursor-pointer rounded-md px-3 py-1.5 text-xs font-medium transition-all duration-150 ${
+                  mode === "keyTransform"
+                    ? "bg-blue-600 text-white shadow-sm"
+                    : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"
+                }`}
+              >
+                Key 转换
+              </button>
             </div>
+
+            {/* Key 转换类型子选项 */}
+            {mode === "keyTransform" && (
+              <>
+                <span className="text-xs font-medium text-slate-500">类型</span>
+                <select
+                  value={keyTransformType}
+                  onChange={(e) =>
+                    setKeyTransformType(e.target.value as KeyTransformType)
+                  }
+                  className="rounded-md border border-slate-200 bg-white px-2.5 py-1.5 text-xs font-medium text-slate-700 shadow-sm transition-colors hover:border-slate-300 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                >
+                  <option value="snakeToCamel">
+                    {getTransformTypeLabel("snakeToCamel")}
+                  </option>
+                  <option value="camelToSnake">
+                    {getTransformTypeLabel("camelToSnake")}
+                  </option>
+                  <option value="snakeToPascal">
+                    {getTransformTypeLabel("snakeToPascal")}
+                  </option>
+                </select>
+              </>
+            )}
           </div>
 
           {/* 操作按钮 */}
@@ -196,7 +250,11 @@ export default function JsonToolPage() {
                   d="M5 3l14 9-14 9V3z"
                 />
               </svg>
-              {mode === "format" ? "格式化" : "压缩"}
+              {mode === "format"
+                ? "格式化"
+                : mode === "minify"
+                  ? "压缩"
+                  : "转换"}
             </Button>
             <Button size="sm" variant="secondary" onClick={handleCopy}>
               <svg
@@ -294,8 +352,12 @@ export default function JsonToolPage() {
               </span>
             </div>
             <span className="text-[11px] text-slate-400">
-              {mode === "format" ? "格式化" : "压缩"} ·{" "}
-              {output.length.toLocaleString()} 字符
+              {mode === "format"
+                ? "格式化"
+                : mode === "minify"
+                  ? "压缩"
+                  : getTransformTypeLabel(keyTransformType)}{" "}
+              · {output.length.toLocaleString()} 字符
             </span>
           </div>
           <div className="min-h-0 flex-1">
