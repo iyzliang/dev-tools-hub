@@ -31,5 +31,10 @@ export {
   type ImageUploaderProps,
 } from "./image-uploader";
 
+export {
+  ScanResult,
+  type ScanResultProps,
+} from "./scan-result";
+
 // Re-export individual forms
 export * from "./content-forms";
