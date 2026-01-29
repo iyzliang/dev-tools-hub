@@ -286,7 +286,7 @@
       "实现 generateMultiple 批量生成函数，支持一次生成 1-10 个密码",
       "为所有生成函数编写 TypeScript 类型定义与参数校验逻辑"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "公共方法开发",
