@@ -262,5 +262,113 @@
       "根据手工验收用例执行一轮完整测试，修复发现的问题并整理已知限制"
     ],
     "passes": true
+  },
+  {
+    "category": "公共方法开发",
+    "description": "创建 EFF Diceware 词表数据文件，作为密码短语生成的基础数据源。",
+    "steps": [
+      "在 src/lib/wordlist/ 目录下创建 eff-large.ts 文件",
+      "从 EFF 官方获取 Diceware 大词表（约 7776 个单词），转换为 TypeScript 数组常量导出",
+      "为词表添加类型定义，确保单词均为小写且无特殊字符",
+      "添加词表长度常量导出，便于熵值计算时引用",
+      "验证词表数据完整性，确保无重复单词且数量正确"
+    ],
+    "passes": true
+  },
+  {
+    "category": "公共方法开发",
+    "description": "实现密码生成核心工具函数，支持随机密码和密码短语两种模式。",
+    "steps": [
+      "在 src/lib/password-utils.ts 中实现 generateRandomPassword 函数，使用 crypto.getRandomValues() 保证密码学安全",
+      "支持配置项：长度（8-128）、字符类型（大写/小写/数字/符号）、可读性模式、排除字符",
+      "定义易混淆字符集合（0/O、1/l/I、5/S 等），在可读性模式下自动排除",
+      "实现 generatePassphrase 函数，从 EFF 词表随机选词，支持配置单词数量（3-8）、分隔符、首字母大写",
+      "实现 generateMultiple 批量生成函数，支持一次生成 1-10 个密码",
+      "为所有生成函数编写 TypeScript 类型定义与参数校验逻辑"
+    ],
+    "passes": false
+  },
+  {
+    "category": "公共方法开发",
+    "description": "实现密码熵值计算与强度评估工具函数，提供破解时间预估。",
+    "steps": [
+      "在 src/lib/entropy-utils.ts 中实现 calculateEntropy 函数，计算密码信息熵（bits）",
+      "随机密码熵值公式：entropy = log2(charPoolSize) × length",
+      "密码短语熵值公式：entropy = log2(wordlistSize) × wordCount",
+      "实现 getStrengthLevel 函数，根据熵值返回强度等级（极弱/弱/中等/强/极强）与对应颜色",
+      "实现 estimateCrackTime 函数，假设每秒 100 亿次尝试，返回人类可读的预估破解时间",
+      "为熵值计算编写单元测试，覆盖不同字符组合与边界场景"
+    ],
+    "passes": false
+  },
+  {
+    "category": "组件开发",
+    "description": "实现密码强度指示器组件，展示熵值、强度等级与预估破解时间。",
+    "steps": [
+      "在 src/components/password/strength-meter.tsx 中创建 StrengthMeter 组件",
+      "接收 password 和 mode（random/passphrase）作为 props，内部调用熵值计算函数",
+      "实现渐变色强度条，根据强度等级（极弱-红/弱-橙/中-黄/强-绿/极强-蓝）显示不同颜色",
+      "显示具体熵值（如 79 bits）与强度等级文案",
+      "显示预估破解时间（如"约 3 万年"），使用友好的中文单位",
+      "确保组件在不同宽度下自适应，强度条与文案布局合理"
+    ],
+    "passes": false
+  },
+  {
+    "category": "组件开发",
+    "description": "实现密码配置面板组件，包含随机密码和密码短语两种模式的配置选项。",
+    "steps": [
+      "在 src/components/password/password-config.tsx 中创建 PasswordConfig 组件",
+      "顶部实现模式切换按钮组（随机密码/密码短语），与 JSON 工具的模式切换风格一致",
+      "随机密码模式：长度滑块（8-128，默认 16）、字符类型复选框组、可读性模式开关、排除字符输入框",
+      "密码短语模式：单词数量滑块（3-8，默认 4）、分隔符选择器（-//_/./空格）、首字母大写开关",
+      "底部实现生成数量滑块（1-10，默认 1）与生成按钮",
+      "通过 props 回调将配置变更与生成操作传递给父组件",
+      "确保所有控件有合适的 label、hover/focus 状态与键盘可访问性"
+    ],
+    "passes": false
+  },
+  {
+    "category": "组件开发",
+    "description": "实现密码结果展示组件，显示生成的密码列表与强度分析。",
+    "steps": [
+      "在 src/components/password/password-result.tsx 中创建 PasswordResult 组件",
+      "接收密码数组、模式与配置信息作为 props",
+      "顶部显示结果数量与"全部复制"按钮",
+      "列表渲染每个密码卡片：密码文本（等宽字体）、StrengthMeter 强度指示器、单个复制按钮",
+      "密码文本默认显示，可考虑添加显示/隐藏切换（可选）",
+      "实现单个复制与全部复制功能，复制后显示成功提示",
+      "无结果时显示占位提示文案，引导用户配置并生成",
+      "确保列表在移动端与桌面端布局合理，支持滚动"
+    ],
+    "passes": false
+  },
+  {
+    "category": "页面开发",
+    "description": "实现密码生成器主页面，集成配置面板与结果展示组件，完成完整交互流程。",
+    "steps": [
+      "在 src/app/password/page.tsx 中创建密码生成器页面，使用 'use client' 标记",
+      "实现与 JSON 工具一致的双栏布局：左侧配置面板、右侧结果展示（移动端上下布局）",
+      "页面顶部添加标题（密码生成器）与简要说明，提示快捷键 Cmd/Ctrl + Enter",
+      "管理页面状态：模式、配置项、生成的密码列表、复制提示等",
+      "实现生成逻辑：根据当前配置调用 password-utils 生成密码，更新结果列表",
+      "监听 Cmd/Ctrl + Enter 快捷键触发生成操作",
+      "集成埋点 SDK，上报 tool_open、password_generate、password_copy、password_copy_all 事件",
+      "验证页面在不同设备尺寸下的响应式表现"
+    ],
+    "passes": false
+  },
+  {
+    "category": "配置更新",
+    "description": "更新工具列表配置，将密码生成器添加到首页工具卡片列表。",
+    "steps": [
+      "在 src/config/tools.ts 中添加密码生成器工具配置项",
+      "配置 id: 'password-generator'、name: '密码生成器'、description: '生成安全随机密码与密码短语'",
+      "配置路由 path: '/password'，选择合适的图标（如锁或钥匙图标）",
+      "根据需要设置 isHot 标记，决定是否在首页显示热门标签",
+      "验证首页工具卡片正确渲染密码生成器入口，点击可跳转到工具页面",
+      "确保搜索功能可通过'密码'、'password'等关键词找到该工具"
+    ],
+    "passes": false
   }
 ]
