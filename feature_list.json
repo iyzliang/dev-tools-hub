@@ -444,7 +444,7 @@
       "实现 ContentFormWrapper 组件，根据选中类型动态渲染对应表单，通过 props 回调传递表单数据",
       "确保所有表单控件有合适的 label、placeholder、校验提示与键盘可访问性"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "组件开发",
