@@ -521,7 +521,7 @@
       "实现实时预览：内容或样式变更后自动重新生成二维码（带 300ms 防抖）",
       "验证页面在移动端与桌面端的响应式表现，移动端采用上下堆叠布局"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "页面开发",
@@ -536,7 +536,7 @@
       "模式切换时上报 qrcode_mode_switch 事件，附带 from_mode、to_mode",
       "确保所有埋点不上传用户输入的实际内容，仅记录元信息"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "配置更新",
