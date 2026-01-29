@@ -16,6 +16,14 @@ export const tools: Tool[] = [
     isHot: true,
     href: "/json",
   },
+  {
+    id: "password-generator",
+    name: "密码生成器",
+    description: "生成安全的随机密码或易记忆的密码短语，支持强度分析",
+    icon: "🔐",
+    isHot: true,
+    href: "/password",
+  },
   // 后续工具占位，待开发
   {
     id: "regex-tester",
