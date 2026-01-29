@@ -475,7 +475,7 @@
       "实现"下载"按钮与"复制图片"按钮，调用 qrcode-export 工具函数",
       "下载与复制成功后显示轻量 toast 提示，失败时显示错误信息"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "组件开发",

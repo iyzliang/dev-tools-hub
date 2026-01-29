@@ -21,5 +21,10 @@ export {
   type StyleConfigProps,
 } from "./style-config";
 
+export {
+  QRCodePreview,
+  type QRCodePreviewProps,
+} from "./qrcode-preview";
+
 // Re-export individual forms
 export * from "./content-forms";
