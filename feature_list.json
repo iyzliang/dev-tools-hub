@@ -201,7 +201,7 @@
       "保证图表与筛选组件在移动端与桌面端的布局与交互合理",
       "为关键交互添加 aria-label 与键盘可访问支持"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "页面布局开发",
