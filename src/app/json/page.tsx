@@ -194,7 +194,7 @@ export default function JsonToolPage() {
       </section>
 
       <section className="grid grid-cols-1 gap-4 lg:grid-cols-2">
-        <div className="space-y-2">
+        <div className="space-y-2 h-[320px] sm:h-[380px] lg:h-[520px]">
           <div className="flex items-center justify-between text-xs text-slate-500">
             <span className="font-medium text-slate-700">原始 JSON</span>
           </div>
@@ -205,7 +205,7 @@ export default function JsonToolPage() {
           />
         </div>
 
-        <div className="space-y-2">
+        <div className="space-y-2 h-[320px] sm:h-[380px] lg:h-[520px]">
           <div className="flex items-center justify-between text-xs text-slate-500">
             <span className="font-medium text-slate-700">结果</span>
             <span className="text-[11px]">
