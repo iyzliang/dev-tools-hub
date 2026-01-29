@@ -69,7 +69,7 @@
       "统一编辑器主题与站点 UI（浅色 VS Code 风格），调整背景色、行高与字体大小",
       "处理客户端渲染与 SSR 差异问题，确保在 Next.js App Router 中稳定运行"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "页面开发",
