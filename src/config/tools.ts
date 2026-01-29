@@ -24,6 +24,14 @@ export const tools: Tool[] = [
     isHot: true,
     href: "/password",
   },
+  {
+    id: "qrcode-tool",
+    name: "二维码工具",
+    description: "生成与解析二维码，支持多种内容类型与样式自定义",
+    icon: "📱",
+    isHot: true,
+    href: "/qrcode",
+  },
   // 后续工具占位，待开发
   {
     id: "regex-tester",
