@@ -490,7 +490,7 @@
       "处理常见错误：文件类型不支持、文件过大（建议限制 10MB）、URL 加载失败、跨域限制",
       "通过 props 回调将加载的图片数据（File 或 ImageData）传递给父组件"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "组件开发",

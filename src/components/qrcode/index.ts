@@ -26,5 +26,10 @@ export {
   type QRCodePreviewProps,
 } from "./qrcode-preview";
 
+export {
+  ImageUploader,
+  type ImageUploaderProps,
+} from "./image-uploader";
+
 // Re-export individual forms
 export * from "./content-forms";
