@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { aggregateAnalyticsEvents } from "@/lib/analytics-summary";
+import { hasValidAdminSessionFromCookie } from "@/lib/admin-auth";
 
 type RangePreset = "24h" | "7d" | "30d";
 
@@ -49,14 +50,10 @@ function computeDateRange(searchParams: URLSearchParams): {
   return { start, end, preset };
 }
 
-function hasValidAdminSession(req: NextRequest): boolean {
-  // 这里仅做基础占位检查：后续 /api/admin/login 完成后，可在此校验会话/Token。
-  const cookie = req.cookies.get("dth_admin_session");
-  return typeof cookie?.value === "string" && cookie.value === "active";
-}
-
 export async function GET(req: NextRequest) {
-  if (!hasValidAdminSession(req)) {
+  const adminCookie = req.cookies.get("dth_admin_session")?.value;
+
+  if (!hasValidAdminSessionFromCookie(adminCookie)) {
     return NextResponse.json(
       { error: "Admin session required" },
       { status: 401 },
