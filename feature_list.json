@@ -81,7 +81,7 @@
       "根据当前选中模式执行格式化（pretty print）或压缩（minify），保持输入不被覆盖",
       "实现一键复制结果到剪贴板的功能，并提供成功/失败的轻量提示"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "公共方法开发",
