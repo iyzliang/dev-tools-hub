@@ -5,6 +5,11 @@ import { JsonEditor } from "@/components/json/json-editor";
 import { JsonViewer } from "@/components/json/json-viewer";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import {
+  formatJson,
+  minifyJson,
+  parseJsonWithLocation,
+} from "@/lib/json-utils";
 
 type Mode = "format" | "minify";
 
@@ -24,17 +29,29 @@ export default function JsonToolPage() {
       return;
     }
 
+    const parsed = parseJsonWithLocation(input);
+
+    if (!parsed.ok) {
+      const { message, location } = parsed.error;
+      if (location) {
+        setError(
+          `${message}（约在第 ${location.line} 行，第 ${location.column} 列）`,
+        );
+      } else {
+        setError(message);
+      }
+      setOutput("");
+      return;
+    }
+
     try {
-      const parsed = JSON.parse(input);
       const result =
-        mode === "format"
-          ? JSON.stringify(parsed, null, 2)
-          : JSON.stringify(parsed);
+        mode === "format" ? formatJson(input) : minifyJson(input);
       setOutput(result);
       setError(null);
     } catch (e) {
       const message =
-        e instanceof SyntaxError ? e.message : "解析 JSON 时发生未知错误。";
+        e instanceof Error ? e.message : "解析 JSON 时发生未知错误。";
       setError(message);
       setOutput("");
     }
