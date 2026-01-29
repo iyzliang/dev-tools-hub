@@ -253,8 +253,8 @@ export default function JsonToolPage() {
               {mode === "format"
                 ? "格式化"
                 : mode === "minify"
-                  ? "压缩"
-                  : "转换"}
+                ? "压缩"
+                : "转换"}
             </Button>
             <Button size="sm" variant="secondary" onClick={handleCopy}>
               <svg
@@ -355,8 +355,8 @@ export default function JsonToolPage() {
               {mode === "format"
                 ? "格式化"
                 : mode === "minify"
-                  ? "压缩"
-                  : getTransformTypeLabel(keyTransformType)}{" "}
+                ? "压缩"
+                : getTransformTypeLabel(keyTransformType)}{" "}
               · {output.length.toLocaleString()} 字符
             </span>
           </div>
