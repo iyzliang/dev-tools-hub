@@ -1,0 +1,35 @@
+version: "3.9"
+
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: dev-tools-hub-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: devtools
+      POSTGRES_PASSWORD: devtools
+      POSTGRES_DB: devtools
+    volumes:
+      - devtools_pg_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: dev-tools-hub-app
+    restart: unless-stopped
+    depends_on:
+      - db
+    environment:
+      NODE_ENV: production
+      DATABASE_URL: postgres://devtools:devtools@db:5432/devtools
+      ADMIN_DASHBOARD_PASSWORD: changeme
+    ports:
+      - "3000:3000"
+    command: ["node", "node_modules/next/dist/bin/next", "start", "-p", "3000"]
+
+volumes:
+  devtools_pg_data:
+
