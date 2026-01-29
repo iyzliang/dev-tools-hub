@@ -5,15 +5,11 @@ import {
   getClientIdentifier,
   isAdminPasswordValid,
 } from "@/lib/admin-auth";
+import { ensureTrimmedString, safeParseJsonBody } from "@/lib/api-security";
 
 type LoginRequestBody = {
   password?: unknown;
 };
-
-function parseLoginBody(value: unknown): LoginRequestBody | null {
-  if (typeof value !== "object" || value === null) return null;
-  return value as LoginRequestBody;
-}
 
 export async function POST(req: NextRequest) {
   // 速率限制：基于 IP + UA 的简单频率限制
@@ -36,10 +32,10 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  let json: LoginRequestBody | null = null;
+  let rawBody: unknown;
 
   try {
-    json = parseLoginBody((await req.json()) as unknown);
+    rawBody = await req.json();
   } catch {
     return NextResponse.json(
       { error: "Invalid JSON body" },
@@ -47,8 +43,16 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const password =
-    typeof json?.password === "string" ? json.password.trim() : undefined;
+  const json = safeParseJsonBody<LoginRequestBody>(rawBody);
+
+  if (!json) {
+    return NextResponse.json(
+      { error: "Invalid request payload" },
+      { status: 400 },
+    );
+  }
+
+  const password = ensureTrimmedString(json.password, 256);
 
   if (!isAdminPasswordValid(password)) {
     // 注意：不在日志中输出密码内容，仅记录通用失败信息

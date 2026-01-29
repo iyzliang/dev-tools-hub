@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import type { JsonValue } from "@/lib/analytics";
+import { ensureTrimmedString, isRecord, safeParseJsonBody } from "@/lib/api-security";
 
 type IncomingEvent = {
   anonymous_id?: unknown;
@@ -19,10 +20,6 @@ type EventsRequestBody =
   | { events?: IncomingEvent[] }
   | IncomingEvent
   | IncomingEvent[];
-
-function isRecord(value: unknown): value is Record<string, unknown> {
-  return typeof value === "object" && value !== null;
-}
 
 function sanitizeProperties(value: unknown): Record<string, JsonValue> | undefined {
   if (!isRecord(value)) return undefined;
@@ -50,10 +47,6 @@ function sanitizeProperties(value: unknown): Record<string, JsonValue> | undefin
   return Object.keys(result).length ? result : undefined;
 }
 
-function ensureString(value: unknown): string | undefined {
-  return typeof value === "string" && value.trim() ? value : undefined;
-}
-
 function parseDate(value: unknown): Date | undefined {
   if (typeof value !== "string") return undefined;
   const d = new Date(value);
@@ -62,13 +55,22 @@ function parseDate(value: unknown): Date | undefined {
 }
 
 export async function POST(req: NextRequest) {
-  let json: EventsRequestBody;
+  let rawBody: unknown;
 
   try {
-    json = (await req.json()) as EventsRequestBody;
+    rawBody = await req.json();
   } catch {
     return NextResponse.json(
       { error: "Invalid JSON body" },
+      { status: 400 },
+    );
+  }
+
+  const json = safeParseJsonBody<EventsRequestBody>(rawBody);
+
+  if (!json) {
+    return NextResponse.json(
+      { error: "Invalid request payload" },
       { status: 400 },
     );
   }
@@ -102,20 +104,20 @@ export async function POST(req: NextRequest) {
 
   const data = incomingEvents
     .map((event) => {
-      const anonymousId = ensureString(event.anonymous_id);
-      const sessionId = ensureString(event.session_id);
-      const eventName = ensureString(event.event_name);
+      const anonymousId = ensureTrimmedString(event.anonymous_id, 255);
+      const sessionId = ensureTrimmedString(event.session_id, 255);
+      const eventName = ensureTrimmedString(event.event_name, 255);
 
       if (!anonymousId || !sessionId || !eventName) {
         return null;
       }
 
-      const toolName = ensureString(event.tool_name);
+      const toolName = ensureTrimmedString(event.tool_name, 255);
       const properties = sanitizeProperties(event.properties);
-      const userAgent = ensureString(event.user_agent);
-      const locale = ensureString(event.locale);
-      const timezone = ensureString(event.timezone);
-      const softFingerprint = ensureString(event.soft_fingerprint);
+      const userAgent = ensureTrimmedString(event.user_agent, 512);
+      const locale = ensureTrimmedString(event.locale, 32);
+      const timezone = ensureTrimmedString(event.timezone, 64);
+      const softFingerprint = ensureTrimmedString(event.soft_fingerprint, 64);
       const createdAt = parseDate(event.created_at) ?? now;
 
       return {
