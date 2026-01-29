@@ -428,7 +428,7 @@
       "定义 ExportFormat 类型（'png' | 'svg' | 'jpeg'）与 ExportOptions 接口",
       "处理浏览器兼容性问题，为不支持 Clipboard API 的环境提供降级提示"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "组件开发",
