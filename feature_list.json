@@ -299,7 +299,7 @@
       "实现 estimateCrackTime 函数，假设每秒 100 亿次尝试，返回人类可读的预估破解时间",
       "为熵值计算编写单元测试，覆盖不同字符组合与边界场景"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "组件开发",
