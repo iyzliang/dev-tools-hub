@@ -370,5 +370,185 @@
       "确保搜索功能可通过'密码'、'password'等关键词找到该工具"
     ],
     "passes": true
+  },
+  {
+    "category": "公共方法开发",
+    "description": "实现二维码内容格式化工具函数，支持 WiFi、vCard、邮件、电话、短信等预设类型的标准格式生成。",
+    "steps": [
+      "在 src/lib/qrcode-content.ts 中创建内容格式化工具模块",
+      "实现 formatWifiContent 函数，生成 WiFi 连接格式：WIFI:T:{type};S:{ssid};P:{password};;，支持 WPA/WEP/无加密类型",
+      "实现 formatVCardContent 函数，生成 vCard 3.0 标准格式，支持姓名、电话、邮箱、公司、职位、地址等可选字段",
+      "实现 formatEmailContent 函数，生成 mailto: 格式，支持收件人、主题、正文参数",
+      "实现 formatPhoneContent 函数，生成 tel: 格式；实现 formatSmsContent 函数，生成 smsto: 格式",
+      "定义 QRContentType 联合类型与各类型的配置接口，导出统一的 formatQRContent 函数根据类型分发",
+      "为所有格式化函数编写单元测试，覆盖正常输入、特殊字符转义与边界场景"
+    ],
+    "passes": true
+  },
+  {
+    "category": "公共方法开发",
+    "description": "实现二维码生成核心工具函数，封装 qrcode 库并提供统一的生成接口。",
+    "steps": [
+      "安装 qrcode 库（pnpm add qrcode）及其 TypeScript 类型定义（pnpm add -D @types/qrcode）",
+      "在 src/lib/qrcode-generator.ts 中封装二维码生成逻辑",
+      "实现 generateQRCodeDataURL 函数，生成 Base64 DataURL 格式用于预览，支持尺寸、纠错级别、前景色、背景色配置",
+      "实现 generateQRCodeSVG 函数，生成 SVG 字符串格式用于矢量导出",
+      "实现 generateQRCodeCanvas 函数，生成 Canvas 元素用于 PNG/JPEG 导出与自定义尺寸渲染",
+      "定义 QRCodeOptions 接口，包含 size（128-1024）、errorCorrectionLevel（L/M/Q/H）、foregroundColor、backgroundColor",
+      "处理内容过长或无效输入的错误场景，返回包含错误信息的结果对象",
+      "为生成函数编写单元测试，验证不同配置下的输出格式正确"
+    ],
+    "passes": false
+  },
+  {
+    "category": "公共方法开发",
+    "description": "实现二维码解析核心工具函数，封装 jsQR 库并支持从图片数据中提取二维码内容。",
+    "steps": [
+      "安装 jsqr 库（pnpm add jsqr）",
+      "在 src/lib/qrcode-scanner.ts 中封装二维码解析逻辑",
+      "实现 scanQRCodeFromImageData 函数，接收 ImageData 对象，使用 jsQR 解析并返回二维码内容",
+      "实现 scanQRCodeFromFile 函数，接收 File 对象，通过 Canvas 将图片转换为 ImageData 后调用解析",
+      "实现 scanQRCodeFromURL 函数，接收图片 URL，通过 fetch 或 Image 加载后转换为 ImageData 进行解析",
+      "定义 ScanResult 接口，包含 success、content、error 字段，统一返回格式",
+      "处理常见错误场景：图片加载失败、未识别到二维码、跨域图片限制等，返回友好错误信息",
+      "为解析函数编写单元测试，使用测试用二维码图片验证解析准确性"
+    ],
+    "passes": false
+  },
+  {
+    "category": "公共方法开发",
+    "description": "实现二维码导出工具函数，支持 PNG、SVG、JPEG 多格式导出与自定义尺寸。",
+    "steps": [
+      "在 src/lib/qrcode-export.ts 中创建导出工具模块",
+      "实现 exportAsPNG 函数，将 Canvas 转换为 PNG Blob，支持自定义导出尺寸（通过重绘到新 Canvas 实现）",
+      "实现 exportAsJPEG 函数，将 Canvas 转换为 JPEG Blob，支持自定义质量参数与导出尺寸",
+      "实现 exportAsSVG 函数，将 SVG 字符串转换为 Blob，支持修改 viewBox 实现尺寸调整",
+      "实现 downloadFile 函数，创建临时 <a> 元素触发文件下载，支持自定义文件名",
+      "实现 copyImageToClipboard 函数，使用 Clipboard API 将 PNG Blob 复制到剪贴板",
+      "定义 ExportFormat 类型（'png' | 'svg' | 'jpeg'）与 ExportOptions 接口",
+      "处理浏览器兼容性问题，为不支持 Clipboard API 的环境提供降级提示"
+    ],
+    "passes": false
+  },
+  {
+    "category": "组件开发",
+    "description": "实现二维码内容类型选择器与对应的动态表单组件。",
+    "steps": [
+      "在 src/components/qrcode/content-type-selector.tsx 中创建内容类型选择组件",
+      "实现下拉选择器或标签组，支持切换：文本/URL、WiFi、vCard、邮件、电话、短信六种类型",
+      "在 src/components/qrcode/content-forms/ 目录下为每种类型创建独立表单组件",
+      "TextUrlForm：多行文本输入框，带字符计数提示",
+      "WifiForm：SSID 输入框、密码输入框（带显示/隐藏切换）、加密类型单选（WPA/WEP/无）",
+      "VCardForm：姓名、电话、邮箱、公司、职位、地址输入框，均为可选，带折叠展开",
+      "EmailForm：收件人、主题、正文输入框；PhoneForm：电话号码输入框；SmsForm：电话号码与短信内容输入框",
+      "实现 ContentFormWrapper 组件，根据选中类型动态渲染对应表单，通过 props 回调传递表单数据",
+      "确保所有表单控件有合适的 label、placeholder、校验提示与键盘可访问性"
+    ],
+    "passes": false
+  },
+  {
+    "category": "组件开发",
+    "description": "实现二维码样式配置面板组件，支持尺寸、纠错级别与颜色自定义。",
+    "steps": [
+      "在 src/components/qrcode/style-config.tsx 中创建样式配置组件",
+      "实现尺寸选择器：下拉选择预设值（128/256/512/1024px）或自定义输入（范围 64-2048）",
+      "实现纠错级别选择器：L（7%）/M（15%）/Q（25%）/H（30%）四个选项，带简要说明 tooltip",
+      "实现前景色选择器：使用原生 <input type='color'> 或自定义颜色选择组件，默认 #000000",
+      "实现背景色选择器：同上，默认 #FFFFFF，支持透明背景选项（仅 PNG 格式有效）",
+      "添加颜色预设快捷按钮：经典黑白、蓝白、绿白等常用配色方案",
+      "通过 props 回调将配置变更实时传递给父组件，支持受控模式",
+      "确保配置面板在移动端可折叠或紧凑显示，避免占用过多空间"
+    ],
+    "passes": false
+  },
+  {
+    "category": "组件开发",
+    "description": "实现二维码预览与导出操作组件，展示生成结果并提供多格式下载。",
+    "steps": [
+      "在 src/components/qrcode/qrcode-preview.tsx 中创建预览组件",
+      "居中显示生成的二维码图片，使用 Canvas 或 <img> 渲染 DataURL",
+      "图片下方显示当前编码的内容摘要（超过 50 字符截断显示，带 tooltip 查看完整内容）",
+      "未生成时显示占位区域：虚线边框 + 提示文案"配置内容后点击生成"",
+      "在 src/components/qrcode/export-actions.tsx 中创建导出操作组件",
+      "实现格式选择器：PNG/SVG/JPEG 单选按钮组，默认 PNG",
+      "实现导出尺寸选择器：与预览相同 / 自定义尺寸输入框（64-4096）",
+      "实现"下载"按钮与"复制图片"按钮，调用 qrcode-export 工具函数",
+      "下载与复制成功后显示轻量 toast 提示，失败时显示错误信息"
+    ],
+    "passes": false
+  },
+  {
+    "category": "组件开发",
+    "description": "实现图片上传组件，支持文件选择、拖拽上传、剪贴板粘贴与 URL 输入。",
+    "steps": [
+      "在 src/components/qrcode/image-uploader.tsx 中创建图片上传组件",
+      "实现主上传区域：虚线边框容器，支持点击触发文件选择器（accept='image/*'）",
+      "实现拖拽上传：监听 dragover/drop 事件，拖入图片时高亮边框，释放后读取文件",
+      "实现剪贴板粘贴：监听全局 paste 事件，检测 clipboardData 中的图片并读取",
+      "实现 URL 输入区域：输入框 + 加载按钮，输入图片 URL 后通过 fetch 或 Image 加载",
+      "图片加载成功后显示缩略图预览，提供"清除"按钮重置状态",
+      "处理常见错误：文件类型不支持、文件过大（建议限制 10MB）、URL 加载失败、跨域限制",
+      "通过 props 回调将加载的图片数据（File 或 ImageData）传递给父组件"
+    ],
+    "passes": false
+  },
+  {
+    "category": "组件开发",
+    "description": "实现二维码解析结果展示组件，显示解析内容与复制操作。",
+    "steps": [
+      "在 src/components/qrcode/scan-result.tsx 中创建解析结果组件",
+      "解析成功时：显示解析出的原始文本内容，使用等宽字体与代码块样式",
+      "内容区域支持滚动（内容过长时）与全选，下方提供"复制内容"按钮",
+      "解析失败时：显示错误提示卡片，包含错误图标与友好错误信息（如"未识别到二维码"、"图片加载失败"）",
+      "未解析时：显示占位提示"上传或粘贴二维码图片进行解析"，配合引导图标",
+      "复制成功后显示轻量 toast 提示",
+      "确保组件在不同内容长度下布局合理，支持响应式调整"
+    ],
+    "passes": false
+  },
+  {
+    "category": "页面开发",
+    "description": "实现二维码工具主页面，集成生成与解析两种模式，完成完整交互流程。",
+    "steps": [
+      "在 src/app/qrcode/page.tsx 中创建二维码工具页面，使用 'use client' 标记",
+      "页面顶部：标题（二维码工具）、简要说明、快捷键提示（Cmd/Ctrl + Enter）",
+      "标题下方：模式切换按钮组（生成二维码 / 解析二维码），风格与密码生成器一致",
+      "生成模式布局：左侧内容配置（类型选择器 + 动态表单 + 样式配置 + 生成按钮），右侧预览与导出",
+      "解析模式布局：左侧图片上传组件，右侧解析结果展示",
+      "管理页面状态：当前模式、内容类型、表单数据、样式配置、生成的二维码、上传的图片、解析结果",
+      "切换模式时保留各自状态不丢失，支持快速切换验证生成的二维码",
+      "监听 Cmd/Ctrl + Enter 快捷键触发当前模式的主操作（生成或解析）",
+      "实现实时预览：内容或样式变更后自动重新生成二维码（带 300ms 防抖）",
+      "验证页面在移动端与桌面端的响应式表现，移动端采用上下堆叠布局"
+    ],
+    "passes": false
+  },
+  {
+    "category": "页面开发",
+    "description": "在二维码工具页面集成埋点 SDK，上报核心用户行为事件。",
+    "steps": [
+      "在页面挂载时上报 tool_open 事件，附带 tool_name: 'qrcode-tool'",
+      "生成二维码时上报 qrcode_generate 事件，附带 content_type（文本/WiFi/vCard 等）、size、error_level、has_custom_color",
+      "下载二维码时上报 qrcode_download 事件，附带 format（png/svg/jpeg）、export_size",
+      "复制二维码图片时上报 qrcode_copy 事件",
+      "解析二维码时上报 qrcode_scan 事件，附带 input_method（upload/paste/drag/url）、success（是否成功）",
+      "复制解析结果时上报 qrcode_scan_copy 事件",
+      "模式切换时上报 qrcode_mode_switch 事件，附带 from_mode、to_mode",
+      "确保所有埋点不上传用户输入的实际内容，仅记录元信息"
+    ],
+    "passes": false
+  },
+  {
+    "category": "配置更新",
+    "description": "更新工具列表配置，将二维码工具添加到首页工具卡片列表。",
+    "steps": [
+      "在 src/config/tools.ts 中添加二维码工具配置项",
+      "配置 id: 'qrcode-tool'、name: '二维码工具'、description: '生成与解析二维码，支持多种内容类型与样式自定义'",
+      "配置路由 path: '/qrcode'，选择合适的图标（如二维码图标）",
+      "根据需要设置 isHot 标记，决定是否在首页显示热门标签",
+      "验证首页工具卡片正确渲染二维码工具入口，点击可跳转到工具页面",
+      "确保搜索功能可通过'二维码'、'qrcode'、'扫码'等关键词找到该工具"
+    ],
+    "passes": false
   }
 ]
