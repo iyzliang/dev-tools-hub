@@ -1,4 +1,4 @@
-FROM node:20-alpine AS base
+FROM node:22-alpine AS base
 
 ENV PNPM_HOME=/pnpm
 ENV PATH=$PNPM_HOME:$PATH
@@ -25,11 +25,14 @@ RUN pnpm prisma:generate
 RUN pnpm run build
 
 # Production runtime image
-FROM node:20-alpine AS runner
+FROM node:22-alpine AS runner
 
 ENV NODE_ENV=production
 
 WORKDIR /app
+
+# 安装 OpenSSL 和 libc 兼容库（Prisma 需要）
+RUN apk add --no-cache openssl libc6-compat
 
 RUN addgroup -S nextjs && adduser -S nextjs -G nextjs
 
