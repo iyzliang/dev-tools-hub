@@ -1168,7 +1168,7 @@
       "可选：实现编辑区与预览区的「同步滚动」占位接口，便于后续按行高映射联动",
       "确保键盘可访问性、aria-label 与焦点状态符合全站规范"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "组件开发",
@@ -1182,7 +1182,7 @@
       "自定义容器（tip/warning/danger/details）：渲染为带图标与标题的块级元素，details 支持折叠",
       "确保预览区可滚动、支持响应式宽度，并防止 XSS（仅渲染信任的解析结果，不直接插入用户原始输入）"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "组件开发",

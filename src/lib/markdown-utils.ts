@@ -3,10 +3,20 @@
  *
  * Parses Markdown with GFM support and VuePress-style custom containers
  * (::: tip / warning / danger / details). Provides parseMarkdown, parseVueStyleContainers,
- * and markdownToHtml for rendering.
+ * and markdownToHtml for rendering. Code blocks are syntax-highlighted via markdown-highlight.
  */
 
 import { marked } from "marked";
+import { highlightCode } from "./markdown-highlight";
+
+marked.use({
+  renderer: {
+    code({ text, lang }: { text?: string; lang?: string }) {
+      const result = highlightCode(text ?? "", lang ?? undefined);
+      return result.html;
+    },
+  },
+});
 
 // ============================================================================
 // Types
@@ -155,18 +165,27 @@ function escapeHtml(unsafe: string): string {
 
 /**
  * Render a single Vue-style block to HTML (wrapper div with class).
+ * details type uses <details>/<summary> for native collapse.
  */
 function renderVueBlockToHtml(block: VueStyleBlock): string {
   const typeClass = `vue-${block.type}`;
-  const titleHtml =
-    block.title != null && block.title.length > 0
-      ? `<p class="vue-container-title"><strong>${escapeHtml(block.title)}</strong></p>`
-      : "";
-  // Content may contain inline Markdown; we run marked on it with inline only (or full blocks).
   const contentRaw = block.content.trim();
   const contentHtml =
     contentRaw.length > 0
       ? marked.parse(contentRaw, { async: false }) as string
+      : "";
+
+  if (block.type === "details") {
+    const summaryText =
+      block.title != null && block.title.length > 0
+        ? escapeHtml(block.title)
+        : "详情";
+    return `<details class="vue-container ${typeClass}"><summary class="vue-container-title">${summaryText}</summary>${contentHtml}</details>`;
+  }
+
+  const titleHtml =
+    block.title != null && block.title.length > 0
+      ? `<p class="vue-container-title"><strong>${escapeHtml(block.title)}</strong></p>`
       : "";
   return `<div class="vue-container ${typeClass}">${titleHtml}${contentHtml}</div>`;
 }
