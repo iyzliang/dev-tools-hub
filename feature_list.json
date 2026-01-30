@@ -826,5 +826,91 @@
       "根据需要设置 isHot 标记，验证首页卡片与搜索可通过「时间戳」「timestamp」「日期」等关键词命中"
     ],
     "passes": true
+  },
+  {
+    "category": "公共方法开发",
+    "description": "实现信息编码/解码核心工具函数，支持 Unicode、URL、UTF16、Base64 文本、MD5、SHA1、HTML 编码与对应解码、URL 参数解析、JWT 解码。",
+    "steps": [
+      "在 src/lib/encoding-utils.ts 中创建编码工具模块，定义 EncodingType 与 DecodingType 联合类型",
+      "实现 Unicode 编码：encodeToUnicodeEscaped(str) 将字符转为 \\uXXXX 形式；实现 decodeFromUnicodeEscaped(str) 解码",
+      "实现 URL 编码：封装 encodeURIComponent 与 decodeURIComponent，或提供百分号形式（%XX）的编解码",
+      "实现 UTF16/十六进制编码：encodeToHexEscaped(str) 转为 \\xXX 形式（按 UTF-8 或 Latin1 字节）；实现对应解码",
+      "实现 Base64 文本编解码：encodeBase64Text(str) 与 decodeBase64Text(str)，使用 btoa/atob 或 Buffer，处理 UTF-8 与错误输入",
+      "实现 MD5 计算：使用 Web Crypto 或安装轻量库（如 js-md5），导出 md5Hash(str) 返回十六进制字符串",
+      "实现 SHA1 加密：使用 Web Crypto API subtle.digest('SHA-1')，导出 sha1Hash(str) 返回十六进制字符串",
+      "实现 HTML 深度编码：encodeHtmlDeep(str) 将字符转为 &#xXXXX; 或 &amp;/&lt;/&gt; 等实体；实现 decodeHtmlEntities(str) 解码",
+      "实现 URL 参数解析：parseQueryString(queryString) 解析 ?key=value&a=b 为键值对对象，支持重复键与 decodeURIComponent",
+      "实现 JWT 解码：decodeJwtPayload(token) 仅解析 Base64Url 的 header 与 payload 并返回可读对象，不验证签名，非法输入返回错误结构",
+      "为上述函数编写单元测试，覆盖正常输入、空输入、非法字符、超长输入与边界场景"
+    ],
+    "passes": true
+  },
+  {
+    "category": "组件开发",
+    "description": "实现信息编码工具的类型选择器与输入输出区域组件。",
+    "steps": [
+      "在 src/components/encoding/ 目录下创建 encoding-type-selector.tsx",
+      "实现编码/解码大模式切换按钮组（编码 | 解码），与现有工具页面风格一致",
+      "编码模式下子类型选项：Unicode(\\u)、URL(%)、UTF16(\\x)、Base64、MD5、SHA1、HTML 深度编码；解码模式下：Unicode、URL、UTF16、Base64、URL 参数解析、JWT 解码",
+      "根据大模式动态展示对应子类型单选或下拉，受控组件 value/onChange，带简短说明或示例文案",
+      "创建 encoding-io.tsx：左侧多行文本输入框（placeholder 随类型变化）、右侧结果展示区（只读多行或结构化展示）",
+      "输入框支持清空、粘贴；结果区在 JWT 解码与 URL 参数解析时展示结构化键值或 JSON 树形展示",
+      "确保所有控件有 label、aria-label 与键盘可访问性，移动端布局紧凑"
+    ],
+    "passes": false
+  },
+  {
+    "category": "组件开发",
+    "description": "实现信息编码结果展示与复制组件，支持纯文本与结构化结果。",
+    "steps": [
+      "在 src/components/encoding/encoding-result.tsx 中创建结果展示组件",
+      "接收 result 与 resultType（'text' | 'keyValue' | 'jwt'）作为 props",
+      "纯文本结果：等宽字体、可滚动、支持全选，下方提供「复制」按钮",
+      "URL 参数解析结果：以键值对列表或表格形式展示，支持「复制为 JSON」与「复制为 query string」",
+      "JWT 解码结果：展示 header 与 payload 的格式化 JSON，可折叠/展开，提供「复制 payload」等操作",
+      "错误状态：输入非法或解码失败时显示友好错误信息与可能原因，不阻塞界面",
+      "复制成功后显示轻量 toast 提示，与全站反馈一致"
+    ],
+    "passes": false
+  },
+  {
+    "category": "页面开发",
+    "description": "实现信息编码工具主页面，集成编码/解码双模式与全部编码类型，完成完整交互流程。",
+    "steps": [
+      "在 src/app/encoding/page.tsx 中创建信息编码工具页面，使用 'use client' 标记",
+      "页面顶部：标题（信息编码工具）、简要说明（编码：Unicode/URL/UTF16/Base64/MD5/SHA1/HTML；解码：Unicode/URL/UTF16/Base64/URL 参数/JWT）、快捷键提示 Cmd/Ctrl + Enter",
+      "实现双栏布局：左侧类型选择器 + 输入区域 + 执行按钮，右侧结果展示组件（移动端上下堆叠）",
+      "管理页面状态：编码或解码模式、当前子类型、输入文本、输出结果、错误信息、复制提示",
+      "实现执行逻辑：点击执行或 Cmd/Ctrl + Enter 时根据当前类型调用 encoding-utils 对应函数，更新结果区域；MD5/SHA1 为异步，需处理 loading 状态",
+      "输入为空时禁用执行按钮并给出提示；解码类操作失败时在结果区展示错误信息",
+      "切换编码类型时保留输入内容，便于同一段文本尝试多种编码；切换编码/解码模式时可清空结果或保留输入",
+      "验证桌面双栏与移动端响应式布局，确保长文本与结构化结果滚动正常"
+    ],
+    "passes": false
+  },
+  {
+    "category": "页面开发",
+    "description": "在信息编码工具页面集成埋点 SDK，上报核心用户行为事件。",
+    "steps": [
+      "页面挂载时上报 tool_open 事件，附带 tool_name: 'encoding-tool'",
+      "执行编码时上报 encoding_encode 事件，附带 encoding_type（unicode/url/utf16/base64/md5/sha1/html）、success",
+      "执行解码时上报 encoding_decode 事件，附带 decoding_type（unicode/url/utf16/base64/query_string/jwt）、success",
+      "复制结果时上报 encoding_copy 事件，附带 result_type（text/key_value/jwt）",
+      "模式切换时上报 encoding_mode_switch 事件，附带 from_mode、to_mode",
+      "所有埋点仅上传元信息与类型，不上传用户输入或输出的具体内容"
+    ],
+    "passes": false
+  },
+  {
+    "category": "配置更新",
+    "description": "更新工具列表配置，将信息编码工具添加到首页工具卡片列表。",
+    "steps": [
+      "在 src/config/tools.ts 中添加信息编码工具配置项",
+      "配置 id: 'encoding-tool'、name: '信息编码工具'、description: 'Unicode/URL/UTF16/Base64/MD5/SHA1/HTML 编码与解码，URL 参数解析、JWT 解码'",
+      "配置路由 path: '/encoding'，选择合适图标（如 Lock、Code 或 Binary）",
+      "根据需要设置 isHot 标记，验证首页工具卡片正确渲染并可跳转",
+      "确保搜索功能可通过「编码」「解码」「Unicode」「URL 编码」「Base64」「MD5」「JWT」等关键词命中"
+    ],
+    "passes": false
   }
 ]
