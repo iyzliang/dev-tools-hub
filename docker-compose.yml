@@ -2,17 +2,23 @@ version: "3.9"
 
 services:
   db:
-    image: postgres:16-alpine
+    image: postgres:18
     container_name: dev-tools-hub-db
     restart: unless-stopped
     environment:
-      POSTGRES_USER: devtools
-      POSTGRES_PASSWORD: devtools
-      POSTGRES_DB: devtools
+      POSTGRES_USER: ${POSTGRES_USER:-devtools}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-devtools}
+      POSTGRES_DB: ${POSTGRES_DB:-devtools}
+      TZ: Asia/Shanghai
     volumes:
       - devtools_pg_data:/var/lib/postgresql/data
     ports:
-      - "5432:5432"
+      - "${DB_PORT:-5504}:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-devtools}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
   app:
     build:
@@ -21,15 +27,14 @@ services:
     container_name: dev-tools-hub-app
     restart: unless-stopped
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     environment:
       NODE_ENV: production
-      DATABASE_URL: postgres://devtools:devtools@db:5432/devtools
-      ADMIN_DASHBOARD_PASSWORD: changeme
+      DATABASE_URL: postgresql://${POSTGRES_USER:-devtools}:${POSTGRES_PASSWORD:-devtools}@db:5432/${POSTGRES_DB:-devtools}
+      ADMIN_DASHBOARD_PASSWORD: ${ADMIN_DASHBOARD_PASSWORD:-changeme}
     ports:
-      - "3000:3000"
-    command: ["node", "node_modules/next/dist/bin/next", "start", "-p", "3000"]
+      - "${APP_PORT:-5505}:5505"
 
 volumes:
   devtools_pg_data:
-

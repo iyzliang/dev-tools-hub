@@ -12,7 +12,7 @@
 
 - Node.js ≥ 20
 - pnpm
-- Docker / Docker Compose（用于生产或本地全栈运行）
+- Docker / Docker Compose（用于生产部署）
 
 ## 本地开发
 
@@ -62,7 +62,92 @@ ADMIN_DASHBOARD_PASSWORD="your-secret-password"
 
 ## 部署
 
-详见 [docs/deployment.md](./docs/deployment.md)：Docker Compose 配置、生产部署步骤与回滚说明。
+### 方式一：Docker Compose（推荐，含数据库）
+
+使用 Docker Compose 统一管理应用和数据库。
+
+#### 环境变量配置
+
+在项目根目录创建 `.env` 文件（**勿提交到仓库**）：
+
+```env
+# 数据库配置
+POSTGRES_USER=devtools
+POSTGRES_PASSWORD=your-db-password
+POSTGRES_DB=devtools
+
+# 端口配置（可选，有默认值）
+APP_PORT=5505
+DB_PORT=5504
+
+# 应用配置
+ADMIN_DASHBOARD_PASSWORD=your-admin-password
+```
+
+| 变量 | 说明 | 默认值 |
+|------|------|--------|
+| `POSTGRES_USER` | 数据库用户名 | `devtools` |
+| `POSTGRES_PASSWORD` | 数据库密码 | `devtools` |
+| `POSTGRES_DB` | 数据库名 | `devtools` |
+| `APP_PORT` | 应用对外端口 | `5505` |
+| `DB_PORT` | 数据库对外端口 | `5504` |
+| `ADMIN_DASHBOARD_PASSWORD` | 管理页登录密码 | `changeme` |
+
+#### 部署步骤
+
+```bash
+# 1. 启动服务（首次会自动构建镜像）
+docker compose up -d
+
+# 2. 首次部署：执行数据库迁移
+docker compose exec app node node_modules/.bin/prisma migrate deploy
+
+# 3. 访问应用
+# http://localhost:5505
+# 管理页：http://localhost:5505/admin/analytics
+```
+
+#### 常用命令
+
+```bash
+# 查看日志
+docker compose logs -f app
+docker compose logs -f db
+
+# 停止服务
+docker compose down
+
+# 重新构建并启动（代码更新后）
+docker compose up -d --build
+
+# 停止并删除数据卷（⚠️ 会清空数据库）
+docker compose down -v
+```
+
+---
+
+### 方式二：Docker 单容器（自备数据库）
+
+若已有外部 PostgreSQL，可只部署应用容器。
+
+```bash
+# 1. 构建镜像
+docker build -t dev-tools-hub .
+
+# 2. 运行容器
+docker run -d \
+  --name dev-tools-hub \
+  -p 5505:5505 \
+  -e DATABASE_URL="postgresql://user:pass@host:5432/devtools" \
+  -e ADMIN_DASHBOARD_PASSWORD="your-password" \
+  dev-tools-hub
+
+# 3. 访问 http://localhost:5505
+```
+
+**说明**：
+- 若不需要埋点/统计功能，可省略 `DATABASE_URL` 和 `ADMIN_DASHBOARD_PASSWORD`
+- 若数据库在本机，`host` 可用 `host.docker.internal`（Mac/Windows）或宿主机 IP
 
 ## 埋点与统计
 

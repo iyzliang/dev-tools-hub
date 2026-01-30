@@ -42,7 +42,7 @@ COPY --from=build /app/prisma ./prisma
 
 USER nextjs
 
-EXPOSE 3000
+EXPOSE 5505
 
-CMD ["node", "node_modules/next/dist/bin/next", "start", "-p", "3000"]
+CMD ["node", "node_modules/next/dist/bin/next", "start", "-p", "5505"]
 
