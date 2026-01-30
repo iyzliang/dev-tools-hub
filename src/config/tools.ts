@@ -1,6 +1,7 @@
 import {
   Binary,
   FileJson2,
+  Hash,
   KeyRound,
   QrCode,
   type LucideIcon,
@@ -47,5 +48,13 @@ export const tools: Tool[] = [
     icon: Binary,
     isHot: false,
     href: "/base64",
+  },
+  {
+    id: "base-converter",
+    name: "进制转换",
+    description: "二进制、八进制、十进制、十六进制互转",
+    icon: Hash,
+    isHot: true,
+    href: "/base-converter",
   },
 ];
