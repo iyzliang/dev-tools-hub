@@ -6,6 +6,7 @@ import {
   Hash,
   KeyRound,
   QrCode,
+  Regex,
   type LucideIcon,
 } from "lucide-react";
 
@@ -74,5 +75,13 @@ export const tools: Tool[] = [
     icon: Code,
     isHot: false,
     href: "/encoding",
+  },
+  {
+    id: "regex-tool",
+    name: "正则表达式",
+    description: "测试、替换与解释正则，支持标志位与常用预设",
+    icon: Regex,
+    isHot: false,
+    href: "/regex",
   },
 ];

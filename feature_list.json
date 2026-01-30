@@ -912,5 +912,205 @@
       "确保搜索功能可通过「编码」「解码」「Unicode」「URL 编码」「Base64」「MD5」「JWT」等关键词命中"
     ],
     "passes": true
+  },
+  {
+    "category": "公共方法开发",
+    "description": "实现正则表达式测试与校验核心工具函数，支持匹配、捕获组与多标志位。",
+    "steps": [
+      "在 src/lib/regex-utils.ts 中创建正则工具模块，定义 RegexFlags 类型（g、i、m、s、u、y）与 MatchResult 接口（match、index、groups、input）",
+      "实现 buildRegex 函数：接收模式字符串与标志位对象，返回 RegExp 实例或错误信息，非法正则时返回统一错误结构",
+      "实现 testRegex 函数：接收正则与测试字符串，返回是否匹配的布尔值",
+      "实现 execAll 函数：使用 matchAll 或循环 exec，返回全部匹配结果数组，每项包含 match、index、groups",
+      "实现 getMatchResults 函数：统一入口，接收模式、标志、测试字符串，返回 { ok, matches, error } 结构",
+      "处理边界情况：空模式、空字符串、非法正则（如未闭合括号）、超大输入时的性能保护",
+      "为上述函数编写单元测试，覆盖正常匹配、捕获组、零宽断言、非法正则与边界输入"
+    ],
+    "passes": true
+  },
+  {
+    "category": "公共方法开发",
+    "description": "实现正则替换核心工具函数，支持替换字符串与 $1、$& 等占位符。",
+    "steps": [
+      "在 src/lib/regex-utils.ts 中扩展替换能力，实现 replaceByRegex 函数",
+      "接收参数：模式字符串、标志位、源字符串、替换字符串（支持 $1-$9、$&、$`、$' 等）",
+      "使用 String.prototype.replace 或 RegExp 实现替换，返回 { ok, result, error } 结构",
+      "非法正则或替换过程中异常时返回错误信息，不抛未捕获异常",
+      "为 replaceByRegex 编写单元测试，覆盖普通替换、捕获组引用、全局替换与非法输入"
+    ],
+    "passes": true
+  },
+  {
+    "category": "公共方法开发",
+    "description": "实现正则特殊字符转义与反转义工具函数，便于将用户输入安全嵌入正则。",
+    "steps": [
+      "实现 escapeForRegex 函数：将字符串中的 . * + ? ^ $ { } [ ] ( ) | \\ 等转义，使其在正则中作为字面量匹配",
+      "实现 unescapeRegex 函数：将 \\x 形式的转义还原为字面量（可选，用于「从正则中提取字面量」场景）",
+      "定义 EscapeResult 类型，返回 { ok, value } 或错误信息",
+      "为转义与反转义函数编写单元测试，覆盖常见特殊字符与边界输入"
+    ],
+    "passes": true
+  },
+  {
+    "category": "公共方法开发",
+    "description": "实现正则表达式解析与「解释」工具函数，输出结构化的片段说明供 UI 展示。",
+    "steps": [
+      "选型：使用 @eslint-community/regexpp 解析正则 AST，或自研简单 token 解析（仅支持常用语法）",
+      "实现 explainRegex 函数：接收模式字符串与标志位，返回 { ok, parts } 或错误信息",
+      "parts 为数组，每项包含 type（literal、characterClass、quantifier、anchor、group 等）、raw、description（简短中文描述）",
+      "对非法正则返回统一错误结构，不抛未捕获异常",
+      "为 explainRegex 编写单元测试，覆盖简单模式、字符类、量词、分组与非法语法"
+    ],
+    "passes": true
+  },
+  {
+    "category": "公共方法开发",
+    "description": "定义常用正则预设（邮箱、手机、URL、身份证等）与预设列表接口，供 UI 快速插入。",
+    "steps": [
+      "在 src/lib/regex-utils.ts 或 src/config/regex-presets.ts 中定义 RegexPreset 接口：id、name、pattern、description、flags（可选）",
+      "实现 getRegexPresets 函数，返回预设数组，包含常见场景：邮箱、手机号（中国大陆）、URL、IPv4、身份证、中文、数字、空白行等",
+      "预设的 pattern 与 description 需准确且注明「仅供参考」，避免用户误用于生产校验",
+      "为预设列表编写简单测试或快照，确保导出结构稳定"
+    ],
+    "passes": true
+  },
+  {
+    "category": "组件开发",
+    "description": "实现正则标志位选择器组件，支持 g、i、m、s、u、y 多选与受控。",
+    "steps": [
+      "在 src/components/regex/ 目录下创建 regex-flags-selector.tsx",
+      "使用复选框组或标签组展示六种标志：全局(g)、忽略大小写(i)、多行(m)、dotAll(s)、unicode(u)、粘性(y)",
+      "每个选项带简短 tooltip 说明（如 g：全局匹配）",
+      "受控组件：value 为标志位对象或字符串，onChange 回调更新",
+      "样式与现有工具页面的选择器一致，支持键盘可访问与 aria-label"
+    ],
+    "passes": true
+  },
+  {
+    "category": "组件开发",
+    "description": "实现正则表达式输入框与测试文本输入区域组件，支持语法高亮与错误状态。",
+    "steps": [
+      "在 src/components/regex/regex-input.tsx 中创建正则输入组件，使用 Input 或 Textarea",
+      "支持受控 value/onChange，placeholder 为「输入正则表达式，如 \\d+」",
+      "非法正则输入时在下方或右侧显示非阻塞错误提示（如「未闭合的括号」），不阻止输入",
+      "可选：集成轻量语法高亮（如正则字面量、字符类高亮），或保持纯文本以降低依赖",
+      "在 src/components/regex/test-string-input.tsx 中创建测试文本输入组件，多行 Textarea，placeholder 随模式变化"
+    ],
+    "passes": true
+  },
+  {
+    "category": "组件开发",
+    "description": "实现正则测试结果展示组件，展示匹配列表、捕获组与在原文中的位置。",
+    "steps": [
+      "在 src/components/regex/match-result-view.tsx 中创建匹配结果展示组件",
+      "接收 matches 数组（match、index、groups）与原始 input 字符串作为 props",
+      "以列表或表格形式展示：序号、匹配内容、起始索引、捕获组（$1、$2…）",
+      "无匹配时显示「无匹配」占位文案；正则非法时显示错误信息",
+      "每行提供「复制」按钮，复制该条匹配或整组结果",
+      "可选：在测试文本上高亮显示匹配区间（通过切片与 span 实现）"
+    ],
+    "passes": true
+  },
+  {
+    "category": "组件开发",
+    "description": "实现正则替换结果展示组件，展示替换后的完整文本与替换次数。",
+    "steps": [
+      "在 src/components/regex/replace-result-view.tsx 中创建替换结果展示组件",
+      "接收替换后的 result 字符串、替换次数（可选）、错误信息作为 props",
+      "使用只读 Textarea 或等宽代码块展示替换结果，支持滚动与全选",
+      "顶部或底部显示「共替换 N 处」等统计信息",
+      "提供「复制结果」按钮，复制成功后轻量 toast 提示",
+      "错误时显示友好错误信息，与全站错误展示风格一致"
+    ],
+    "passes": true
+  },
+  {
+    "category": "组件开发",
+    "description": "实现正则解释结果展示组件，以结构化方式展示正则各片段说明。",
+    "steps": [
+      "在 src/components/regex/explain-result-view.tsx 中创建解释结果展示组件",
+      "接收 explainRegex 返回的 parts 数组作为 props",
+      "以列表或树形展示每个片段：raw 文本 + type + description（中文简短说明）",
+      "可使用卡片、表格或折叠面板区分「字面量」「字符类」「量词」等类型",
+      "非法正则或解析失败时显示错误信息区域",
+      "确保长列表可滚动，移动端布局紧凑"
+    ],
+    "passes": true
+  },
+  {
+    "category": "组件开发",
+    "description": "实现常用正则预设选择器组件，支持下拉选择并插入到输入框。",
+    "steps": [
+      "在 src/components/regex/regex-preset-selector.tsx 中创建预设选择组件",
+      "使用 Select 或下拉列表展示 getRegexPresets() 返回的预设（名称 + 简短描述）",
+      "选择某一预设时，通过 onChange 回调将 pattern 与可选 flags 传给父组件，由父组件填入正则输入框",
+      "不替代用户输入，仅「插入」或「替换」当前正则，具体行为由页面状态决定",
+      "样式与 encoding 类型选择器、base-converter 进制选择器保持一致"
+    ],
+    "passes": true
+  },
+  {
+    "category": "页面开发",
+    "description": "实现正则表达式工具主页面，集成测试、替换、解释三种模式与双栏布局。",
+    "steps": [
+      "在 src/app/regex/page.tsx 中创建正则工具页面，使用 'use client' 标记",
+      "页面顶部：标题（正则表达式工具）、简要说明、快捷键提示 Cmd/Ctrl + Enter",
+      "模式切换按钮组：测试匹配 / 替换 / 解释，与 JSON、编码工具风格一致",
+      "左侧：正则输入框 + 标志位选择器 + 预设选择器（可选）；测试/替换模式下增加测试文本输入框，替换模式下增加替换字符串输入框",
+      "右侧：根据模式展示 MatchResultView / ReplaceResultView / ExplainResultView",
+      "管理页面状态：模式、正则、标志位、测试文本、替换字符串、匹配/替换/解释结果、错误信息",
+      "实现执行逻辑：点击「执行」或 Cmd/Ctrl + Enter 时根据当前模式调用 regex-utils 对应函数并更新结果",
+      "正则或测试文本为空时禁用执行按钮并给出提示；非法正则在结果区展示错误"
+    ],
+    "passes": true
+  },
+  {
+    "category": "页面开发",
+    "description": "在正则工具页面集成键盘快捷键、输入校验与结果复制体验。",
+    "steps": [
+      "在正则工具页面中监听 Cmd/Ctrl + Enter 快捷键触发当前模式的主操作（测试/替换/解释）",
+      "正则输入框失焦或内容变更时可选做轻量校验，非法时在输入区下方显示非阻塞错误提示",
+      "结果区域提供「复制全部」「复制第一条」等操作，复制成功后统一 toast 提示",
+      "替换模式下列出「共替换 N 处」，便于用户确认预期",
+      "在移动端与桌面端分别验证快捷键、按钮状态与复制行为"
+    ],
+    "passes": true
+  },
+  {
+    "category": "页面开发",
+    "description": "在正则表达式工具页面集成埋点 SDK，上报核心用户行为事件。",
+    "steps": [
+      "页面挂载时上报 tool_open 事件，附带 tool_name: 'regex-tool'",
+      "执行测试时上报 regex_test 事件，附带 has_match（是否匹配）、match_count、success（正则是否合法）",
+      "执行替换时上报 regex_replace 事件，附带 replace_count、success",
+      "执行解释时上报 regex_explain 事件，附带 success",
+      "使用预设时上报 regex_preset_use 事件，附带 preset_id（如 email、phone），不上传具体 pattern",
+      "复制结果时上报 regex_copy 事件，附带 result_type（match_list、replace_result、explain）",
+      "模式切换时上报 regex_mode_switch 事件，附带 from_mode、to_mode",
+      "所有埋点仅上传元信息，不上传用户输入的正则或测试文本内容"
+    ],
+    "passes": true
+  },
+  {
+    "category": "页面布局开发",
+    "description": "正则工具页面响应式布局与移动端适配，与全站双栏/堆叠一致。",
+    "steps": [
+      "正则工具页在宽屏下采用左右双栏（左输入配置、右结果），窄屏下改为上下堆叠",
+      "输入区与结果区高度与内边距随断点调整，避免滚动条重叠或过于拥挤",
+      "标志位选择器在移动端可折叠为「高级选项」或横向滚动标签，保证触控区域足够",
+      "验证在 sm/lg 断点下布局正常，与 JSON、编码、进制转换等工具页体验一致"
+    ],
+    "passes": true
+  },
+  {
+    "category": "配置更新",
+    "description": "更新工具列表配置，将正则表达式工具添加到首页工具卡片列表。",
+    "steps": [
+      "在 src/config/tools.ts 中添加正则表达式工具配置项",
+      "配置 id: 'regex-tool'、name: '正则表达式'、description: '测试、替换与解释正则，支持标志位与常用预设'",
+      "配置 href: '/regex'，选择合适图标（如 Lucide 的 Regex 或 Code）",
+      "根据需要设置 isHot 标记，验证首页工具卡片正确渲染并可跳转",
+      "确保搜索功能可通过「正则」「regex」「匹配」「替换」等关键词命中"
+    ],
+    "passes": true
   }
 ]
