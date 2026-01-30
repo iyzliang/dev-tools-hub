@@ -1155,7 +1155,7 @@
       "自定义容器：.tip / .warning / .danger / .details 的图标（或 emoji）、左边框色、背景色、标题加粗",
       "导出 CSS 变量或类名清单，供组件与预览区复用"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "组件开发",

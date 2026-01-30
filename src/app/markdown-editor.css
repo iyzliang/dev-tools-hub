@@ -1,0 +1,278 @@
+/**
+ * Vue-style Markdown 样式规范
+ * 作用域：.md-vue（包裹预览区使用）
+ *
+ * 类名清单：
+ * - .md-vue 根容器
+ * - .md-vue h1 ~ h6 标题
+ * - .md-vue p 段落
+ * - .md-vue ul, .md-vue ol 列表
+ * - .md-vue pre, .md-vue code 代码块与行内代码
+ * - .md-vue blockquote 引用块
+ * - .md-vue table 表格
+ * - .vue-container, .vue-tip, .vue-warning, .vue-danger, .vue-details 自定义容器
+ * - .vue-container-title 自定义容器标题
+ */
+
+/* ============================================================================
+   Root & variables
+   ============================================================================ */
+
+.md-vue {
+  --md-vue-heading-color: #111827;
+  --md-vue-text-color: #374151;
+  --md-vue-code-bg: #f1f5f9;
+  --md-vue-code-border: #e2e8f0;
+  --md-vue-blockquote-border: #3b82f6;
+  --md-vue-blockquote-bg: #eff6ff;
+  --md-vue-table-border: #e5e7eb;
+  --md-vue-table-th-bg: #f9fafb;
+  --md-vue-tip-border: #22c55e;
+  --md-vue-tip-bg: #f0fdf4;
+  --md-vue-warning-border: #f59e0b;
+  --md-vue-warning-bg: #fffbeb;
+  --md-vue-danger-border: #ef4444;
+  --md-vue-danger-bg: #fef2f2;
+  --md-vue-details-border: #8b5cf6;
+  --md-vue-details-bg: #f5f3ff;
+  line-height: 1.7;
+  color: var(--md-vue-text-color);
+}
+
+/* ============================================================================
+   Headings h1–h6
+   ============================================================================ */
+
+.md-vue h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1.3;
+  margin-top: 0;
+  margin-bottom: 1rem;
+  color: var(--md-vue-heading-color);
+  padding-bottom: 0.3rem;
+  border-bottom: 1px solid var(--md-vue-code-border);
+}
+
+.md-vue h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  line-height: 1.4;
+  margin-top: 2rem;
+  margin-bottom: 0.75rem;
+  color: var(--md-vue-heading-color);
+  padding-bottom: 0.25rem;
+  border-bottom: 1px solid var(--md-vue-code-border);
+}
+
+.md-vue h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+  color: var(--md-vue-heading-color);
+}
+
+.md-vue h4,
+.md-vue h5,
+.md-vue h6 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin-top: 1.25rem;
+  margin-bottom: 0.5rem;
+  color: var(--md-vue-heading-color);
+}
+
+/* ============================================================================
+   Paragraph & list
+   ============================================================================ */
+
+.md-vue p {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  line-height: 1.7;
+}
+
+.md-vue ul,
+.md-vue ol {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  padding-left: 1.5rem;
+}
+
+.md-vue ul {
+  list-style-type: disc;
+}
+
+.md-vue ol {
+  list-style-type: decimal;
+}
+
+.md-vue li {
+  margin-bottom: 0.25rem;
+}
+
+.md-vue li > ul,
+.md-vue li > ol {
+  margin-top: 0.25rem;
+  margin-bottom: 0;
+}
+
+/* ============================================================================
+   Code block & inline code
+   ============================================================================ */
+
+.md-vue pre {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  padding: 1rem 1.25rem;
+  background-color: var(--md-vue-code-bg);
+  border: 1px solid var(--md-vue-code-border);
+  border-radius: 0.5rem;
+  overflow-x: auto;
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+
+.md-vue pre code {
+  padding: 0;
+  background: transparent;
+  border-radius: 0;
+  font-size: inherit;
+}
+
+.md-vue :not(pre) > code {
+  padding: 0.2em 0.4em;
+  background-color: var(--md-vue-code-bg);
+  border: 1px solid var(--md-vue-code-border);
+  border-radius: 0.25rem;
+  font-family: ui-monospace, monospace;
+  font-size: 0.875em;
+}
+
+/* ============================================================================
+   Blockquote
+   ============================================================================ */
+
+.md-vue blockquote {
+  margin: 1rem 0;
+  padding: 0.5rem 0 0.5rem 1rem;
+  border-left: 4px solid var(--md-vue-blockquote-border);
+  background-color: var(--md-vue-blockquote-bg);
+  color: var(--md-vue-text-color);
+}
+
+.md-vue blockquote p {
+  margin-bottom: 0.5rem;
+}
+
+.md-vue blockquote p:last-child {
+  margin-bottom: 0;
+}
+
+.md-vue blockquote code {
+  font-size: 0.85em;
+}
+
+/* ============================================================================
+   Table
+   ============================================================================ */
+
+.md-vue table {
+  width: 100%;
+  margin: 1rem 0;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+  overflow-x: auto;
+  display: block;
+}
+
+@media (min-width: 640px) {
+  .md-vue table {
+    display: table;
+  }
+}
+
+.md-vue th,
+.md-vue td {
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--md-vue-table-border);
+  text-align: left;
+}
+
+.md-vue th {
+  font-weight: 600;
+  background-color: var(--md-vue-table-th-bg);
+  color: var(--md-vue-heading-color);
+}
+
+.md-vue tr:nth-child(even) {
+  background-color: #fafafa;
+}
+
+.md-vue tr:hover {
+  background-color: #f5f5f5;
+}
+
+/* ============================================================================
+   Vue-style custom containers
+   ============================================================================ */
+
+.md-vue .vue-container {
+  margin: 1rem 0;
+  padding: 1rem 1.25rem;
+  border-left: 4px solid;
+  border-radius: 0 0.5rem 0.5rem 0;
+}
+
+.md-vue .vue-container-title {
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+.md-vue .vue-container .vue-container-title:last-child,
+.md-vue .vue-container p:last-child,
+.md-vue .vue-container ul:last-child,
+.md-vue .vue-container ol:last-child {
+  margin-bottom: 0;
+}
+
+.md-vue .vue-tip {
+  border-color: var(--md-vue-tip-border);
+  background-color: var(--md-vue-tip-bg);
+}
+
+.md-vue .vue-warning {
+  border-color: var(--md-vue-warning-border);
+  background-color: var(--md-vue-warning-bg);
+}
+
+.md-vue .vue-danger {
+  border-color: var(--md-vue-danger-border);
+  background-color: var(--md-vue-danger-bg);
+}
+
+.md-vue .vue-details {
+  border-color: var(--md-vue-details-border);
+  background-color: var(--md-vue-details-bg);
+}
+
+/* ============================================================================
+   Links & horizontal rule
+   ============================================================================ */
+
+.md-vue a {
+  color: #2563eb;
+  text-decoration: none;
+}
+
+.md-vue a:hover {
+  text-decoration: underline;
+}
+
+.md-vue hr {
+  margin: 1.5rem 0;
+  border: none;
+  border-top: 1px solid var(--md-vue-code-border);
+}
