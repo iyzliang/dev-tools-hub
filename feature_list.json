@@ -1139,7 +1139,7 @@
       "实现 getHighlightCss 或导出预置 CSS 路径，供 Markdown 预览组件引入 Vue 风格代码块样式",
       "为 highlightCode 编写单元测试，覆盖多语言与未知语言降级为纯文本的场景"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "公共方法开发",
