@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { PasswordConfig, type PasswordMode } from "@/components/password/password-config";
 import { PasswordResult } from "@/components/password/password-result";
-import { trackEvent, getInputSizeRange } from "@/lib/analytics";
+import { trackEvent } from "@/lib/analytics";
 import {
   generateRandomPassword,
   generatePassphrase,

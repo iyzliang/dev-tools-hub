@@ -171,7 +171,7 @@ export function PasswordResult({
           还没有生成密码
         </h3>
         <p className="text-xs text-slate-500">
-          在左侧配置选项，然后点击"生成密码"按钮
+          在左侧配置选项，然后点击「生成密码」按钮
         </p>
       </div>
     );

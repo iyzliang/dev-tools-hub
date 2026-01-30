@@ -2,9 +2,6 @@ import {
   FileJson2,
   KeyRound,
   QrCode,
-  Regex,
-  Link,
-  GitCompare,
   type LucideIcon,
 } from "lucide-react";
 

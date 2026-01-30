@@ -309,7 +309,7 @@
       "接收 password 和 mode（random/passphrase）作为 props，内部调用熵值计算函数",
       "实现渐变色强度条，根据强度等级（极弱-红/弱-橙/中-黄/强-绿/极强-蓝）显示不同颜色",
       "显示具体熵值（如 79 bits）与强度等级文案",
-      "显示预估破解时间（如"约 3 万年"），使用友好的中文单位",
+      "显示预估破解时间（如「约 3 万年」），使用友好的中文单位",
       "确保组件在不同宽度下自适应，强度条与文案布局合理"
     ],
     "passes": true
@@ -334,7 +334,7 @@
     "steps": [
       "在 src/components/password/password-result.tsx 中创建 PasswordResult 组件",
       "接收密码数组、模式与配置信息作为 props",
-      "顶部显示结果数量与"全部复制"按钮",
+      "顶部显示结果数量与「全部复制」按钮",
       "列表渲染每个密码卡片：密码文本（等宽字体）、StrengthMeter 强度指示器、单个复制按钮",
       "密码文本默认显示，可考虑添加显示/隐藏切换（可选）",
       "实现单个复制与全部复制功能，复制后显示成功提示",
@@ -468,11 +468,11 @@
       "在 src/components/qrcode/qrcode-preview.tsx 中创建预览组件",
       "居中显示生成的二维码图片，使用 Canvas 或 <img> 渲染 DataURL",
       "图片下方显示当前编码的内容摘要（超过 50 字符截断显示，带 tooltip 查看完整内容）",
-      "未生成时显示占位区域：虚线边框 + 提示文案"配置内容后点击生成"",
+      "未生成时显示占位区域：虚线边框 + 提示文案「配置内容后点击生成」",
       "在 src/components/qrcode/export-actions.tsx 中创建导出操作组件",
       "实现格式选择器：PNG/SVG/JPEG 单选按钮组，默认 PNG",
       "实现导出尺寸选择器：与预览相同 / 自定义尺寸输入框（64-4096）",
-      "实现"下载"按钮与"复制图片"按钮，调用 qrcode-export 工具函数",
+      "实现「下载」按钮与「复制图片」按钮，调用 qrcode-export 工具函数",
       "下载与复制成功后显示轻量 toast 提示，失败时显示错误信息"
     ],
     "passes": true
@@ -486,7 +486,7 @@
       "实现拖拽上传：监听 dragover/drop 事件，拖入图片时高亮边框，释放后读取文件",
       "实现剪贴板粘贴：监听全局 paste 事件，检测 clipboardData 中的图片并读取",
       "实现 URL 输入区域：输入框 + 加载按钮，输入图片 URL 后通过 fetch 或 Image 加载",
-      "图片加载成功后显示缩略图预览，提供"清除"按钮重置状态",
+      "图片加载成功后显示缩略图预览，提供「清除」按钮重置状态",
       "处理常见错误：文件类型不支持、文件过大（建议限制 10MB）、URL 加载失败、跨域限制",
       "通过 props 回调将加载的图片数据（File 或 ImageData）传递给父组件"
     ],
@@ -498,9 +498,9 @@
     "steps": [
       "在 src/components/qrcode/scan-result.tsx 中创建解析结果组件",
       "解析成功时：显示解析出的原始文本内容，使用等宽字体与代码块样式",
-      "内容区域支持滚动（内容过长时）与全选，下方提供"复制内容"按钮",
-      "解析失败时：显示错误提示卡片，包含错误图标与友好错误信息（如"未识别到二维码"、"图片加载失败"）",
-      "未解析时：显示占位提示"上传或粘贴二维码图片进行解析"，配合引导图标",
+      "内容区域支持滚动（内容过长时）与全选，下方提供「复制内容」按钮",
+      "解析失败时：显示错误提示卡片，包含错误图标与友好错误信息（如「未识别到二维码」、「图片加载失败」）",
+      "未解析时：显示占位提示「上传或粘贴二维码图片进行解析」，配合引导图标",
       "复制成功后显示轻量 toast 提示",
       "确保组件在不同内容长度下布局合理，支持响应式调整"
     ],
@@ -571,14 +571,82 @@
     "description": "在 JSON 工具页面中集成 Key 转换模式，扩展现有模式切换功能并提供转换类型子选项。",
     "steps": [
       "在 src/app/json/page.tsx 中扩展 Mode 类型，新增 'keyTransform' 模式",
-      "扩展模式切换按钮组，添加"Key 转换"按钮，与现有格式化/压缩按钮风格一致",
+      "扩展模式切换按钮组，添加「Key 转换」按钮，与现有格式化/压缩按钮风格一致",
       "当选择 Key 转换模式时，显示转换类型子选项（蛇形转驼峰/驼峰转蛇形/蛇形转帕斯卡），使用下拉选择或按钮组",
       "在 handleRun 函数中集成 Key 转换逻辑，调用 transformJsonKeys 函数处理输入 JSON",
-      "更新执行按钮文案，在 Key 转换模式下显示"转换"",
+      "更新执行按钮文案，在 Key 转换模式下显示「转换」",
       "集成埋点 SDK，上报 json_key_transform 事件，附带 transform_type（转换类型）与 input_size_range",
       "验证在不同设备尺寸下 Key 转换模式的 UI 布局正常",
       "更新页面说明文案，提示 Key 转换功能的使用方式"
     ],
     "passes": true
+  },
+  {
+    "category": "公共方法开发",
+    "description": "实现 Base64/DataURL 与图片文件互转的核心工具函数，支持健壮的格式识别、大小估算与错误处理。",
+    "steps": [
+      "在 src/lib/base64-utils.ts 中创建 Base64 工具模块，导出统一的转换与解析函数",
+      "实现 normalizeBase64Input：支持纯 Base64 与 DataURL（data:image/png;base64,...）输入，自动剥离前缀与空白字符",
+      "实现 detectMimeType：从 DataURL 前缀推断 MIME（如 image/png），并在未知时回退为 application/octet-stream",
+      "实现 fileToDataURL：接收 File/Blob，使用 FileReader 生成 DataURL（用于「图片转 Base64」）",
+      "实现 dataURLToBlob 与 base64ToBlob：将 DataURL/Base64 转换为 Blob，支持传入 mimeType（用于「Base64 转图片/下载」）",
+      "实现 estimateBytesFromBase64：估算 Base64 对应的字节大小，供 UI 展示文件大小（不解码也可估算）",
+      "实现安全限制：对超大输入（如估算 > 20MB）返回友好错误，避免浏览器内存暴涨",
+      "为上述函数编写单元测试，覆盖：空输入、带换行的 Base64、带前缀的 DataURL、无效字符、超大输入等边界场景"
+    ],
+    "passes": true
+  },
+  {
+    "category": "组件开发",
+    "description": "实现 Base64 文本输入/输出组件，支持复制、清空、长度与大小提示、以及 DataURL/纯 Base64 视图切换。",
+    "steps": [
+      "在 src/components/base64/base64-textarea.tsx 中创建 Base64TextArea 组件，沿用现有 Input/TextArea 的设计系统样式",
+      "支持受控模式：value/onChange，并提供 disabled/readonly 形态以复用在「输出区域」",
+      "实现工具栏操作：复制（copy）、清空（clear）",
+      "实现视图切换：可在「DataURL」与「纯 Base64」两种展示之间切换（输出时可选是否包含前缀）",
+      "展示元信息：字符长度、估算字节大小（调用 estimateBytesFromBase64）、识别到的 MIME（如可识别）",
+      "对无效输入显示非阻塞错误提示（不在文本域内插入红字），并提供可关闭提示条",
+      "确保键盘可访问性：按钮可 tab 聚焦、aria-label 完整、复制成功有轻量提示"
+    ],
+    "passes": false
+  },
+  {
+    "category": "组件开发",
+    "description": "实现图片选择与预览组件，用于「图片转 Base64」，支持文件选择、拖拽与剪贴板粘贴。",
+    "steps": [
+      "在 src/components/base64/image-picker.tsx 中创建 ImagePicker 组件，支持点击选择图片（accept='image/*'）",
+      "实现拖拽上传：dragover/drop 高亮反馈，释放后读取 File",
+      "实现剪贴板粘贴：监听 paste 事件，从 clipboardData 读取图片并转为 File/Blob",
+      "展示预览与元信息：缩略图、文件名、MIME、文件大小，并提供「移除/重选」操作",
+      "校验与限制：仅允许图片类型、限制最大文件大小（如 10MB），超限给出错误提示",
+      "通过 props 回调将选中的 File 传给父组件，保持组件无业务耦合"
+    ],
+    "passes": false
+  },
+  {
+    "category": "页面开发",
+    "description": "实现 Base64 转换工具主页面，包含「图片转 Base64」和「Base64 转图片」两个模式，并提供复制与下载能力。",
+    "steps": [
+      "在 src/app/base64/page.tsx 创建页面并使用 'use client'，页面标题为「Base64 转换」并添加简要说明",
+      "实现模式切换按钮组：图片转 Base64 / Base64 转图片（切换时保留各自状态）",
+      "图片转 Base64：左侧使用 ImagePicker 选择图片，右侧输出 Base64TextArea（支持 DataURL/纯 Base64 切换）",
+      "Base64 转图片：左侧输入 Base64TextArea（支持粘贴 DataURL 或纯 Base64），右侧显示图片预览与错误提示",
+      "实现下载：图片转 Base64 支持下载 .txt（如 base64.txt）；Base64 转图片支持下载解析后的图片文件（默认文件名与扩展名）",
+      "实现复制：一键复制 Base64 字符串；在 Base64 转图片模式支持复制图片到剪贴板（ClipboardItem）并做兼容性降级提示",
+      "实现快捷键：Cmd/Ctrl + Enter 执行当前模式主动作（生成 Base64 或解析预览），并在输入为空时禁用主按钮",
+      "集成埋点 SDK：上报 tool_open（tool_name: 'base64'）、base64_encode、base64_decode、base64_copy、base64_download 等事件（仅上传元信息，不上传内容）",
+      "验证响应式布局：桌面双栏、移动端上下堆叠，保证预览与文本域滚动体验良好"
+    ],
+    "passes": false
+  },
+  {
+    "category": "页面开发",
+    "description": "将 Base64 转换工具加入首页工具入口配置，确保可从首页搜索与卡片点击进入。",
+    "steps": [
+      "在 src/config/tools.ts 中新增工具项：id 建议 'base64-converter'，name: 'Base64 转换'，description 覆盖「图片↔Base64 互转」",
+      "为该工具选择合适图标并设置 href: '/base64'，根据优先级决定 isHot（默认 false）",
+      "验证首页工具卡片可跳转到 /base64，并确保搜索功能可通过「base64/Base64/图片编码」等关键词命中"
+    ],
+    "passes": false
   }
 ]
