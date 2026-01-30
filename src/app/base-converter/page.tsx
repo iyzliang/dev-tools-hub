@@ -6,11 +6,7 @@ import { BaseSelector } from "@/components/base-converter/base-selector";
 import { NumberInput } from "@/components/base-converter/number-input";
 import { ConversionResult } from "@/components/base-converter/conversion-result";
 import { trackEvent } from "@/lib/analytics";
-import {
-  convertAllBases,
-  type Base,
-  DEFAULT_BASE,
-} from "@/lib/base-converter";
+import { convertAllBases, type Base, DEFAULT_BASE } from "@/lib/base-converter";
 
 const BASE_CONVERTER_TOOL_NAME = "base-converter";
 
@@ -122,16 +118,11 @@ export default function BaseConverterPage() {
         <div className="flex min-h-0 flex-col">
           <div className="mb-2 flex shrink-0 items-center gap-2">
             <div className="h-2 w-2 rounded-full bg-blue-500" />
-            <span className="text-xs font-medium text-slate-700">
-              输入配置
-            </span>
+            <span className="text-xs font-medium text-slate-700">输入配置</span>
           </div>
           <div className="min-h-0 flex-1 rounded-lg border border-slate-200 bg-slate-50/50 p-4">
             <div className="flex h-full flex-col gap-4 overflow-y-auto">
-              <BaseSelector
-                value={selectedBase}
-                onChange={handleBaseChange}
-              />
+              <BaseSelector value={selectedBase} onChange={handleBaseChange} />
               <NumberInput
                 selectedBase={selectedBase}
                 value={inputValue}
@@ -169,14 +160,16 @@ export default function BaseConverterPage() {
         <div className="flex min-h-0 flex-col">
           <div className="mb-2 flex shrink-0 items-center gap-2">
             <div className="h-2 w-2 rounded-full bg-emerald-500" />
-            <span className="text-xs font-medium text-slate-700">
-              转换结果
-            </span>
+            <span className="text-xs font-medium text-slate-700">转换结果</span>
           </div>
           <div className="min-h-0 flex-1 rounded-lg border border-slate-200 bg-white p-4">
             <ConversionResult
               results={conversionResults}
-              sourceBase={conversionResults[selectedBase] === inputValue.trim() ? selectedBase : null}
+              sourceBase={
+                conversionResults[selectedBase] === inputValue.trim()
+                  ? selectedBase
+                  : null
+              }
               onCopy={handleCopy}
             />
           </div>
