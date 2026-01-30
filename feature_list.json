@@ -647,6 +647,6 @@
       "为该工具选择合适图标并设置 href: '/base64'，根据优先级决定 isHot（默认 false）",
       "验证首页工具卡片可跳转到 /base64，并确保搜索功能可通过「base64/Base64/图片编码」等关键词命中"
     ],
-    "passes": false
+    "passes": true
   }
 ]

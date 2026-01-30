@@ -1,4 +1,5 @@
 import {
+  Binary,
   FileJson2,
   KeyRound,
   QrCode,
@@ -38,5 +39,13 @@ export const tools: Tool[] = [
     icon: QrCode,
     isHot: true,
     href: "/qrcode",
+  },
+  {
+    id: "base64-converter",
+    name: "Base64 转换",
+    description: "图片↔Base64/DataURL 互转，支持复制与下载",
+    icon: Binary,
+    isHot: false,
+    href: "/base64",
   },
 ];
