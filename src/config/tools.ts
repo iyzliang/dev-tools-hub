@@ -1,5 +1,6 @@
 import {
   Binary,
+  Clock,
   FileJson2,
   Hash,
   KeyRound,
@@ -56,5 +57,13 @@ export const tools: Tool[] = [
     icon: Hash,
     isHot: true,
     href: "/base-converter",
+  },
+  {
+    id: "timestamp-converter",
+    name: "时间戳转换",
+    description: "时间戳与日期时间互转，支持秒/毫秒、多时区与复制",
+    icon: Clock,
+    isHot: false,
+    href: "/timestamp",
   },
 ];

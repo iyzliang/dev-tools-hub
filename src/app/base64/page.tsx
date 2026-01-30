@@ -243,7 +243,7 @@ export default function Base64ToolPage() {
           {
             success: false,
             input_size_range: getInputSizeRange(trimmed.length),
-            bytes_estimate: bytesEstimate.ok ? bytesEstimate.bytes : undefined,
+            bytes_estimate: bytesEstimate.ok ? bytesEstimate.bytes : null,
             has_data_url_prefix: trimmed.startsWith("data:"),
           },
           { toolName: TOOL_NAME },
@@ -263,7 +263,7 @@ export default function Base64ToolPage() {
         {
           success: true,
           input_size_range: getInputSizeRange(trimmed.length),
-          bytes_estimate: bytesEstimate.ok ? bytesEstimate.bytes : undefined,
+          bytes_estimate: bytesEstimate.ok ? bytesEstimate.bytes : null,
           bytes: result.bytes,
           mime: result.mimeType,
           has_data_url_prefix: trimmed.startsWith("data:"),

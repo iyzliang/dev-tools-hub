@@ -207,7 +207,7 @@ export function base64ToBlob(
     const u8 = decodeBase64ToUint8Array(normalized.base64);
     return {
       ok: true,
-      blob: new Blob([u8], { type: mimeType || DEFAULT_MIME_TYPE }),
+      blob: new Blob([u8 as BlobPart], { type: mimeType || DEFAULT_MIME_TYPE }),
       mimeType: mimeType || DEFAULT_MIME_TYPE,
       bytes,
     };
@@ -237,7 +237,7 @@ export function dataURLToBlob(
     const u8 = decodeBase64ToUint8Array(parsed.base64);
     return {
       ok: true,
-      blob: new Blob([u8], { type: parsed.mimeType }),
+      blob: new Blob([u8 as BlobPart], { type: parsed.mimeType }),
       mimeType: parsed.mimeType,
       bytes,
     };

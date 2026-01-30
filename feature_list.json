@@ -737,5 +737,94 @@
       "确保搜索功能可通过'进制'、'base'、'转换'等关键词找到该工具"
     ],
     "passes": true
+  },
+  {
+    "category": "公共方法开发",
+    "description": "实现时间戳与日期时间互转、时区格式化与日期字符串解析的核心工具函数。",
+    "steps": [
+      "在 src/lib/timestamp-utils.ts 中创建时间戳转换工具模块",
+      "定义 TimestampUnit 类型（'seconds' | 'milliseconds'）与 TimezoneOption 类型（'UTC' | 'local' | string）",
+      "实现 parseDateString 函数：支持 ISO 8601（如 2024-01-30T12:00:00、带 Z 或 +08:00）、常见格式（2024-01-30 12:00:00），返回 Date 或错误信息",
+      "实现 timestampToDate 函数：接收数字与单位（秒/毫秒），返回 Date 对象",
+      "实现 dateToTimestamp 函数：接收 Date，返回 { seconds, milliseconds } 对象",
+      "实现 formatDateInTimezone 函数：接收 Date 与时区（UTC/local/IANA 如 Asia/Shanghai），使用 Intl.DateTimeFormat 格式化为可读字符串",
+      "实现 getCurrentTimestamp 函数：返回当前时间的秒与毫秒；实现 getCurrentDateString 函数：返回当前时间的 ISO 字符串",
+      "处理边界与错误：无效时间戳、无法解析的日期字符串、超出安全范围数字，返回统一错误结构",
+      "为上述函数编写单元测试，覆盖正常解析、多种日期格式、时区输出与边界场景"
+    ],
+    "passes": true
+  },
+  {
+    "category": "组件开发",
+    "description": "实现时间戳单位选择器与时区选择器组件，供时间戳转换页面使用。",
+    "steps": [
+      "在 src/components/timestamp/ 目录下创建 unit-selector.tsx，实现秒/毫秒单选按钮组，受控模式 value/onChange",
+      "创建 timezone-selector.tsx：支持选项「本地」「UTC」与常用时区下拉（如 Asia/Shanghai、America/New_York），可使用 Intl.supportedValuesOf('timeZone') 或预设列表",
+      "时区选择器为受控组件，与全站 Input/Select 样式一致，带 label 与键盘可访问性",
+      "两个组件均支持 disabled 与 aria-label，移动端布局紧凑"
+    ],
+    "passes": true
+  },
+  {
+    "category": "组件开发",
+    "description": "实现时间戳输入框与日期时间输入框组件，支持校验与当前时间快捷填入。",
+    "steps": [
+      "在 src/components/timestamp/timestamp-input.tsx 中创建时间戳输入组件：纯数字输入，配合单位选择器（秒/毫秒），实时校验非法字符与超出安全范围",
+      "在 src/components/timestamp/date-string-input.tsx 中创建日期时间输入组件：多行或单行文本，支持粘贴 ISO 8601 及常见格式，解析失败时显示非阻塞错误提示",
+      "为两个输入组件提供「当前时间」快捷按钮：时间戳输入时填入当前秒或毫秒；日期输入时填入当前时间的 ISO 字符串",
+      "输入组件受控、带清空与 placeholder，错误状态与现有设计系统一致"
+    ],
+    "passes": true
+  },
+  {
+    "category": "组件开发",
+    "description": "实现时间戳转换结果展示组件，多时区日期与双单位时间戳展示，带复制按钮。",
+    "steps": [
+      "在 src/components/timestamp/conversion-result.tsx 中创建结果展示组件",
+      "时间戳→日期模式：接收 Date 与所选时区列表，展示各时区下的格式化日期时间字符串，每行带复制按钮",
+      "日期→时间戳模式：接收 seconds 与 milliseconds，以卡片或列表展示两种单位的结果，各带复制按钮",
+      "无结果时显示占位文案「输入后点击转换」；错误时显示友好错误信息",
+      "结果区域使用等宽字体，复制成功后轻量 toast 提示，布局支持响应式与滚动"
+    ],
+    "passes": true
+  },
+  {
+    "category": "页面开发",
+    "description": "实现时间戳转换工具主页面，双模式（时间戳→日期、日期→时间戳）与完整交互流程。",
+    "steps": [
+      "在 src/app/timestamp/page.tsx 中创建时间戳转换页面，使用 'use client' 标记",
+      "页面顶部：标题（时间戳转换）、简要说明、快捷键提示 Cmd/Ctrl + Enter",
+      "模式切换按钮组：时间戳 → 日期时间 | 日期时间 → 时间戳，与进制转换/Base64 风格一致",
+      "时间戳→日期模式：左侧单位选择器 + 时间戳输入框 + 当前时间按钮 + 时区选择器 + 转换按钮；右侧展示所选时区下的日期时间结果与复制",
+      "日期→时间戳模式：左侧日期时间输入框 + 当前时间按钮 + 时区选择器（解释输入时间的时区）+ 转换按钮；右侧展示秒/毫秒时间戳与复制",
+      "管理页面状态：模式、单位、输入值、时区、转换结果、错误信息、复制提示；切换模式时保留各自状态",
+      "实现转换逻辑：调用 timestamp-utils，根据模式更新结果；监听 Cmd/Ctrl + Enter 触发展示；输入为空或非法时禁用主按钮并显示提示",
+      "验证桌面双栏与移动端上下堆叠的响应式布局"
+    ],
+    "passes": true
+  },
+  {
+    "category": "页面开发",
+    "description": "在时间戳转换工具页面集成埋点 SDK，上报核心用户行为事件。",
+    "steps": [
+      "页面挂载时上报 tool_open 事件，附带 tool_name: 'timestamp-converter'",
+      "执行转换时上报 timestamp_convert 事件，附带 mode（to_date | to_timestamp）、unit（若适用）、timezone、success",
+      "复制结果时上报 timestamp_copy 事件，附带 copy_target（date_string | seconds | milliseconds）",
+      "点击当前时间按钮时上报 timestamp_current_time 事件，附带 mode",
+      "模式切换时上报 timestamp_mode_switch 事件，附带 from_mode、to_mode",
+      "所有埋点仅上传元信息，不上传用户输入的具体时间戳或日期字符串"
+    ],
+    "passes": true
+  },
+  {
+    "category": "配置更新",
+    "description": "更新工具列表配置，将时间戳转换工具添加到首页工具卡片列表。",
+    "steps": [
+      "在 src/config/tools.ts 中添加时间戳转换工具配置项",
+      "配置 id: 'timestamp-converter'、name: '时间戳转换'、description: '时间戳与日期时间互转，支持秒/毫秒、多时区与复制'",
+      "配置路由 path: '/timestamp'，选择合适图标（如 Clock 或 CalendarClock）",
+      "根据需要设置 isHot 标记，验证首页卡片与搜索可通过「时间戳」「timestamp」「日期」等关键词命中"
+    ],
+    "passes": true
   }
 ]
