@@ -34,10 +34,10 @@ pnpm dev
 
 ### 环境变量
 
-| 变量 | 说明 | 必填 |
-|------|------|------|
-| `DATABASE_URL` | PostgreSQL 连接串，供 Prisma 使用 | 使用埋点或管理统计页时必填 |
-| `ADMIN_DASHBOARD_PASSWORD` | 管理统计页 `/admin/analytics` 登录密码 | 访问管理页时必填 |
+| 变量                       | 说明                                   | 必填                       |
+| -------------------------- | -------------------------------------- | -------------------------- |
+| `DATABASE_URL`             | PostgreSQL 连接串，供 Prisma 使用      | 使用埋点或管理统计页时必填 |
+| `ADMIN_DASHBOARD_PASSWORD` | 管理统计页 `/admin/analytics` 登录密码 | 访问管理页时必填           |
 
 示例（`.env`，勿提交仓库）：
 
@@ -50,15 +50,15 @@ ADMIN_DASHBOARD_PASSWORD="your-secret-password"
 
 ## 脚本说明
 
-| 命令 | 说明 |
-|------|------|
-| `pnpm dev` | 启动开发服务器 |
-| `pnpm build` | 生产构建 |
-| `pnpm start` | 生产模式启动（需先 build） |
-| `pnpm lint` | ESLint 检查 |
-| `pnpm test` | Vitest 单元测试 |
-| `pnpm prisma:generate` | 生成 Prisma Client |
-| `pnpm prisma:migrate` | 执行数据库迁移（开发环境） |
+| 命令                   | 说明                       |
+| ---------------------- | -------------------------- |
+| `pnpm dev`             | 启动开发服务器             |
+| `pnpm build`           | 生产构建                   |
+| `pnpm start`           | 生产模式启动（需先 build） |
+| `pnpm lint`            | ESLint 检查                |
+| `pnpm test`            | Vitest 单元测试            |
+| `pnpm prisma:generate` | 生成 Prisma Client         |
+| `pnpm prisma:migrate`  | 执行数据库迁移（开发环境） |
 
 ## 部署
 
@@ -84,13 +84,13 @@ DB_PORT=5504
 ADMIN_DASHBOARD_PASSWORD=your-admin-password
 ```
 
-| 变量 | 说明 | 默认值 |
-|------|------|--------|
-| `POSTGRES_USER` | 数据库用户名 | `devtools` |
-| `POSTGRES_PASSWORD` | 数据库密码 | `devtools` |
-| `POSTGRES_DB` | 数据库名 | `devtools` |
-| `APP_PORT` | 应用对外端口 | `5505` |
-| `DB_PORT` | 数据库对外端口 | `5504` |
+| 变量                       | 说明           | 默认值     |
+| -------------------------- | -------------- | ---------- |
+| `POSTGRES_USER`            | 数据库用户名   | `devtools` |
+| `POSTGRES_PASSWORD`        | 数据库密码     | `devtools` |
+| `POSTGRES_DB`              | 数据库名       | `devtools` |
+| `APP_PORT`                 | 应用对外端口   | `5505`     |
+| `DB_PORT`                  | 数据库对外端口 | `5504`     |
 | `ADMIN_DASHBOARD_PASSWORD` | 管理页登录密码 | `changeme` |
 
 #### 部署步骤
@@ -100,7 +100,7 @@ ADMIN_DASHBOARD_PASSWORD=your-admin-password
 docker compose up -d
 
 # 2. 首次部署：执行数据库迁移
-docker compose exec app node node_modules/.bin/prisma migrate deploy
+docker compose exec app npx prisma migrate deploy
 
 # 3. 访问应用
 # http://localhost:5505
@@ -146,6 +146,7 @@ docker run -d \
 ```
 
 **说明**：
+
 - 若不需要埋点/统计功能，可省略 `DATABASE_URL` 和 `ADMIN_DASHBOARD_PASSWORD`
 - 若数据库在本机，`host` 可用 `host.docker.internal`（Mac/Windows）或宿主机 IP
 

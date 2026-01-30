@@ -40,6 +40,9 @@ COPY --from=build /app/.next ./.next
 COPY --from=build /app/node_modules ./node_modules
 COPY --from=build /app/prisma ./prisma
 
+# 修改目录属主，确保 nextjs 用户有权写入（prisma migrate 需要）
+RUN chown -R nextjs:nextjs /app
+
 USER nextjs
 
 EXPOSE 5505
