@@ -857,7 +857,7 @@
       "输入框支持清空、粘贴；结果区在 JWT 解码与 URL 参数解析时展示结构化键值或 JSON 树形展示",
       "确保所有控件有 label、aria-label 与键盘可访问性，移动端布局紧凑"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "组件开发",
@@ -871,7 +871,7 @@
       "错误状态：输入非法或解码失败时显示友好错误信息与可能原因，不阻塞界面",
       "复制成功后显示轻量 toast 提示，与全站反馈一致"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "页面开发",
@@ -886,7 +886,7 @@
       "切换编码类型时保留输入内容，便于同一段文本尝试多种编码；切换编码/解码模式时可清空结果或保留输入",
       "验证桌面双栏与移动端响应式布局，确保长文本与结构化结果滚动正常"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "页面开发",
@@ -899,7 +899,7 @@
       "模式切换时上报 encoding_mode_switch 事件，附带 from_mode、to_mode",
       "所有埋点仅上传元信息与类型，不上传用户输入或输出的具体内容"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "配置更新",
@@ -911,6 +911,6 @@
       "根据需要设置 isHot 标记，验证首页工具卡片正确渲染并可跳转",
       "确保搜索功能可通过「编码」「解码」「Unicode」「URL 编码」「Base64」「MD5」「JWT」等关键词命中"
     ],
-    "passes": false
+    "passes": true
   }
 ]

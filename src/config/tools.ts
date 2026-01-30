@@ -1,6 +1,7 @@
 import {
   Binary,
   Clock,
+  Code,
   FileJson2,
   Hash,
   KeyRound,
@@ -65,5 +66,13 @@ export const tools: Tool[] = [
     icon: Clock,
     isHot: false,
     href: "/timestamp",
+  },
+  {
+    id: "encoding-tool",
+    name: "信息编码工具",
+    description: "Unicode/URL/UTF16/Base64/MD5/SHA1/HTML 编码与解码，URL 参数解析、JWT 解码",
+    icon: Code,
+    isHot: false,
+    href: "/encoding",
   },
 ];
