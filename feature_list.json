@@ -1195,7 +1195,7 @@
       "工具栏样式与 JSON/编码工具页的操作栏一致，移动端可折叠为「更多」下拉",
       "所有按钮具备 aria-label 与键盘可访问性"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "页面开发",
@@ -1209,7 +1209,7 @@
       "集成埋点 SDK：上报 tool_open（tool_name: 'markdown-editor'）、markdown_export_html、markdown_export_md、markdown_toolbar_insert 等事件（仅元信息）",
       "验证桌面双栏与移动端 Tab 切换的响应式表现"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "页面开发",
@@ -1221,7 +1221,7 @@
       "导出与复制成功后显示轻量 toast 提示，失败时显示错误信息",
       "埋点：上报 markdown_export_html、markdown_export_md、markdown_copy_html，附带 success 与格式类型"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "页面布局开发",
@@ -1233,7 +1233,7 @@
       "工具栏在移动端可横向滚动或折叠为图标+下拉，触控区域不小于 44px",
       "在 sm/lg 断点验证与 JSON、编码等工具页体验一致"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "配置更新",
@@ -1245,6 +1245,6 @@
       "根据需要设置 isHot 标记，验证首页工具卡片正确渲染并可跳转",
       "确保搜索功能可通过「Markdown」「md」「编辑器」「Vue」等关键词命中"
     ],
-    "passes": false
+    "passes": true
   }
 ]

@@ -19,6 +19,8 @@ export interface EditorAreaProps {
 
 export interface EditorAreaHandle {
   insertAtCursor: (text: string) => void;
+  /** Wrap current selection with before/after strings. */
+  wrapSelection: (before: string, after: string) => void;
 }
 
 export const EditorArea = React.forwardRef<EditorAreaHandle, EditorAreaProps>(
@@ -54,12 +56,35 @@ export const EditorArea = React.forwardRef<EditorAreaHandle, EditorAreaProps>(
       [value, onChange],
     );
 
+    const wrapSelection = React.useCallback(
+      (before: string, after: string) => {
+        const el = textareaRef.current;
+        if (!el) return;
+        const start = el.selectionStart;
+        const end = el.selectionEnd;
+        const left = value.slice(0, start);
+        const sel = value.slice(start, end);
+        const right = value.slice(end);
+        const next = left + before + sel + after + right;
+        onChange(next);
+        requestAnimationFrame(() => {
+          el.focus();
+          el.setSelectionRange(
+            start + before.length,
+            end + before.length,
+          );
+        });
+      },
+      [value, onChange],
+    );
+
     React.useImperativeHandle(
       ref,
       () => ({
         insertAtCursor,
+        wrapSelection,
       }),
-      [insertAtCursor],
+      [insertAtCursor, wrapSelection],
     );
 
     const handleKeyDown = React.useCallback(

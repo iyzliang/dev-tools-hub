@@ -3,6 +3,7 @@ import {
   Clock,
   Code,
   FileJson2,
+  FileText,
   Hash,
   KeyRound,
   QrCode,
@@ -83,5 +84,13 @@ export const tools: Tool[] = [
     icon: Regex,
     isHot: false,
     href: "/regex",
+  },
+  {
+    id: "markdown-editor",
+    name: "Markdown 编辑器",
+    description: "编辑与预览 Markdown，Vue 风格排版与代码高亮，支持导出 HTML/MD",
+    icon: FileText,
+    isHot: false,
+    href: "/markdown-editor",
   },
 ];
