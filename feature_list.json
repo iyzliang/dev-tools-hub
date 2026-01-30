@@ -1112,5 +1112,139 @@
       "确保搜索功能可通过「正则」「regex」「匹配」「替换」等关键词命中"
     ],
     "passes": true
+  },
+  {
+    "category": "公共方法开发",
+    "description": "实现 Markdown 解析与 AST 转换核心工具函数，支持标准 GFM 与 Vue 风格自定义容器（::: tip / warning / danger / details）的解析。",
+    "steps": [
+      "安装 markdown 解析库：pnpm add marked 或 pnpm add remark remark-parse remark-gfm，并选型自定义容器扩展（如 remark-directive 或自研简单正则解析）",
+      "在 src/lib/markdown-utils.ts 中创建 Markdown 工具模块，定义 MarkdownParseResult 与 VueStyleBlock 等类型",
+      "实现 parseMarkdown 函数：将原始 Markdown 字符串解析为可渲染结构，支持标题、列表、代码块、表格、引用、自定义容器",
+      "实现 parseVueStyleContainers 函数：识别 ::: tip、::: warning、::: danger、::: details 等 VuePress 风格块，解析标题与内容",
+      "实现 markdownToHtml 或提供供 React 使用的节点树（若采用 remark-rehype 则输出 hast），便于与语法高亮管线衔接",
+      "处理边界情况：空输入、非法嵌套、未闭合块，返回统一结果结构（ok/error）",
+      "为解析与容器解析函数编写单元测试，覆盖常见 Markdown 与 Vue 风格块场景"
+    ],
+    "passes": true
+  },
+  {
+    "category": "公共方法开发",
+    "description": "实现 Markdown 代码块语法高亮工具函数，采用 Vue 文档风格配色（如浅色主题、多语言支持）。",
+    "steps": [
+      "安装语法高亮库：pnpm add highlight.js 或 pnpm add shiki（可选，更佳样式与 Vue 官网一致）",
+      "在 src/lib/markdown-utils.ts 或新建 src/lib/markdown-highlight.ts 中实现 highlightCode 函数",
+      "接收代码字符串与语言标识（如 js、ts、vue、bash、json），返回带 class 的 HTML 片段或 React 节点",
+      "注册 Vue 文档常用语言：JavaScript、TypeScript、Vue、HTML、CSS、JSON、Bash、Shell",
+      "若使用 highlight.js：应用 vue 或 github 主题的 CSS 变量/类名，与全站浅色风格统一；若使用 shiki：配置 vue-light 或自定义主题",
+      "实现 getHighlightCss 或导出预置 CSS 路径，供 Markdown 预览组件引入 Vue 风格代码块样式",
+      "为 highlightCode 编写单元测试，覆盖多语言与未知语言降级为纯文本的场景"
+    ],
+    "passes": false
+  },
+  {
+    "category": "公共方法开发",
+    "description": "定义 Vue 风格 Markdown 样式规范与工具类，包括排版、自定义容器、表格、引用块等 CSS。",
+    "steps": [
+      "在 src/app/globals.css 或新建 src/app/markdown-editor.css 中定义 Vue 风格 Markdown 作用域样式类（如 .md-vue）",
+      "标题：h1–h6 字号层级、字重、行高、与下方段落间距，与 Vue 文档视觉一致",
+      "段落与列表：行高 1.7、列表缩进、有序/无序列表样式",
+      "代码块：背景色（如 slate-100）、圆角、边框、内边距、语法高亮容器样式",
+      "行内代码：背景、圆角、字体（monospace）、字号略小",
+      "引用块：左边框、背景色、引用内代码与列表的嵌套样式",
+      "表格：边框、表头背景、斑马纹（可选）、响应式横向滚动",
+      "自定义容器：.tip / .warning / .danger / .details 的图标（或 emoji）、左边框色、背景色、标题加粗",
+      "导出 CSS 变量或类名清单，供组件与预览区复用"
+    ],
+    "passes": false
+  },
+  {
+    "category": "组件开发",
+    "description": "实现 Markdown 编辑区组件，支持多行输入、Tab 缩进、与预览联动（可选分栏同步滚动）。",
+    "steps": [
+      "在 src/components/markdown-editor/ 目录下创建 editor-area.tsx（或使用 CodeMirror 的 Markdown 模式）",
+      "若使用 CodeMirror：安装 @codemirror/lang-markdown，配置 GFM、缩进、括号匹配，与现有 JSON 编辑器风格统一",
+      "若使用 Textarea：实现 Tab 键插入空格、多行、等宽字体、最小高度与可伸缩高度",
+      "组件为受控组件，接收 value、onChange、placeholder、disabled 等 props",
+      "可选：实现编辑区与预览区的「同步滚动」占位接口，便于后续按行高映射联动",
+      "确保键盘可访问性、aria-label 与焦点状态符合全站规范"
+    ],
+    "passes": false
+  },
+  {
+    "category": "组件开发",
+    "description": "实现 Markdown 预览组件，渲染 HTML 并应用 Vue 风格样式与代码高亮。",
+    "steps": [
+      "在 src/components/markdown-editor/preview-panel.tsx 中创建预览组件",
+      "接收 markdown 字符串（或已解析的 HTML/节点树）作为 props",
+      "使用 markdown-utils 的解析与高亮管线输出 HTML，通过 dangerouslySetInnerHTML 或 react-markdown + 自定义组件渲染",
+      "根容器添加 Vue 风格类名（如 md-vue），应用公共方法开发中定义的 CSS",
+      "代码块：调用 highlightCode 注入高亮后的 HTML，并包裹在带语言 class 的 pre/code 中",
+      "自定义容器（tip/warning/danger/details）：渲染为带图标与标题的块级元素，details 支持折叠",
+      "确保预览区可滚动、支持响应式宽度，并防止 XSS（仅渲染信任的解析结果，不直接插入用户原始输入）"
+    ],
+    "passes": false
+  },
+  {
+    "category": "组件开发",
+    "description": "实现 Markdown 编辑器工具栏组件，提供常用语法快捷插入与导出操作。",
+    "steps": [
+      "在 src/components/markdown-editor/toolbar.tsx 中创建工具栏组件",
+      "提供快捷按钮：标题（H1–H3）、加粗、斜体、行内代码、链接、图片、引用、无序列表、有序列表、代码块、表格（插入表格模板）、分割线",
+      "点击按钮时通过回调向编辑区当前光标位置插入对应语法（或选中文本包裹），需接收 textarea/editor 的 ref 或由父组件传入 insertAtCursor 方法",
+      "提供「导出」区域：导出为 HTML、导出为 .md 文件，通过回调交由页面或工具函数处理",
+      "工具栏样式与 JSON/编码工具页的操作栏一致，移动端可折叠为「更多」下拉",
+      "所有按钮具备 aria-label 与键盘可访问性"
+    ],
+    "passes": false
+  },
+  {
+    "category": "页面开发",
+    "description": "实现 Markdown 编辑器主页面，双栏（编辑 | 预览）布局与模式切换，集成编辑、预览与工具栏。",
+    "steps": [
+      "在 src/app/markdown-editor/page.tsx 中创建页面，使用 'use client' 标记",
+      "页面顶部：标题（Markdown 编辑器）、简要说明（支持 Vue 风格排版与代码高亮）、快捷键提示 Cmd/Ctrl + Enter 执行预览刷新",
+      "实现双栏布局：左侧编辑区（Toolbar + EditorArea）、右侧预览区（PreviewPanel），桌面端 50/50 或可调比例；移动端上下堆叠，可切换「编辑」「预览」Tab",
+      "管理页面状态：原始 Markdown 内容、解析/高亮结果、编辑/预览模式（移动端）、错误信息",
+      "编辑内容变更时实时或防抖（如 300ms）更新预览，无需单独「执行」按钮；保留 Cmd/Ctrl + Enter 作为刷新预览快捷键",
+      "集成埋点 SDK：上报 tool_open（tool_name: 'markdown-editor'）、markdown_export_html、markdown_export_md、markdown_toolbar_insert 等事件（仅元信息）",
+      "验证桌面双栏与移动端 Tab 切换的响应式表现"
+    ],
+    "passes": false
+  },
+  {
+    "category": "页面开发",
+    "description": "在 Markdown 编辑器页面中集成导出为 HTML / 导出为 .md 文件功能与复制 HTML 能力。",
+    "steps": [
+      "在 src/lib/markdown-utils.ts 或 src/lib/markdown-export.ts 中实现 exportMarkdownAsHtml 函数：将当前 Markdown 转为完整 HTML 文档（含 Vue 风格内联或链接的 CSS 摘要），返回 Blob 或 Data URL",
+      "实现 exportMarkdownAsFile 函数：将当前原始 Markdown 文本转为 .md 文件并触发下载，文件名可带时间戳",
+      "在页面或工具栏中提供「导出 HTML」「导出 .md」「复制 HTML」按钮，复制 HTML 时将预览区渲染结果转为 HTML 字符串写入剪贴板（需包含样式类名，或提示用户另存为文件以保留样式）",
+      "导出与复制成功后显示轻量 toast 提示，失败时显示错误信息",
+      "埋点：上报 markdown_export_html、markdown_export_md、markdown_copy_html，附带 success 与格式类型"
+    ],
+    "passes": false
+  },
+  {
+    "category": "页面布局开发",
+    "description": "Markdown 编辑器页面响应式布局与移动端适配，与全站双栏/堆叠一致。",
+    "steps": [
+      "宽屏下采用左右双栏（编辑 | 预览），可为预览区设置最小宽度避免过窄",
+      "窄屏下改为上下堆叠，顶部 Tab 切换「编辑」「预览」，保证单栏时编辑与预览均可全宽使用",
+      "编辑区与预览区高度使用 min-height + 弹性高度或固定视口比例，避免折叠后高度为 0",
+      "工具栏在移动端可横向滚动或折叠为图标+下拉，触控区域不小于 44px",
+      "在 sm/lg 断点验证与 JSON、编码等工具页体验一致"
+    ],
+    "passes": false
+  },
+  {
+    "category": "配置更新",
+    "description": "更新工具列表配置，将 Markdown 编辑器添加到首页工具卡片列表。",
+    "steps": [
+      "在 src/config/tools.ts 中添加 Markdown 编辑器配置项",
+      "配置 id: 'markdown-editor'、name: 'Markdown 编辑器'、description: '编辑与预览 Markdown，Vue 风格排版与代码高亮，支持导出 HTML/MD'",
+      "配置 href: '/markdown-editor'，选择合适图标（如 Lucide 的 FileText、PenLine 或 Markdown）",
+      "根据需要设置 isHot 标记，验证首页工具卡片正确渲染并可跳转",
+      "确保搜索功能可通过「Markdown」「md」「编辑器」「Vue」等关键词命中"
+    ],
+    "passes": false
   }
 ]
