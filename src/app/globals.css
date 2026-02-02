@@ -61,7 +61,7 @@ body {
 }
 
 .app-main-inner {
-  @apply flex min-h-0 flex-1 flex-col overflow-hidden py-4 sm:py-5 lg:py-6;
+  @apply flex min-h-0 flex-1 flex-col overflow-y-auto py-4 sm:py-5 lg:py-6;
 }
 
 /* 首页欢迎区入场动画 */
