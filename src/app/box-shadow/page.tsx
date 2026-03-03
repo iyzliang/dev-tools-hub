@@ -1,11 +1,13 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { ShadowControls } from "@/components/box-shadow/shadow-controls";
 import { ShadowPreview } from "@/components/box-shadow/shadow-preview";
 import { ShadowCodeOutput } from "@/components/box-shadow/shadow-code-output";
 import { ShadowPresetSelector } from "@/components/box-shadow/shadow-preset-selector";
 import { trackEvent } from "@/lib/analytics";
+import { generateBoxShadowCSS } from "@/lib/shadow-utils";
+import { useBoxShadowShortcuts } from "@/lib/use-keyboard-shortcut";
 import type { ShadowParams } from "@/lib/shadow-utils";
 import { normalizeShadowParams } from "@/lib/shadow-utils";
 
@@ -63,6 +65,18 @@ export default function BoxShadowPage() {
     );
   };
 
+  const handleCopyShortcut = useCallback(async () => {
+    const cssCode = generateBoxShadowCSS(params);
+    await navigator.clipboard.writeText(cssCode);
+    trackEvent("code_copy", { format: "css" }, { toolName: BOX_SHADOW_TOOL_NAME });
+  }, [params]);
+
+  const handleResetShortcut = useCallback(() => {
+    setParams(DEFAULT_PARAMS);
+  }, []);
+
+  useBoxShadowShortcuts(handleCopyShortcut, handleResetShortcut);
+
   return (
     <div className="flex h-full flex-col overflow-hidden">
       <header className="shrink-0 space-y-4 pb-4">
@@ -72,6 +86,12 @@ export default function BoxShadowPage() {
           </h1>
           <p className="text-sm leading-relaxed text-slate-500">
             在线调整阴影参数，实时预览效果，支持 CSS 和 Tailwind 代码导出
+          </p>
+          <p className="text-xs text-slate-400">
+            快捷键：⌘C 复制 · R 重置
+          </p>
+          <p className="text-xs text-slate-400">
+            快捷键：⌘C 复制 · R 重置
           </p>
         </div>
       </header>

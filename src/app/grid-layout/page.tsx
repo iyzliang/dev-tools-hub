@@ -1,10 +1,12 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { GridCanvas } from "@/components/grid-layout/grid-canvas";
 import { GridControls } from "@/components/grid-layout/grid-controls";
 import { GridCodePreview } from "@/components/grid-layout/grid-code-preview";
 import { trackEvent } from "@/lib/analytics";
+import { generateGridCSS } from "@/lib/grid-utils";
+import { useGridShortcuts } from "@/lib/use-keyboard-shortcut";
 import type { GridConfig, MergedArea } from "@/lib/grid-utils";
 import type { GridPreset } from "@/lib/grid-presets";
 
@@ -108,6 +110,31 @@ export default function GridLayoutPage() {
     );
   };
 
+  const handleSaveShortcut = useCallback(() => {
+    const cssCode = generateGridCSS(config, mergedAreas);
+    const blob = new Blob([cssCode], { type: "text/css" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "grid-layout.css";
+    a.click();
+    URL.revokeObjectURL(url);
+  }, [config, mergedAreas]);
+
+  const handleCopyShortcut = useCallback(async () => {
+    const cssCode = generateGridCSS(config, mergedAreas);
+    await navigator.clipboard.writeText(cssCode);
+    trackEvent("code_copy", { format: "css" }, { toolName: GRID_LAYOUT_TOOL_NAME });
+  }, [config, mergedAreas]);
+
+  const handleDeleteShortcut = useCallback(() => {
+    if (mergedAreas.length > 0) {
+      setMergedAreas(mergedAreas.slice(0, -1));
+    }
+  }, [mergedAreas]);
+
+  useGridShortcuts(handleSaveShortcut, handleCopyShortcut, handleDeleteShortcut);
+
   return (
     <div className="flex h-full flex-col overflow-hidden">
       <header className="shrink-0 space-y-4 pb-4">
@@ -117,6 +144,9 @@ export default function GridLayoutPage() {
           </h1>
           <p className="text-sm leading-relaxed text-slate-500">
             可视化拖拽创建 CSS Grid 布局，生成 CSS 和 Tailwind 代码
+          </p>
+          <p className="text-xs text-slate-400">
+            快捷键：⌘S 保存 · ⌘C 复制 · Delete 删除最后区域
           </p>
         </div>
       </header>
