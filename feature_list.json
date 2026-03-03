@@ -323,7 +323,7 @@
       "步骤4：设置 Box Shadow 工具的 title、description、keywords",
       "步骤5：验证元数据在页面源码中正确显示"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "页面布局开发",
