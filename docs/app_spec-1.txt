@@ -1,0 +1,636 @@
+<project_specification>
+  <project_name>Dev Tools Hub - 面向开发者的轻量工具集网站</project_name>
+
+  <overview>
+    Dev Tools Hub 是一个面向开发者的 Web 工具集网站，第一版仅提供 JSON 格式化与校验工具，后续会陆续扩展更多常用开发小工具（如正则测试、编码转换、Diff 对比等）。目标是提供一个轻量、好用、打开即用的在线工具入口，减少开发过程中在各个网站之间来回切换的心智负担。
+
+    目标用户主要是前后端工程师、测试工程师、运维工程师等技术人员，使用场景集中在日常开发与调试过程中的快速辅助操作。应用支持匿名使用，无需登录即可使用所有公开工具。
+
+  </overview>
+
+  <technology_stack>
+    <frontend>
+      <framework>Next.js 16（App Router, React 19）</framework>
+      <styling>Tailwind CSS v4 + 自定义轻量设计系统（清爽中性）</styling>
+      <state_management>局部组件状态 + React Hooks（第一版不引入全局状态库）</state_management>
+      <routing>Next.js App Router（基于 `app/` 目录的文件路由）</routing>
+      <additional_libraries>
+        - 代码编辑器：CodeMirror 或 Monaco（其一，用于 JSON 编辑器语法高亮与折叠）
+        - clsx / tailwind-merge（可选，用于样式组合与冲突合并）
+        - lucide-react Icon图标
+      </additional_libraries>
+      <port>3000</port>
+    </frontend>
+
+    <backend>
+      <runtime>Next.js Route Handlers（Node.js 运行时）</runtime>
+      <database>PostgreSQL（自建实例，通过 Docker 部署）</database>
+      <orm>Prisma</orm>
+      <authentication>第一版无用户体系，通过匿名 ID 做访问与事件归因；管理统计页采用环境变量密码保护。</authentication>
+      <additional_services>
+        - （预留）Sentry：后续可接入，用于错误监控与性能追踪。
+      </additional_services>
+    </backend>
+
+    <communication>
+      <api>RESTful JSON API（基于 Next.js Route Handlers，路径形如 `/api/events`）</api>
+      <realtime>暂无实时能力，后续如有需要再考虑 SSE/WebSocket。</realtime>
+      <external_apis>当前无外部 API 集成需求。</external_apis>
+    </communication>
+
+    <infrastructure>
+      <hosting>自管服务器 + Docker（Next.js 应用容器 + PostgreSQL 容器，通过 Docker Compose 管理）</hosting>
+      <ci_cd>GitHub Actions（用于代码检查、构建与镜像构建；部署步骤可通过手动触发或自建脚本完成）。</ci_cd>
+      <monitoring>第一版通过应用日志与数据库统计为主，后续可扩展 Sentry / Prometheus / Grafana。</monitoring>
+    </infrastructure>
+  </technology_stack>
+
+  <prerequisites>
+    <environment_setup>
+      - 需要 Node.js（版本 ≥ 20）和 pnpm，用于本地开发与构建。
+      - 需要 Docker 与 Docker Compose，用于在服务器上运行 Next.js 应用与 PostgreSQL 数据库。
+      - 需要配置 PostgreSQL 数据库连接字符串环境变量：`DATABASE_URL`（供 Prisma 使用）。
+      - 需要配置管理统计页面访问密码环境变量：`ADMIN_DASHBOARD_PASSWORD`。
+      - 首次启动前需执行 `prisma migrate` 以初始化数据库结构（事件表等）。
+      - 根据需要配置 `NODE_ENV`、`NEXT_PUBLIC_APP_BASE_URL` 等基础环境变量。
+    </environment_setup>
+
+    <development_tools>
+      - Node.js: 20.x（建议与 Next.js 官方推荐版本保持一致）
+      - 包管理工具: pnpm（团队内部约定一种）
+      - Docker: 最新稳定版
+      - Docker Compose: 最新稳定版
+      - PostgreSQL: 18+（通过 Docker 容器提供）
+      - Prisma CLI: 与项目依赖版本一致
+      - Git: 用于版本管理与 CI 集成
+    </development_tools>
+  </prerequisites>
+
+  <core_features>
+    <feature_module_1>
+      <name>工具列表页</name>
+      <description>提供所有可用工具列表展示，工具通过配置文件加载。</description>
+      <features>
+        - 功能列表排列展示
+        - 配置文件包括id、icon、工具名、描述、是否热门等字段
+        - 配置列表最后需要展示一项为持续更新中，敬请期待。
+        - 工具选择卡需要合适的阴影与列表。合适的圆角与细节交互
+        - 热门标签添加呼吸交互动画
+        - 设计风格与主体保持一致
+      </features>
+    </feature_module_1>
+    
+    <feature_module_2>
+      <name>JSON 格式化与校验工具</name>
+      <description>提供双栏 JSON 输入与输出体验，支持语法高亮、格式化、压缩与错误提示。</description>
+      <features>
+        - 内容区域左侧为原始 JSON 输入编辑器，支持粘贴与键入，具备 JSON 语法高亮与基础自动缩进。
+        - 内容区域右侧为格式化结果区域，支持在「格式化」按钮点击后更新结果。
+        - 功能菜单区域提供「格式化」（pretty）与「压缩」（minify）两种操作模式，可通过切换控件选择。
+        - 当 JSON 无效时，在界面上以清晰的错误信息展示大致出错位置（行列号或片段），并高亮错误区域。
+        - 支持一键复制格式化结果到剪贴板。
+        - 支持编辑器主题与整体站点 UI 保持一致（清爽中性、偏 VS Code 风格，浅色为主）。
+        - 所有操作在浏览器端完成，不依赖后端 API，提升响应速度与隐私安全。
+      </features>
+    </feature_module_2>
+
+    <feature_module_3>
+      <name>访问埋点与匿名用户识别</name>
+      <description>对工具使用情况进行匿名统计，便于后续优化产品与观察趋势。</description>
+      <features>
+        - 前端首次访问时生成并持久化匿名访客 ID（`anonymous_id`，例如 `crypto.randomUUID()`，存储于 `localStorage`）。
+        - 每个会话生成 `session_id`，可按时间窗口（如 30 分钟无交互）划分新会话。
+        - 对关键事件进行埋点：页面访问、工具打开、点击格式化/压缩按钮、解析错误发生等。
+        - 所有埋点通过后端 `/api/events` 等 REST API 上报，以批量或单条方式写入 PostgreSQL。
+        - 不收集任何明确个人身份信息（PII），仅记录匿名 ID、会话 ID、时间戳、工具名称、事件名称、基础环境信息（如 UA、语言、时区）。
+        - 可选软指纹字段（如 UA + 语言 + 时区 + 屏幕尺寸 hash），仅用于内部统计分析，不对外展示。
+        - 在前端提供轻量的埋点 SDK 封装（如 `trackEvent(name, payload)`），便于未来新增工具时统一使用。
+      </features>
+    </feature_module_3>
+
+    <feature_module_4>
+      <name>隐藏管理统计页面</name>
+      <description>仅供站点所有者使用的访问统计查看页面，通过密码保护。</description>
+      <features>
+        - 使用一个不在公开导航中展示的路径（如 `/admin/analytics`）承载统计页面。
+        - 页面首次访问时要求输入管理密码，密码与后端环境变量 `ADMIN_DASHBOARD_PASSWORD` 一致。
+        - 验证成功后在浏览器端通过加密 Cookie 或短期 token 维持登录状态，减少频繁输入密码。
+        - 页面展示关键指标：总访问量、按工具分类的访问量、最近 7/30 天的访问趋势图、格式化操作次数等。
+        - 支持按时间范围筛选（如最近 24 小时 / 7 天 / 30 天）与简单维度切换（按工具、按事件类型聚合）。
+        - 管理页面不被搜索引擎索引（通过 robots 与不公开链接控制），并在 UI 上明确标注为「内部页面」。
+        - UI 保持与前台风格一致，但可以使用更偏仪表盘的布局（卡片 + 简单双轴图表）。
+      </features>
+    </feature_module_4>
+  </core_features>
+
+  <database_schema>
+    <tables>
+      <table_name_1>
+        <description>analytics_events：记录所有前端埋点事件数据，用于统计分析。</description>
+        <fields>
+          - id: UUID - 主键
+          - anonymous_id: TEXT - 匿名访客 ID（来自前端 localStorage）
+          - session_id: TEXT - 会话 ID，用于区分不同访问会话
+          - event_name: TEXT - 事件名称（如 `page_view`, `json_format`, `json_error`）
+          - tool_name: TEXT - 工具名称（如 `json_formatter`）
+          - properties: JSONB - 事件附加属性（如是否成功、错误信息、输入大小区间等）
+          - user_agent: TEXT - 浏览器 UA 字符串
+          - locale: TEXT - 语言（如 `zh-CN`）
+          - timezone: TEXT - 时区（如 `Asia/Shanghai`）
+          - soft_fingerprint: TEXT - 可选软指纹 hash，用于统计归并（可为空）
+          - ip_hash: TEXT - 可选 IP hash（如启用时，用不可逆 hash 存储以增强隐私）
+          - created_at: TIMESTAMP WITH TIME ZONE - 事件产生时间
+          - received_at: TIMESTAMP WITH TIME ZONE - 服务器接收时间
+          - updated_at: TIMESTAMP WITH TIME ZONE - 记录更新时间（一般与 `received_at` 一致）
+        </fields>
+        <indexes>
+          - idx_events_created_at（基于 `created_at`，用于时间范围查询）
+          - idx_events_tool_name_created_at（联合索引：`tool_name`, `created_at`）
+          - idx_events_anonymous_id_created_at（联合索引：`anonymous_id`, `created_at`）
+        </indexes>
+        <relationships>
+          - 当前无外键关系，后续如引入用户表可根据匿名/登录用户建立映射表。
+        </relationships>
+      </table_name_1>
+
+      <table_name_2>
+        <description>（可选预留）tool_usage_daily：按天与工具维度聚合的汇总表，用于提升统计页面查询性能。</description>
+        <fields>
+          - id: UUID - 主键
+          - date: DATE - 统计日期（UTC 或指定时区）
+          - tool_name: TEXT - 工具名称
+          - event_name: TEXT - 事件名称
+          - count: INTEGER - 当天该工具该事件的总次数
+          - created_at: TIMESTAMP WITH TIME ZONE
+          - updated_at: TIMESTAMP WITH TIME ZONE
+        </fields>
+        <indexes>
+          - idx_tool_usage_daily_date_tool_event（联合索引：`date`, `tool_name`, `event_name`）
+        </indexes>
+        <relationships>
+          - 通过 `tool_name` 和 `event_name` 与 `analytics_events` 概念关联（非外键）。
+        </relationships>
+      </table_name_2>
+    </tables>
+
+    <relationships_diagram>
+      analytics_events 为核心明细表，记录所有事件；tool_usage_daily 为可选的聚合表。
+      未来如引入用户表，可通过匿名 ID 或登录 ID 与 events 建立一对多关系。
+    </relationships_diagram>
+  </database_schema>
+
+  <api_endpoints_summary>
+    <module_name_1>
+      <description>埋点事件上报 API</description>
+      <endpoints>
+        - POST /api/events - 上报单条或多条埋点事件
+        - GET /api/events/summary - （仅管理端使用）按时间范围与工具聚合统计数据
+      </endpoints>
+    </module_name_1>
+
+    <module_name_2>
+      <description>管理统计页面访问控制</description>
+      <endpoints>
+        - POST /api/admin/login - 提交管理密码，验证成功后发放短期 token / 设置 Cookie
+        - GET /api/admin/session - 校验当前管理会话是否有效
+      </endpoints>
+    </module_name_2>
+
+    <module_name_3>
+      <description>JSON 工具相关 API（第一版主要逻辑在前端，不强制需要后端接口）</description>
+      <endpoints>
+        - （预留）POST /api/json/validate - 可选后端校验与安全检查接口，如未来需要可实现
+      </endpoints>
+    </module_name_3>
+  </api_endpoints_summary>
+
+  <ui_layout>
+    <main_structure>
+      - 布局类型： 固定顶部搜索 + 内容区域 + 固定页脚。
+      - 响应式断点：移动端（< 768px）、平板（768px - 1024px）、桌面（≥ 1024px）。
+    </main_structure>
+
+    <component_area_1>
+      <name>顶部导航栏</name>
+      <description>展示品牌、与搜索框</description>
+      <elements>
+        - 左侧 Logo / 文本标识（如「Dev Tools Hub」），点击回到首页。
+        - 右侧可放置 搜索输入框 输入框需要有一些微交互与动画效果。搜索可以按照工具名与工具描述筛选
+      </elements>
+    </component_area_1>
+
+    <component_area_2>
+      <name>内容区域</name>
+      <description>根据路由动态加载包括首页、与后续工具页面</description>
+    </component_area_2>
+
+    <component_area_3>
+      <name>页脚区域</name>
+      <description>展示备案记录</description>
+    </component_area_3>
+
+    <component_area_4>
+      <name>管理统计页面</name>
+      <description>内部使用的简易仪表盘，用于查看使用情况。</description>
+      <elements>
+        - 登录视图：密码输入框、提交按钮、错误提示信息。
+        - 主仪表盘：若干统计卡片（总访问量、总格式化次数、最近 7 天趋势等）。
+        - 简单折线图或柱状图：展示按日 PV/事件数。
+        - 筛选控件：时间范围选择器、工具/事件类型过滤器。
+      </elements>
+    </component_area_4>
+
+    <modals_overlays>
+      - 错误提示区域采用非阻塞式提示（如结果区域上方的警示条），不使用阻塞模态弹框。
+      - （可选）首次访问时展示简短使用说明的轻量提示条。
+    </modals_overlays>
+
+    <responsive_behavior>
+      - 移动端（< 768px）：顶部导航简化为 Logo + 菜单入口；JSON 工具区域改为上下布局（先输入编辑器，后结果区域），按钮置于两者之间；适当减小左右内边距，保证不出现横向滚动。
+      - 平板端（768px - 1024px）：保留双栏布局，但每栏宽度略窄，操作栏可放在上方单行展示；导航仍在顶部。
+      - 桌面端（> 1024px）：采用宽屏双栏布局，左右各占 50% 左右宽度，留足内边距和行高；导航固定在页面顶部。
+    </responsive_behavior>
+  </ui_layout>
+
+  <design_system>
+    <color_palette>
+      <primary>#2563EB（蓝色主色，按钮和高亮）</primary>
+      <secondary>#10B981（绿色辅助色，用于成功状态与标签）</secondary>
+      <background>
+        - Light mode: #F3F4F6（整体背景，接近 Tailwind gray-100）
+        - Dark mode: （第一版可以不实现；如实现建议 #020617 作为深色背景）
+      </background>
+      <text>
+        - Primary: #111827（主要文本，接近 slate-900）
+        - Secondary: #4B5563（次要文本，接近 slate-600）
+        - Disabled: #9CA3AF（禁用状态文本）
+      </text>
+      <semantic_colors>
+        - Success: #16A34A
+        - Warning: #F97316
+        - Error: #DC2626
+        - Info: #0EA5E9
+      </semantic_colors>
+      <borders>#E5E7EB（浅灰色边框）</borders>
+    </color_palette>
+
+    <typography>
+      <font_families>
+        - Primary: Geist Sans（通过 `--font-geist-sans` 引入，备选系统字体如 system-ui, -apple-system）
+        - Monospace: Geist Mono 或 `ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace`
+      </font_families>
+      <font_sizes>
+        - Heading 1: 32px
+        - Heading 2: 24px
+        - Body: 16px
+        - Small: 14px
+      </font_sizes>
+      <font_weights>
+        - Regular: 400
+        - Medium: 500
+        - Bold: 600
+      </font_weights>
+      <line_heights>
+        - 正文建议行高 1.5 - 1.7，代码区域稍紧（约 1.4），保证可读性。
+      </line_heights>
+    </typography>
+
+    <spacing>
+      <scale>基于 4px 的间距系统。</scale>
+      <common_values>
+        - xs: 4px
+        - sm: 8px
+        - md: 12px
+        - lg: 16px
+        - xl: 24px
+      </common_values>
+    </spacing>
+
+    <components>
+      <component_type_1>
+        <name>按钮 Button</name>
+        <variants>
+          - Primary：实心蓝色背景，白色文字，用于主要操作（如「格式化」）。
+          - Secondary：浅灰背景 + 深色文字，用于次要操作（如「复制结果」）。
+        </variants>
+        <states>
+          - Default: 有清晰轮廓与对比度，圆角中等。
+          - Hover: 背景色略微变深，添加轻微阴影或亮度变化，不产生布局位移。
+          - Active: 背景色进一步变深，阴影减弱。
+          - Disabled: 降低不透明度，禁用点击，鼠标非 pointer。
+        </states>
+      </component_type_1>
+
+      <component_type_2>
+        <name>输入框 / 文本域</name>
+        <variants>
+          - 单行输入：用于管理密码、筛选条件等。
+          - 多行文本域：用于非代码输入场景（如说明补充）。
+        </variants>
+        <states>
+          - Default: 浅灰边框，圆角中等，内边距适中。
+          - Focus: 边框使用主色高亮，并有明显的 focus ring，满足可访问性。
+          - Error: 边框与提示文案使用 Error 语义色。
+          - Disabled: 背景略变灰，文本颜色变浅，禁用输入。
+        </states>
+      </component_type_2>
+
+      <component_type_3>
+        <name>代码编辑区域</name>
+        <variants>
+          - JSON 编辑器：左侧输入，支持语法高亮与折叠。
+          - 结果查看器：右侧只读区域，支持复制与滚动。
+        </variants>
+        <states>
+          - Default: 等宽字体，浅色背景，清晰边框；行高与字体大小适合长时间阅读。
+          - Focus: 边框或外侧阴影微调，明确聚焦状态。
+          - Error: 在顶部或下方展示错误条，而不是直接改变代码配色。
+        </states>
+      </component_type_3>
+    </components>
+
+    <borders_shadows>
+      <border_radius>
+        - Small: 4px
+        - Medium: 8px
+        - Large: 12px
+      </border_radius>
+      <shadows>
+        - Small: 轻微阴影，用于按钮 hover。
+        - Medium: 卡片级阴影，用于主面板与管理页面卡片。
+        - Large: 谨慎使用，一般用于模态或突出卡片。
+      </shadows>
+    </borders_shadows>
+
+    <animations>
+      <timing>
+        - Fast: 150ms
+        - Normal: 200-250ms
+        - Slow: 300-400ms（用于较明显的布局变化）
+      </timing>
+      <easing>
+        - 建议统一使用 `ease-out` 或 `ease-in-out`，避免过度弹跳。
+      </easing>
+      <common_animations>
+        - 按钮与卡片 hover：颜色与阴影的平滑过渡。
+        - 折叠/展开：对 JSON 折叠用高度/opacity 过渡（如由编辑器库自身提供）。
+      </common_animations>
+    </animations>
+
+    <accessibility>
+      - 文本与背景的对比度至少达到 4.5:1，保证可读性。
+      - 所有可点击元素均有清晰的 hover 与 focus 状态（包括键盘 Tab 导航）。
+      - 图标按钮需提供 aria-label，确保屏幕阅读器可识别。
+      - 错误提示放在错误附近，并使用颜色 + 文本双重提示，而不是仅用颜色。
+    </accessibility>
+  </design_system>
+
+  <key_interactions>
+    <interaction_flow_1>
+      <name>使用 JSON 格式化工具</name>
+      <description>用户访问首页，粘贴 JSON，进行格式化/压缩并查看结果。</description>
+      <steps>
+        1. 用户访问站点首页（记录 `page_view` 事件，生成/读取 `anonymous_id` 与 `session_id`）。
+        2. 用户在左侧编辑器中粘贴或输入原始 JSON 文本。
+        3. 用户点击「格式化」按钮，前端尝试解析 JSON。
+        4. 若解析成功，右侧结果区域展示格式化后的 JSON，并更新滚动位置；记录 `json_format` 成功事件。
+        5. 若解析失败，在操作区展示错误信息（包含大致位置），并记录 `json_error` 事件。
+        6. 用户如需压缩，切换为「压缩」操作并再次点击按钮，结果区域展示压缩后的 JSON。
+        7. 用户可点击「复制结果」按钮，将结果复制到剪贴板（可记录 `copy_result` 事件）。
+      </steps>
+      <edge_cases>
+        - 输入内容为空：禁用操作按钮或给出提示「请输入 JSON」。
+        - 输入内容过大：前端可对长度设定上限并提示用户；事件属性中仅记录大小区间而非内容本身。
+      </edge_cases>
+    </interaction_flow_1>
+
+    <interaction_flow_2>
+      <name>管理员查看访问统计</name>
+      <description>管理员通过隐藏页面和密码访问统计数据。</description>
+      <steps>
+        1. 管理员在浏览器中直接访问预先约定的路径（如 `/admin/analytics`）。
+        2. 若当前无有效管理会话，则展示密码输入表单。
+        3. 管理员输入密码后，前端调用 `/api/admin/login` 校验。
+        4. 若密码正确，后端设置短期 Cookie 或返回 token，前端更新为已登录状态。
+        5. 前端调用 `/api/events/summary` 拉取默认时间范围（如最近 7 天）的汇总数据。
+        6. 管理员可调整时间范围、切换工具或事件类型查看不同统计视图。
+      </steps>
+      <edge_cases>
+        - 密码错误：展示明确错误提示，但不暴露任何多余信息；可限制连续错误次数。
+        - 会话过期：重新跳转到密码输入状态。
+      </edge_cases>
+    </interaction_flow_2>
+
+    <keyboard_shortcuts>
+      - Cmd/Ctrl + Enter：在 JSON 工具页面触发当前选中的操作（默认「格式化」）。
+    </keyboard_shortcuts>
+
+    <gestures>
+      - 移动端主要通过点击与滚动操作，不额外设计复杂手势。
+    </gestures>
+  </key_interactions>
+
+  <success_criteria>
+    <success_criteria>
+      <functionality>
+        <description>核心功能完整且稳定可用。</description>
+        <criteria>
+          - JSON 工具在主流浏览器中可正常格式化与压缩合法 JSON。
+          - 非法 JSON 能够被正确识别并给出清晰错误提示。
+          - 埋点事件可成功写入数据库，管理页面可查询并展示基本统计。
+          - 管理页面密码保护机制可靠，不易被绕过。
+        </criteria>
+      </functionality>
+
+      <user_experience>
+        <description>界面直观易用，操作路径清晰。</description>
+        <criteria>
+          - 首次访问即可理解页面用途与操作方式。
+          - JSON 编辑与结果查看区域在桌面端有足够空间，滚动与复制顺畅。
+          - 移动端无横向滚动，主要功能依然可用。
+          - 整体响应速度快，操作无明显卡顿。
+        </criteria>
+      </user_experience>
+
+      <performance>
+        <description>保持良好的加载与交互性能。</description>
+        <metrics>
+          - 页面加载时间：首次打开首页 < 2 秒（在典型网络环境下）。
+          - API 响应时间：埋点上报接口 P95 < 300ms。
+          - FCP / LCP / CLS：尽量接近 Lighthouse 建议值（后续可细化）。
+        </metrics>
+      </performance>
+
+      <technical_quality>
+        <description>代码质量与架构可支持后续扩展。</description>
+        <criteria>
+          - 代码遵循统一的 ESLint 与格式化规范。
+          - 关键模块具备基础测试用例，核心逻辑可维护。
+          - 前后端接口边界清晰，易于在此基础上新增其它工具与埋点。
+        </criteria>
+      </technical_quality>
+
+      <design_polish>
+        <description>视觉与交互达到专业工具站点水平。</description>
+        <criteria>
+          - 整体风格统一，空间利用合理，无明显对齐问题。
+          - hover / focus / active 状态完整且不引起布局跳动。
+          - 字体、颜色与间距符合设计系统约定。
+          - 可访问性基础要求达标（对比度、焦点可见性等）。
+        </criteria>
+      </design_polish>
+
+      <business_goals>
+        <description>满足初版产品目标。</description>
+        <goals>
+          - 发布后可作为日常开发中稳定使用的 JSON 工具入口。
+          - 通过埋点数据发现真实使用频率与行为模式，为后续工具优先级决策提供依据。
+        </goals>
+      </business_goals>
+
+      <acceptance_testing>
+        <description>通过一组核心场景的人工验收测试。</description>
+        <test_scenarios>
+          - 在桌面浏览器中正常使用 JSON 格式化、压缩与复制，验证埋点写入与统计展示。
+          - 在移动浏览器中进行基本格式化操作与结果查看，确认布局无异常。
+          - 多次错误密码尝试管理页面，确认无泄露信息与异常行为。
+        </test_scenarios>
+      </acceptance_testing>
+    </success_criteria>
+  </success_criteria>
+
+  <additional_considerations>
+    <security>
+      <requirements>
+        - 埋点数据不得记录完整 JSON 内容，仅记录元信息（例如长度区间、是否成功）。
+        - 管理密码仅存于环境变量，不写入数据库，不在前端硬编码。
+        - API 需有基础的速率限制与输入校验，防止滥用与注入攻击。
+        - 数据库连接信息与其他敏感配置通过环境变量管理，不提交至代码仓库。
+      </requirements>
+      <compliance>
+        - 当前为自用与小规模匿名访问场景，无特殊合规要求；如未来扩展到大量公网用户，应进一步评估隐私与合规要求。
+      </compliance>
+    </security>
+
+    <scalability>
+      <requirements>
+        - 预期用户规模：初期为少量内部/熟人使用，后续可自然增长。
+        - 并发用户：初版按低并发设计，但架构不阻碍水平扩展。
+        - 数据增长预期：事件表可持续增长，需定期归档或聚合（如 `tool_usage_daily`）。
+        - 扩展策略：通过 Docker 增加应用副本，或将数据库迁移到托管 PG 服务。
+      </requirements>
+    </scalability>
+
+    <internationalization>
+      <languages>第一版以中文界面为主，后续可考虑中英文切换。</languages>
+      <localization>
+        - 文案与日期格式等应尽量通过统一封装，方便未来国际化。
+      </localization>
+    </internationalization>
+
+    <analytics_monitoring>
+      <tracking>
+        - 需要跟踪的事件：`page_view`、`json_format`、`json_minify`、`json_error`、`copy_result` 等。
+        - 管理页面访问事件与筛选操作，可按需埋点以观察使用频率。
+      </tracking>
+      <monitoring>
+        - 基本应用日志（错误、异常）在服务端记录。
+        - 后续可接入 Sentry 以监控前端/后端错误与性能。
+      </monitoring>
+    </analytics_monitoring>
+
+    <maintenance>
+      <backup_strategy>定期备份 PostgreSQL 数据库（至少每日一次），并保留最近 N 天的历史备份。</backup_strategy>
+      <update_policy>功能更新通过 Git 分支与 PR 流程完成，合并后由 CI/CD 构建并部署；避免直接在生产环境改动配置。</update_policy>
+      <support_plan>目前由开发者本人维护，重要问题通过日志与邮件/即时通讯渠道反馈。</support_plan>
+    </maintenance>
+
+    <documentation>
+      <required_docs>
+        - README：项目简介、启动方式、环境变量说明。
+        - 部署文档：Docker Compose 配置与部署步骤。
+        - 埋点文档：事件名、字段说明与典型查询方式。
+      </required_docs>
+    </documentation>
+
+    <testing_strategy>
+      <unit_testing>对 JSON 格式化与错误解析逻辑等关键函数编写单元测试。</unit_testing>
+      <integration_testing>对 `/api/events`、`/api/events/summary` 等接口进行集成测试。</integration_testing>
+      <e2e_testing>通过 Playwright / Cypress 等对核心用户流程编写少量端到端用例。</e2e_testing>
+      <performance_testing>在测试环境下对埋点接口压测，确保在预期并发下无明显性能瓶颈。</performance_testing>
+      <security_testing>对管理登录与 API 输入进行基础安全测试（如简单暴力尝试、注入等）。</security_testing>
+    </testing_strategy>
+
+    <deployment>
+      <environments>
+        - Development: 本地开发环境，使用本地或 Docker 内的 PostgreSQL。
+        - Staging: 可选预发布环境，用于测试与演示。
+        - Production: 正式生产环境，运行在自管服务器上，通过 Docker Compose 管理服务。
+      </environments>
+      <deployment_process>代码合并至主分支后，由 CI 进行构建并推送镜像；服务器拉取最新镜像并通过 Docker Compose 重启服务。</deployment_process>
+      <rollback_strategy>保留上一版本镜像与 Compose 配置，如新版本出问题可快速切回旧版本。</rollback_strategy>
+    </deployment>
+
+    <team_structure>
+      <roles>
+        - 开发者：负责整体架构设计、功能开发与部署。
+      </roles>
+      <communication>目前为单人或小团队项目，通过即时通讯工具与代码仓库 Issue 进行沟通与记录。</communication>
+    </team_structure>
+
+    <timeline>
+      <milestones>
+        - M1：基础框架与 JSON 工具页面完成。
+        - M2：埋点系统与管理统计页面完成。
+        - M3：UI/UX 打磨与首次生产部署完成。
+      </milestones>
+      <total_duration>约 1.5 - 3 周，视开发投入时间而定。</total_duration>
+    </timeline>
+
+    <risks_mitigation>
+      <risk_1>
+        <description>埋点数据量随时间增长导致查询变慢。</description>
+        <probability>中</probability>
+        <impact>中</impact>
+        <mitigation>提前设计合理索引，并预留按日聚合表与归档策略。</mitigation>
+      </risk_1>
+    </risks_mitigation>
+
+    <assumptions_constraints>
+      <assumptions>
+        - 主要使用场景为开发者工具，不涉及敏感个人数据。
+        - 初期访问量相对较低，可在单机部署下稳定运行。
+      </assumptions>
+      <constraints>
+        - 时间有限，第一版只实现 JSON 工具与基础统计，不做完整账号体系。
+        - 服务器资源有限，需要保持实现简洁与性能合理。
+      </constraints>
+    </assumptions_constraints>
+  </additional_considerations>
+
+  <appendix>
+    <references>
+      <design_references>
+        - VS Code 官网与文档页面风格（色彩与布局参考）。
+      </design_references>
+      <technical_references>
+        - Next.js 官方文档（App Router、Route Handlers）。
+        - Prisma 官方文档（PostgreSQL 集成）。
+      </technical_references>
+      <competitor_analysis>
+        - 各类在线 JSON 工具与开发者工具站点：可用性与性能作为基准参考。
+      </competitor_analysis>
+    </references>
+
+    <glossary>
+      <term name="anonymous_id">匿名访客 ID，本地生成并存储，用于跨会话识别同一浏览器。</term>
+      <term name="session_id">会话 ID，用于标识一次连续的访问会话。</term>
+    </glossary>
+
+    <change_log>
+      <version number="1.0" date="[2026-01-28]">
+        初始版本，定义 Dev Tools Hub 第一版（JSON 工具 + 埋点统计）的整体规范。
+      </version>
+    </change_log>
+  </appendix>
+</project_specification>

@@ -1,0 +1,1250 @@
+[
+  {
+    "category": "页面布局开发",
+    "description": "初始化 Next.js 16 + Tailwind CSS v4 项目基础结构，配置 App Router、全局布局与基础设计系统变量。",
+    "steps": [
+      "使用 pnpm 和 Next.js 16 创建项目骨架，启用 App Router 目录结构（app/）",
+      "集成 Tailwind CSS v4，配置基础色板、字体与间距系统，与设计系统描述保持一致",
+      "在 app/layout.tsx 中配置全局字体（Geist Sans/Mono）、背景色、文字颜色与基础 meta",
+      "实现主布局骨架：顶部导航区域、内容区域与页脚区域的基本结构和响应式网格",
+      "为移动端、平板和桌面端设置基础断点与容器宽度，保证无横向滚动"
+    ],
+    "passes": true
+  },
+  {
+    "category": "页面布局开发",
+    "description": "实现全局导航栏组件结构与搜索占位，确保与设计系统风格一致并具备基础响应式表现。",
+    "steps": [
+      "在 app 目录下定义共享布局组件，将顶部导航栏提取为独立组件（如 components/Header）",
+      "在导航栏左侧加入站点标识文案（Dev Tools Hub），支持点击回到首页",
+      "在导航栏右侧预留搜索输入框区域，采用统一输入框样式（圆角、边框、focus ring）",
+      "实现移动端下导航的简化布局（Logo + 搜索入口或折叠菜单），并验证不同断点布局正常",
+      "为导航栏添加基础交互动效（hover、focus 状态），确保可访问性与无布局抖动"
+    ],
+    "passes": true
+  },
+  {
+    "category": "页面布局开发",
+    "description": "实现全局页脚组件，展示备案或版权信息，并与整体 UI 风格统一。",
+    "steps": [
+      "创建独立页脚组件（如 components/Footer），在全局布局中引用",
+      "设计页脚背景、分割线与文字样式，使其与顶部导航和主体内容风格统一",
+      "预留备案信息与简单链接区域，保证在移动端也能正常显示",
+      "验证在不同页面内容高度下页脚显示正常，不覆盖主要内容",
+      "为页脚中的链接添加 hover/focus 状态与 aria-label（如有图标）"
+    ],
+    "passes": true
+  },
+  {
+    "category": "页面开发",
+    "description": "实现首页工具列表页，基于配置文件渲染工具卡片列表并支持搜索过滤。",
+    "steps": [
+      "设计并创建工具配置文件（如 config/tools.ts），包含 id、icon、名称、描述、是否热门等字段",
+      "在首页路由（app/page.tsx）中加载配置列表并渲染为网格卡片布局",
+      "为每个工具卡片实现合适的阴影、圆角与 hover 动画，热门标签增加呼吸动画效果",
+      "在工具列表末尾添加“持续更新中，敬请期待”占位卡片，样式与其他卡片协调",
+      "实现与顶部搜索框联动的过滤逻辑，可按工具名与描述进行模糊搜索"
+    ],
+    "passes": true
+  },
+  {
+    "category": "组件开发",
+    "description": "抽象可复用的卡片、按钮与输入组件库，用于工具列表与后续页面统一使用。",
+    "steps": [
+      "实现基础 Button 组件，支持 primary 与 secondary 变体及不同尺寸",
+      "实现 Input/TextArea 组件，统一边框、圆角、焦点状态与错误状态样式",
+      "实现通用 Card 组件，包含阴影、圆角与内边距，可用于工具卡片与统计卡片",
+      "为上述组件补充 hover、active、disabled 状态，并校验对比度与可访问性要求",
+      "整理组件导出与类型定义，便于在 app 路由中统一导入使用"
+    ],
+    "passes": true
+  },
+  {
+    "category": "组件开发",
+    "description": "集成代码编辑器（Monaco 或 CodeMirror）并封装为 JSON 编辑/查看组件。",
+    "steps": [
+      "选择并安装合适的代码编辑器库（Monaco 或 CodeMirror），配置与 Next.js 兼容的按需加载方式",
+      "为 JSON 输入区域创建 Editor 组件，启用 JSON 语言语法高亮、自动缩进与折叠支持",
+      "为结果查看区域创建只读 Viewer 组件，使用等宽字体并支持滚动与复制操作",
+      "统一编辑器主题与站点 UI（浅色 VS Code 风格），调整背景色、行高与字体大小",
+      "处理客户端渲染与 SSR 差异问题，确保在 Next.js App Router 中稳定运行"
+    ],
+    "passes": true
+  },
+  {
+    "category": "页面开发",
+    "description": "实现 JSON 格式化与压缩工具主页面的双栏布局与交互逻辑。",
+    "steps": [
+      "在 app/json 或首页主区域构建左右双栏布局（移动端为上下布局），左侧输入、右侧结果",
+      "添加操作栏，包含模式切换（格式化/压缩）、执行按钮与复制结果按钮",
+      "实现前端 JSON 解析与错误捕获逻辑，更新右侧结果区域内容",
+      "根据当前选中模式执行格式化（pretty print）或压缩（minify），保持输入不被覆盖",
+      "实现一键复制结果到剪贴板的功能，并提供成功/失败的轻量提示"
+    ],
+    "passes": true
+  },
+  {
+    "category": "公共方法开发",
+    "description": "实现 JSON 解析、格式化、压缩与错误信息提取的纯函数工具库，并为其编写单元测试。",
+    "steps": [
+      "编写解析与格式化工具函数（如 parseJsonWithLocation、formatJson、minifyJson），仅依赖标准库",
+      "在解析失败时返回包含错误类型、消息与大致行列位置的数据结构",
+      "根据错误位置信息提供可在 UI 中高亮或提示的片段索引",
+      "为上述函数编写 Jest 或 Vitest 单元测试，覆盖正常、异常与边界场景（空输入、大输入等）",
+      "确保工具函数与 UI 解耦，便于未来在后端或其他工具中复用"
+    ],
+    "passes": true
+  },
+  {
+    "category": "页面开发",
+    "description": "在 JSON 工具页面中接入键盘快捷键和错误提示展示逻辑，完善交互体验。",
+    "steps": [
+      "在前端页面中监听 Cmd/Ctrl + Enter 快捷键以触发当前选中的操作（默认格式化）",
+      "当输入为空时禁用执行按钮或提示“请输入 JSON”，避免无意义请求",
+      "在解析失败时于结果区域上方展示错误提示条，包含错误类型与大致位置说明",
+      "确保错误提示条为非阻塞式，支持关闭或在成功操作后自动消失",
+      "在移动端与桌面端分别验证快捷键、按钮状态与错误提示行为"
+    ],
+    "passes": true
+  },
+  {
+    "category": "公共方法开发",
+    "description": "实现前端匿名访客 ID 与会话 ID 管理工具，并提供轻量埋点 SDK 封装。",
+    "steps": [
+      "实现生成匿名 ID 的工具函数（使用 crypto.randomUUID），并在 localStorage 中持久化 anonymous_id",
+      "实现基于时间窗口的 session_id 管理逻辑（如超 30 分钟无交互视为新会话），存储于 sessionStorage 或内存",
+      "封装 trackEvent(name, payload) 前端 SDK，自动附带 anonymous_id、session_id、UA、语言与时区等信息",
+      "为 SDK 增加基础错误处理与退避策略，避免上报失败导致前端报错",
+      "在 JSON 工具与管理页面中引入 SDK，留出统一埋点接口调用位置"
+    ],
+    "passes": true
+  },
+  {
+    "category": "页面开发",
+    "description": "在前端页面中集成埋点 SDK，上报核心用户行为事件。",
+    "steps": [
+      "在应用入口或布局初始化阶段生成/读取 anonymous_id 与 session_id，并记录 page_view 事件",
+      "在 JSON 工具页面中为格式化、压缩、复制结果等操作调用 trackEvent，上报 json_format、json_minify、copy_result 等事件",
+      "在解析失败时调用 trackEvent 上报 json_error 事件，附带错误类型与输入大小区间等元信息（不上传完整内容）",
+      "在工具卡片点击、工具页面打开时上报工具打开事件，记录 tool_name 等字段",
+      "验证在不同浏览器与隐私模式下的行为，确保在不可用环境中 graceful degradation"
+    ],
+    "passes": true
+  },
+  {
+    "category": "数据库与 ORM 开发",
+    "description": "使用 Prisma 建模 analytics_events 与预留 tool_usage_daily 表，并生成数据库迁移。",
+    "steps": [
+      "在项目中安装并初始化 Prisma，配置 PostgreSQL 连接字符串（DATABASE_URL）",
+      "在 Prisma schema 中定义 analytics_events 表字段结构，与规格中的字段与类型保持一致",
+      "定义 tool_usage_daily 聚合表的 schema，包括联合索引与时间维度字段",
+      "为关键查询创建适当索引（如 created_at、tool_name + created_at、anonymous_id + created_at）",
+      "运行 prisma migrate 生成并应用初始迁移，验证数据库表结构正确"
+    ],
+    "passes": true
+  },
+  {
+    "category": "后端接口开发",
+    "description": "实现埋点事件上报 API：POST /api/events，接收单条或多条事件并写入数据库。",
+    "steps": [
+      "在 Next.js Route Handlers 中创建 /api/events 路由，支持 POST 方法",
+      "定义请求体结构，支持接收单条或数组形式的事件数据，进行基础输入校验与清洗",
+      "实现事件持久化逻辑，使用 Prisma 将数据写入 analytics_events 表",
+      "对敏感字段进行限制，不允许上传完整 JSON 内容，仅保留长度区间等元信息",
+      "为接口添加基础错误处理与日志记录，并预留速率限制或防滥用策略"
+    ],
+    "passes": true
+  },
+  {
+    "category": "后端接口开发",
+    "description": "实现统计汇总 API：GET /api/events/summary，用于管理页面按时间范围与工具聚合数据。",
+    "steps": [
+      "在 Next.js Route Handlers 中创建 /api/events/summary 路由，支持 GET 方法与查询参数（时间范围、tool_name、event_name 等）",
+      "基于 analytics_events 或 tool_usage_daily 表实现分组聚合查询，返回按日期与工具/事件类型汇总的数据结构",
+      "为接口增加基础校验与访问控制（仅在管理员会话有效时返回数据）",
+      "优化查询逻辑与索引使用，保证在事件量增加时仍有可接受性能",
+      "为统计接口编写基础集成测试或手工测试脚本，覆盖常见筛选组合"
+    ],
+    "passes": true
+  },
+  {
+    "category": "后端接口开发",
+    "description": "实现管理登录与会话控制 API：/api/admin/login 与 /api/admin/session。",
+    "steps": [
+      "在 /api/admin/login 实现 POST 处理，读取环境变量 ADMIN_DASHBOARD_PASSWORD 校验提交密码",
+      "登录成功后生成短期 token 或会话标记，并通过 HttpOnly Cookie 返回给前端",
+      "在 /api/admin/session 实现 GET 逻辑，用于校验当前管理会话是否有效",
+      "为管理相关接口添加基础速率限制与错误返回规范，避免暴力尝试",
+      "确保管理密码不写入数据库、不在前端硬编码，所有日志中不泄露明文密码"
+    ],
+    "passes": true
+  },
+  {
+    "category": "页面开发",
+    "description": "实现隐藏管理统计页面 /admin/analytics，包括登录视图与主仪表盘布局。",
+    "steps": [
+      "在 app/admin/analytics 路由下创建页面文件，标记为不在公开导航中展示",
+      "实现登录视图，包括密码输入框、提交按钮、错误提示信息区域，与全站设计系统统一",
+      "在登录成功后切换为仪表盘视图，包含关键指标卡片（总访问量、总格式化次数、最近 7 天趋势等）",
+      "集成统计 API，拉取默认时间范围内的数据并以卡片、图表与列表形式展示",
+      "在页面上明确标注为内部管理页面，并确保 robots 与 meta 设置不被搜索引擎索引"
+    ],
+    "passes": true
+  },
+  {
+    "category": "组件开发",
+    "description": "为管理统计页面实现基础图表与筛选控件组件。",
+    "steps": [
+      "选型并集成轻量级图表库，或基于 SVG/canvas 自行实现简单折线/柱状图组件",
+      "实现时间范围选择器组件（最近 24 小时 / 7 天 / 30 天等），支持在管理页面复用",
+      "实现工具/事件类型过滤下拉或标签组件，与统计数据查询参数联动",
+      "保证图表与筛选组件在移动端与桌面端的布局与交互合理",
+      "为关键交互添加 aria-label 与键盘可访问支持"
+    ],
+    "passes": true
+  },
+  {
+    "category": "页面布局开发",
+    "description": "完善响应式布局与移动端适配，确保 JSON 工具与管理页面在不同设备上体验良好。",
+    "steps": [
+      "针对 JSON 工具页面，实现在宽屏下左右双栏、在窄屏下上下堆叠的布局切换",
+      "调整编辑器与结果区域在不同断点下的高度与内边距，避免滚动条重叠或过于拥挤",
+      "为管理仪表盘在移动端下重新排版统计卡片与图表，避免横向滚动",
+      "验证所有按钮、输入框与链接在移动端触控区域足够大，便于点击",
+      "通过浏览器 DevTools 的设备模拟器检查主流程在常见设备尺寸上的表现"
+    ],
+    "passes": true
+  },
+  {
+    "category": "公共方法开发",
+    "description": "实现基础安全与校验工具函数，用于后端 API 输入验证与速率限制。",
+    "steps": [
+      "实现通用请求体校验逻辑（可使用轻量 schema 校验库或自定义校验函数）",
+      "为埋点事件与管理登录请求定义类型与校验规则，过滤非法或超大输入",
+      "实现基于 IP hash 或匿名标识的简单频率限制或防暴力尝试逻辑（可先以内存实现）",
+      "在 API 中复用安全与校验工具，统一错误响应结构与状态码",
+      "为关键安全逻辑编写基础单元测试或集成测试，覆盖常见攻击尝试场景"
+    ],
+    "passes": true
+  },
+  {
+    "category": "基础设施与脚本开发",
+    "description": "编写 Docker 与 Docker Compose 配置，支撑 Next.js 应用与 PostgreSQL 数据库部署。",
+    "steps": [
+      "编写应用 Dockerfile，支持生产构建与运行，合理拆分构建与运行阶段以减小镜像体积",
+      "编写 docker-compose.yml，定义 Next.js 应用服务与 PostgreSQL 数据库服务，并配置网络与卷",
+      "在 Compose 配置中管理基础环境变量（如 DATABASE_URL），并确保敏感信息不提交到仓库",
+      "本地通过 Docker Compose 启动服务，验证应用可访问与数据库连接正常",
+      "为不同环境（开发/生产）准备示例配置或覆盖文件，简化部署流程"
+    ],
+    "passes": true
+  },
+  {
+    "category": "文档与测试开发",
+    "description": "编写 README、部署文档与埋点文档，并补充关键测试用例。",
+    "steps": [
+      "撰写 README，说明项目简介、技术栈、启动方式与基础环境变量配置",
+      "编写部署文档，详细描述 Docker Compose 配置与生产环境部署步骤、回滚策略",
+      "整理埋点事件文档，列出事件名、字段含义与典型查询示例，便于后续分析与扩展",
+      "为 JSON 工具核心逻辑与埋点/统计接口补充单元测试与集成测试",
+      "为核心用户流程（JSON 格式化与管理统计查看）编写少量 e2e 用例（如 Playwright/Cypress）"
+    ],
+    "passes": true
+  },
+  {
+    "category": "质量与性能优化",
+    "description": "进行 UI/UX 打磨、性能与可访问性优化，达到可上线的生产级质量。",
+    "steps": [
+      "根据设计系统检查各页面字体、颜色、间距与阴影是否一致，修正对齐与视觉问题",
+      "优化首屏加载与交互性能，按需拆分代码、减少不必要依赖与重渲染",
+      "通过 Lighthouse 或浏览器工具检查性能指标（FCP/LCP/CLS）并做针对性优化",
+      "检查所有交互控件的 hover/focus/active 状态与键盘导航路径，提升可访问性",
+      "根据手工验收用例执行一轮完整测试，修复发现的问题并整理已知限制"
+    ],
+    "passes": true
+  },
+  {
+    "category": "公共方法开发",
+    "description": "创建 EFF Diceware 词表数据文件，作为密码短语生成的基础数据源。",
+    "steps": [
+      "在 src/lib/wordlist/ 目录下创建 eff-large.ts 文件",
+      "从 EFF 官方获取 Diceware 大词表（约 7776 个单词），转换为 TypeScript 数组常量导出",
+      "为词表添加类型定义，确保单词均为小写且无特殊字符",
+      "添加词表长度常量导出，便于熵值计算时引用",
+      "验证词表数据完整性，确保无重复单词且数量正确"
+    ],
+    "passes": true
+  },
+  {
+    "category": "公共方法开发",
+    "description": "实现密码生成核心工具函数，支持随机密码和密码短语两种模式。",
+    "steps": [
+      "在 src/lib/password-utils.ts 中实现 generateRandomPassword 函数，使用 crypto.getRandomValues() 保证密码学安全",
+      "支持配置项：长度（8-128）、字符类型（大写/小写/数字/符号）、可读性模式、排除字符",
+      "定义易混淆字符集合（0/O、1/l/I、5/S 等），在可读性模式下自动排除",
+      "实现 generatePassphrase 函数，从 EFF 词表随机选词，支持配置单词数量（3-8）、分隔符、首字母大写",
+      "实现 generateMultiple 批量生成函数，支持一次生成 1-10 个密码",
+      "为所有生成函数编写 TypeScript 类型定义与参数校验逻辑"
+    ],
+    "passes": true
+  },
+  {
+    "category": "公共方法开发",
+    "description": "实现密码熵值计算与强度评估工具函数，提供破解时间预估。",
+    "steps": [
+      "在 src/lib/entropy-utils.ts 中实现 calculateEntropy 函数，计算密码信息熵（bits）",
+      "随机密码熵值公式：entropy = log2(charPoolSize) × length",
+      "密码短语熵值公式：entropy = log2(wordlistSize) × wordCount",
+      "实现 getStrengthLevel 函数，根据熵值返回强度等级（极弱/弱/中等/强/极强）与对应颜色",
+      "实现 estimateCrackTime 函数，假设每秒 100 亿次尝试，返回人类可读的预估破解时间",
+      "为熵值计算编写单元测试，覆盖不同字符组合与边界场景"
+    ],
+    "passes": true
+  },
+  {
+    "category": "组件开发",
+    "description": "实现密码强度指示器组件，展示熵值、强度等级与预估破解时间。",
+    "steps": [
+      "在 src/components/password/strength-meter.tsx 中创建 StrengthMeter 组件",
+      "接收 password 和 mode（random/passphrase）作为 props，内部调用熵值计算函数",
+      "实现渐变色强度条，根据强度等级（极弱-红/弱-橙/中-黄/强-绿/极强-蓝）显示不同颜色",
+      "显示具体熵值（如 79 bits）与强度等级文案",
+      "显示预估破解时间（如「约 3 万年」），使用友好的中文单位",
+      "确保组件在不同宽度下自适应，强度条与文案布局合理"
+    ],
+    "passes": true
+  },
+  {
+    "category": "组件开发",
+    "description": "实现密码配置面板组件，包含随机密码和密码短语两种模式的配置选项。",
+    "steps": [
+      "在 src/components/password/password-config.tsx 中创建 PasswordConfig 组件",
+      "顶部实现模式切换按钮组（随机密码/密码短语），与 JSON 工具的模式切换风格一致",
+      "随机密码模式：长度滑块（8-128，默认 16）、字符类型复选框组、可读性模式开关、排除字符输入框",
+      "密码短语模式：单词数量滑块（3-8，默认 4）、分隔符选择器（-//_/./空格）、首字母大写开关",
+      "底部实现生成数量滑块（1-10，默认 1）与生成按钮",
+      "通过 props 回调将配置变更与生成操作传递给父组件",
+      "确保所有控件有合适的 label、hover/focus 状态与键盘可访问性"
+    ],
+    "passes": true
+  },
+  {
+    "category": "组件开发",
+    "description": "实现密码结果展示组件，显示生成的密码列表与强度分析。",
+    "steps": [
+      "在 src/components/password/password-result.tsx 中创建 PasswordResult 组件",
+      "接收密码数组、模式与配置信息作为 props",
+      "顶部显示结果数量与「全部复制」按钮",
+      "列表渲染每个密码卡片：密码文本（等宽字体）、StrengthMeter 强度指示器、单个复制按钮",
+      "密码文本默认显示，可考虑添加显示/隐藏切换（可选）",
+      "实现单个复制与全部复制功能，复制后显示成功提示",
+      "无结果时显示占位提示文案，引导用户配置并生成",
+      "确保列表在移动端与桌面端布局合理，支持滚动"
+    ],
+    "passes": true
+  },
+  {
+    "category": "页面开发",
+    "description": "实现密码生成器主页面，集成配置面板与结果展示组件，完成完整交互流程。",
+    "steps": [
+      "在 src/app/password/page.tsx 中创建密码生成器页面，使用 'use client' 标记",
+      "实现与 JSON 工具一致的双栏布局：左侧配置面板、右侧结果展示（移动端上下布局）",
+      "页面顶部添加标题（密码生成器）与简要说明，提示快捷键 Cmd/Ctrl + Enter",
+      "管理页面状态：模式、配置项、生成的密码列表、复制提示等",
+      "实现生成逻辑：根据当前配置调用 password-utils 生成密码，更新结果列表",
+      "监听 Cmd/Ctrl + Enter 快捷键触发生成操作",
+      "集成埋点 SDK，上报 tool_open、password_generate、password_copy、password_copy_all 事件",
+      "验证页面在不同设备尺寸下的响应式表现"
+    ],
+    "passes": true
+  },
+  {
+    "category": "配置更新",
+    "description": "更新工具列表配置，将密码生成器添加到首页工具卡片列表。",
+    "steps": [
+      "在 src/config/tools.ts 中添加密码生成器工具配置项",
+      "配置 id: 'password-generator'、name: '密码生成器'、description: '生成安全随机密码与密码短语'",
+      "配置路由 path: '/password'，选择合适的图标（如锁或钥匙图标）",
+      "根据需要设置 isHot 标记，决定是否在首页显示热门标签",
+      "验证首页工具卡片正确渲染密码生成器入口，点击可跳转到工具页面",
+      "确保搜索功能可通过'密码'、'password'等关键词找到该工具"
+    ],
+    "passes": true
+  },
+  {
+    "category": "公共方法开发",
+    "description": "实现二维码内容格式化工具函数，支持 WiFi、vCard、邮件、电话、短信等预设类型的标准格式生成。",
+    "steps": [
+      "在 src/lib/qrcode-content.ts 中创建内容格式化工具模块",
+      "实现 formatWifiContent 函数，生成 WiFi 连接格式：WIFI:T:{type};S:{ssid};P:{password};;，支持 WPA/WEP/无加密类型",
+      "实现 formatVCardContent 函数，生成 vCard 3.0 标准格式，支持姓名、电话、邮箱、公司、职位、地址等可选字段",
+      "实现 formatEmailContent 函数，生成 mailto: 格式，支持收件人、主题、正文参数",
+      "实现 formatPhoneContent 函数，生成 tel: 格式；实现 formatSmsContent 函数，生成 smsto: 格式",
+      "定义 QRContentType 联合类型与各类型的配置接口，导出统一的 formatQRContent 函数根据类型分发",
+      "为所有格式化函数编写单元测试，覆盖正常输入、特殊字符转义与边界场景"
+    ],
+    "passes": true
+  },
+  {
+    "category": "公共方法开发",
+    "description": "实现二维码生成核心工具函数，封装 qrcode 库并提供统一的生成接口。",
+    "steps": [
+      "安装 qrcode 库（pnpm add qrcode）及其 TypeScript 类型定义（pnpm add -D @types/qrcode）",
+      "在 src/lib/qrcode-generator.ts 中封装二维码生成逻辑",
+      "实现 generateQRCodeDataURL 函数，生成 Base64 DataURL 格式用于预览，支持尺寸、纠错级别、前景色、背景色配置",
+      "实现 generateQRCodeSVG 函数，生成 SVG 字符串格式用于矢量导出",
+      "实现 generateQRCodeCanvas 函数，生成 Canvas 元素用于 PNG/JPEG 导出与自定义尺寸渲染",
+      "定义 QRCodeOptions 接口，包含 size（128-1024）、errorCorrectionLevel（L/M/Q/H）、foregroundColor、backgroundColor",
+      "处理内容过长或无效输入的错误场景，返回包含错误信息的结果对象",
+      "为生成函数编写单元测试，验证不同配置下的输出格式正确"
+    ],
+    "passes": true
+  },
+  {
+    "category": "公共方法开发",
+    "description": "实现二维码解析核心工具函数，封装 jsQR 库并支持从图片数据中提取二维码内容。",
+    "steps": [
+      "安装 jsqr 库（pnpm add jsqr）",
+      "在 src/lib/qrcode-scanner.ts 中封装二维码解析逻辑",
+      "实现 scanQRCodeFromImageData 函数，接收 ImageData 对象，使用 jsQR 解析并返回二维码内容",
+      "实现 scanQRCodeFromFile 函数，接收 File 对象，通过 Canvas 将图片转换为 ImageData 后调用解析",
+      "实现 scanQRCodeFromURL 函数，接收图片 URL，通过 fetch 或 Image 加载后转换为 ImageData 进行解析",
+      "定义 ScanResult 接口，包含 success、content、error 字段，统一返回格式",
+      "处理常见错误场景：图片加载失败、未识别到二维码、跨域图片限制等，返回友好错误信息",
+      "为解析函数编写单元测试，使用测试用二维码图片验证解析准确性"
+    ],
+    "passes": true
+  },
+  {
+    "category": "公共方法开发",
+    "description": "实现二维码导出工具函数，支持 PNG、SVG、JPEG 多格式导出与自定义尺寸。",
+    "steps": [
+      "在 src/lib/qrcode-export.ts 中创建导出工具模块",
+      "实现 exportAsPNG 函数，将 Canvas 转换为 PNG Blob，支持自定义导出尺寸（通过重绘到新 Canvas 实现）",
+      "实现 exportAsJPEG 函数，将 Canvas 转换为 JPEG Blob，支持自定义质量参数与导出尺寸",
+      "实现 exportAsSVG 函数，将 SVG 字符串转换为 Blob，支持修改 viewBox 实现尺寸调整",
+      "实现 downloadFile 函数，创建临时 <a> 元素触发文件下载，支持自定义文件名",
+      "实现 copyImageToClipboard 函数，使用 Clipboard API 将 PNG Blob 复制到剪贴板",
+      "定义 ExportFormat 类型（'png' | 'svg' | 'jpeg'）与 ExportOptions 接口",
+      "处理浏览器兼容性问题，为不支持 Clipboard API 的环境提供降级提示"
+    ],
+    "passes": true
+  },
+  {
+    "category": "组件开发",
+    "description": "实现二维码内容类型选择器与对应的动态表单组件。",
+    "steps": [
+      "在 src/components/qrcode/content-type-selector.tsx 中创建内容类型选择组件",
+      "实现下拉选择器或标签组，支持切换：文本/URL、WiFi、vCard、邮件、电话、短信六种类型",
+      "在 src/components/qrcode/content-forms/ 目录下为每种类型创建独立表单组件",
+      "TextUrlForm：多行文本输入框，带字符计数提示",
+      "WifiForm：SSID 输入框、密码输入框（带显示/隐藏切换）、加密类型单选（WPA/WEP/无）",
+      "VCardForm：姓名、电话、邮箱、公司、职位、地址输入框，均为可选，带折叠展开",
+      "EmailForm：收件人、主题、正文输入框；PhoneForm：电话号码输入框；SmsForm：电话号码与短信内容输入框",
+      "实现 ContentFormWrapper 组件，根据选中类型动态渲染对应表单，通过 props 回调传递表单数据",
+      "确保所有表单控件有合适的 label、placeholder、校验提示与键盘可访问性"
+    ],
+    "passes": true
+  },
+  {
+    "category": "组件开发",
+    "description": "实现二维码样式配置面板组件，支持尺寸、纠错级别与颜色自定义。",
+    "steps": [
+      "在 src/components/qrcode/style-config.tsx 中创建样式配置组件",
+      "实现尺寸选择器：下拉选择预设值（128/256/512/1024px）或自定义输入（范围 64-2048）",
+      "实现纠错级别选择器：L（7%）/M（15%）/Q（25%）/H（30%）四个选项，带简要说明 tooltip",
+      "实现前景色选择器：使用原生 <input type='color'> 或自定义颜色选择组件，默认 #000000",
+      "实现背景色选择器：同上，默认 #FFFFFF，支持透明背景选项（仅 PNG 格式有效）",
+      "添加颜色预设快捷按钮：经典黑白、蓝白、绿白等常用配色方案",
+      "通过 props 回调将配置变更实时传递给父组件，支持受控模式",
+      "确保配置面板在移动端可折叠或紧凑显示，避免占用过多空间"
+    ],
+    "passes": true
+  },
+  {
+    "category": "组件开发",
+    "description": "实现二维码预览与导出操作组件，展示生成结果并提供多格式下载。",
+    "steps": [
+      "在 src/components/qrcode/qrcode-preview.tsx 中创建预览组件",
+      "居中显示生成的二维码图片，使用 Canvas 或 <img> 渲染 DataURL",
+      "图片下方显示当前编码的内容摘要（超过 50 字符截断显示，带 tooltip 查看完整内容）",
+      "未生成时显示占位区域：虚线边框 + 提示文案「配置内容后点击生成」",
+      "在 src/components/qrcode/export-actions.tsx 中创建导出操作组件",
+      "实现格式选择器：PNG/SVG/JPEG 单选按钮组，默认 PNG",
+      "实现导出尺寸选择器：与预览相同 / 自定义尺寸输入框（64-4096）",
+      "实现「下载」按钮与「复制图片」按钮，调用 qrcode-export 工具函数",
+      "下载与复制成功后显示轻量 toast 提示，失败时显示错误信息"
+    ],
+    "passes": true
+  },
+  {
+    "category": "组件开发",
+    "description": "实现图片上传组件，支持文件选择、拖拽上传、剪贴板粘贴与 URL 输入。",
+    "steps": [
+      "在 src/components/qrcode/image-uploader.tsx 中创建图片上传组件",
+      "实现主上传区域：虚线边框容器，支持点击触发文件选择器（accept='image/*'）",
+      "实现拖拽上传：监听 dragover/drop 事件，拖入图片时高亮边框，释放后读取文件",
+      "实现剪贴板粘贴：监听全局 paste 事件，检测 clipboardData 中的图片并读取",
+      "实现 URL 输入区域：输入框 + 加载按钮，输入图片 URL 后通过 fetch 或 Image 加载",
+      "图片加载成功后显示缩略图预览，提供「清除」按钮重置状态",
+      "处理常见错误：文件类型不支持、文件过大（建议限制 10MB）、URL 加载失败、跨域限制",
+      "通过 props 回调将加载的图片数据（File 或 ImageData）传递给父组件"
+    ],
+    "passes": true
+  },
+  {
+    "category": "组件开发",
+    "description": "实现二维码解析结果展示组件，显示解析内容与复制操作。",
+    "steps": [
+      "在 src/components/qrcode/scan-result.tsx 中创建解析结果组件",
+      "解析成功时：显示解析出的原始文本内容，使用等宽字体与代码块样式",
+      "内容区域支持滚动（内容过长时）与全选，下方提供「复制内容」按钮",
+      "解析失败时：显示错误提示卡片，包含错误图标与友好错误信息（如「未识别到二维码」、「图片加载失败」）",
+      "未解析时：显示占位提示「上传或粘贴二维码图片进行解析」，配合引导图标",
+      "复制成功后显示轻量 toast 提示",
+      "确保组件在不同内容长度下布局合理，支持响应式调整"
+    ],
+    "passes": true
+  },
+  {
+    "category": "页面开发",
+    "description": "实现二维码工具主页面，集成生成与解析两种模式，完成完整交互流程。",
+    "steps": [
+      "在 src/app/qrcode/page.tsx 中创建二维码工具页面，使用 'use client' 标记",
+      "页面顶部：标题（二维码工具）、简要说明、快捷键提示（Cmd/Ctrl + Enter）",
+      "标题下方：模式切换按钮组（生成二维码 / 解析二维码），风格与密码生成器一致",
+      "生成模式布局：左侧内容配置（类型选择器 + 动态表单 + 样式配置 + 生成按钮），右侧预览与导出",
+      "解析模式布局：左侧图片上传组件，右侧解析结果展示",
+      "管理页面状态：当前模式、内容类型、表单数据、样式配置、生成的二维码、上传的图片、解析结果",
+      "切换模式时保留各自状态不丢失，支持快速切换验证生成的二维码",
+      "监听 Cmd/Ctrl + Enter 快捷键触发当前模式的主操作（生成或解析）",
+      "实现实时预览：内容或样式变更后自动重新生成二维码（带 300ms 防抖）",
+      "验证页面在移动端与桌面端的响应式表现，移动端采用上下堆叠布局"
+    ],
+    "passes": true
+  },
+  {
+    "category": "页面开发",
+    "description": "在二维码工具页面集成埋点 SDK，上报核心用户行为事件。",
+    "steps": [
+      "在页面挂载时上报 tool_open 事件，附带 tool_name: 'qrcode-tool'",
+      "生成二维码时上报 qrcode_generate 事件，附带 content_type（文本/WiFi/vCard 等）、size、error_level、has_custom_color",
+      "下载二维码时上报 qrcode_download 事件，附带 format（png/svg/jpeg）、export_size",
+      "复制二维码图片时上报 qrcode_copy 事件",
+      "解析二维码时上报 qrcode_scan 事件，附带 input_method（upload/paste/drag/url）、success（是否成功）",
+      "复制解析结果时上报 qrcode_scan_copy 事件",
+      "模式切换时上报 qrcode_mode_switch 事件，附带 from_mode、to_mode",
+      "确保所有埋点不上传用户输入的实际内容，仅记录元信息"
+    ],
+    "passes": true
+  },
+  {
+    "category": "配置更新",
+    "description": "更新工具列表配置，将二维码工具添加到首页工具卡片列表。",
+    "steps": [
+      "在 src/config/tools.ts 中添加二维码工具配置项",
+      "配置 id: 'qrcode-tool'、name: '二维码工具'、description: '生成与解析二维码，支持多种内容类型与样式自定义'",
+      "配置路由 path: '/qrcode'，选择合适的图标（如二维码图标）",
+      "根据需要设置 isHot 标记，决定是否在首页显示热门标签",
+      "验证首页工具卡片正确渲染二维码工具入口，点击可跳转到工具页面",
+      "确保搜索功能可通过'二维码'、'qrcode'、'扫码'等关键词找到该工具"
+    ],
+    "passes": true
+  },
+  {
+    "category": "公共方法开发",
+    "description": "实现 JSON Key 命名风格转换核心工具函数，支持蛇形、驼峰、帕斯卡之间的相互转换。",
+    "steps": [
+      "在 src/lib/key-transform.ts 中创建 Key 转换工具模块",
+      "实现 snakeToCamel 函数，将 snake_case 转换为 camelCase（如 user_name → userName）",
+      "实现 camelToSnake 函数，将 camelCase 转换为 snake_case（如 userName → user_name）",
+      "实现 snakeToPascal 函数，将 snake_case 转换为 PascalCase（如 user_name → UserName）",
+      "实现 transformKeys 递归函数，接收 JSON 对象与转换函数，递归转换所有层级的对象键（包括数组中的对象）",
+      "定义 KeyTransformType 类型（'snakeToCamel' | 'camelToSnake' | 'snakeToPascal'）与统一的 transformJsonKeys 入口函数",
+      "处理边界情况：空对象、空数组、非对象类型、已是目标格式的键、包含数字的键（如 user_id_2）",
+      "为所有转换函数编写单元测试，覆盖嵌套对象、数组、边界场景与特殊字符"
+    ],
+    "passes": true
+  },
+  {
+    "category": "页面开发",
+    "description": "在 JSON 工具页面中集成 Key 转换模式，扩展现有模式切换功能并提供转换类型子选项。",
+    "steps": [
+      "在 src/app/json/page.tsx 中扩展 Mode 类型，新增 'keyTransform' 模式",
+      "扩展模式切换按钮组，添加「Key 转换」按钮，与现有格式化/压缩按钮风格一致",
+      "当选择 Key 转换模式时，显示转换类型子选项（蛇形转驼峰/驼峰转蛇形/蛇形转帕斯卡），使用下拉选择或按钮组",
+      "在 handleRun 函数中集成 Key 转换逻辑，调用 transformJsonKeys 函数处理输入 JSON",
+      "更新执行按钮文案，在 Key 转换模式下显示「转换」",
+      "集成埋点 SDK，上报 json_key_transform 事件，附带 transform_type（转换类型）与 input_size_range",
+      "验证在不同设备尺寸下 Key 转换模式的 UI 布局正常",
+      "更新页面说明文案，提示 Key 转换功能的使用方式"
+    ],
+    "passes": true
+  },
+  {
+    "category": "公共方法开发",
+    "description": "实现 Base64/DataURL 与图片文件互转的核心工具函数，支持健壮的格式识别、大小估算与错误处理。",
+    "steps": [
+      "在 src/lib/base64-utils.ts 中创建 Base64 工具模块，导出统一的转换与解析函数",
+      "实现 normalizeBase64Input：支持纯 Base64 与 DataURL（data:image/png;base64,...）输入，自动剥离前缀与空白字符",
+      "实现 detectMimeType：从 DataURL 前缀推断 MIME（如 image/png），并在未知时回退为 application/octet-stream",
+      "实现 fileToDataURL：接收 File/Blob，使用 FileReader 生成 DataURL（用于「图片转 Base64」）",
+      "实现 dataURLToBlob 与 base64ToBlob：将 DataURL/Base64 转换为 Blob，支持传入 mimeType（用于「Base64 转图片/下载」）",
+      "实现 estimateBytesFromBase64：估算 Base64 对应的字节大小，供 UI 展示文件大小（不解码也可估算）",
+      "实现安全限制：对超大输入（如估算 > 20MB）返回友好错误，避免浏览器内存暴涨",
+      "为上述函数编写单元测试，覆盖：空输入、带换行的 Base64、带前缀的 DataURL、无效字符、超大输入等边界场景"
+    ],
+    "passes": true
+  },
+  {
+    "category": "组件开发",
+    "description": "实现 Base64 文本输入/输出组件，支持复制、清空、长度与大小提示、以及 DataURL/纯 Base64 视图切换。",
+    "steps": [
+      "在 src/components/base64/base64-textarea.tsx 中创建 Base64TextArea 组件，沿用现有 Input/TextArea 的设计系统样式",
+      "支持受控模式：value/onChange，并提供 disabled/readonly 形态以复用在「输出区域」",
+      "实现工具栏操作：复制（copy）、清空（clear）",
+      "实现视图切换：可在「DataURL」与「纯 Base64」两种展示之间切换（输出时可选是否包含前缀）",
+      "展示元信息：字符长度、估算字节大小（调用 estimateBytesFromBase64）、识别到的 MIME（如可识别）",
+      "对无效输入显示非阻塞错误提示（不在文本域内插入红字），并提供可关闭提示条",
+      "确保键盘可访问性：按钮可 tab 聚焦、aria-label 完整、复制成功有轻量提示"
+    ],
+    "passes": true
+  },
+  {
+    "category": "组件开发",
+    "description": "实现图片选择与预览组件，用于「图片转 Base64」，支持文件选择、拖拽与剪贴板粘贴。",
+    "steps": [
+      "在 src/components/base64/image-picker.tsx 中创建 ImagePicker 组件，支持点击选择图片（accept='image/*'）",
+      "实现拖拽上传：dragover/drop 高亮反馈，释放后读取 File",
+      "实现剪贴板粘贴：监听 paste 事件，从 clipboardData 读取图片并转为 File/Blob",
+      "展示预览与元信息：缩略图、文件名、MIME、文件大小，并提供「移除/重选」操作",
+      "校验与限制：仅允许图片类型、限制最大文件大小（如 10MB），超限给出错误提示",
+      "通过 props 回调将选中的 File 传给父组件，保持组件无业务耦合"
+    ],
+    "passes": true
+  },
+  {
+    "category": "页面开发",
+    "description": "实现 Base64 转换工具主页面，包含「图片转 Base64」和「Base64 转图片」两个模式，并提供复制与下载能力。",
+    "steps": [
+      "在 src/app/base64/page.tsx 创建页面并使用 'use client'，页面标题为「Base64 转换」并添加简要说明",
+      "实现模式切换按钮组：图片转 Base64 / Base64 转图片（切换时保留各自状态）",
+      "图片转 Base64：左侧使用 ImagePicker 选择图片，右侧输出 Base64TextArea（支持 DataURL/纯 Base64 切换）",
+      "Base64 转图片：左侧输入 Base64TextArea（支持粘贴 DataURL 或纯 Base64），右侧显示图片预览与错误提示",
+      "实现下载：图片转 Base64 支持下载 .txt（如 base64.txt）；Base64 转图片支持下载解析后的图片文件（默认文件名与扩展名）",
+      "实现复制：一键复制 Base64 字符串；在 Base64 转图片模式支持复制图片到剪贴板（ClipboardItem）并做兼容性降级提示",
+      "实现快捷键：Cmd/Ctrl + Enter 执行当前模式主动作（生成 Base64 或解析预览），并在输入为空时禁用主按钮",
+      "集成埋点 SDK：上报 tool_open（tool_name: 'base64'）、base64_encode、base64_decode、base64_copy、base64_download 等事件（仅上传元信息，不上传内容）",
+      "验证响应式布局：桌面双栏、移动端上下堆叠，保证预览与文本域滚动体验良好"
+    ],
+    "passes": true
+  },
+  {
+    "category": "页面开发",
+    "description": "将 Base64 转换工具加入首页工具入口配置，确保可从首页搜索与卡片点击进入。",
+    "steps": [
+      "在 src/config/tools.ts 中新增工具项：id 建议 'base64-converter'，name: 'Base64 转换'，description 覆盖「图片↔Base64 互转」",
+      "为该工具选择合适图标并设置 href: '/base64'，根据优先级决定 isHot（默认 false）",
+      "验证首页工具卡片可跳转到 /base64，并确保搜索功能可通过「base64/Base64/图片编码」等关键词命中"
+    ],
+    "passes": true
+  },
+  {
+    "category": "公共方法开发",
+    "description": "实现进制转换核心工具函数，支持二进制、八进制、十进制、十六进制之间的相互转换与校验。",
+    "steps": [
+      "在 src/lib/base-converter.ts 中创建进制转换工具模块",
+      "定义 Base 类型：'binary' | 'octal' | 'decimal' | 'hexadecimal'，并定义对应的基数映射（2/8/10/16）",
+      "实现 validateBaseInput 函数，校验输入字符串是否符合目标进制规则（如二进制只含 0/1，十六进制只含 0-9/a-f/A-F）",
+      "实现 convertToDecimal 函数，将任意进制转换为十进制（使用 parseInt(value, radix)）",
+      "实现 convertFromDecimal 函数，将十进制转换为目标进制（使用 number.toString(radix)）",
+      "实现 convertBase 函数，统一入口，接收源进制、目标进制与输入字符串，返回转换结果或错误信息",
+      "实现 convertAllBases 函数，输入一个数字与源进制，返回包含其他三种进制的转换结果对象",
+      "处理边界情况：空输入、非法字符、超大数字（超过 Number.MAX_SAFE_INTEGER 时使用 BigInt 处理）",
+      "为所有转换函数编写单元测试，覆盖正常转换、非法输入、边界数字等场景"
+    ],
+    "passes": true
+  },
+  {
+    "category": "组件开发",
+    "description": "实现进制选择器组件，支持二进制、八进制、十进制、十六进制四种进制的单选切换。",
+    "steps": [
+      "在 src/components/base-converter/base-selector.tsx 中创建进制选择组件",
+      "使用单选按钮组实现四种进制选项，每个选项显示进制名称与示例（如「二进制（0/1）」）",
+      "实现受控模式：通过 props 接收当前选中的进制与 onChange 回调",
+      "为选中项添加高亮样式，未选中项添加 hover 状态",
+      "确保组件有合适的 label、键盘可访问性与 aria 标签",
+      "验证组件在不同宽度下布局合理，移动端可紧凑显示"
+    ],
+    "passes": true
+  },
+  {
+    "category": "组件开发",
+    "description": "实现数字输入框组件，支持不同进制的输入验证与实时反馈。",
+    "steps": [
+      "在 src/components/base-converter/number-input.tsx 中创建数字输入组件",
+      "使用 Input 组件作为基础，扩展为支持进制特定校验的输入框",
+      "接收 selectedBase 与 onChange 作为 props",
+      "实现实时校验：输入时检测是否符合当前进制规则，非法字符时显示错误提示",
+      "支持受控模式与非受控模式，提供 value/onChange 接口",
+      "实现输入框右下角的小提示，显示当前进制可用的字符范围（如「仅支持 0 和 1」）",
+      "添加 clear 按钮用于快速清空输入",
+      "确保组件在空输入、非法输入、超大输入等场景下有清晰的 UI 反馈"
+    ],
+    "passes": true
+  },
+  {
+    "category": "组件开发",
+    "description": "实现转换结果展示组件，以卡片形式显示四种进制的转换结果。",
+    "steps": [
+      "在 src/components/base-converter/conversion-result.tsx 中创建结果展示组件",
+      "接收转换结果对象（包含四种进制的值）作为 props",
+      "使用卡片网格布局，每种进制一个卡片，显示进制名称、转换结果与复制按钮",
+      "为源进制的卡片添加高亮边框或背景色，标识为输入源",
+      "为每个结果卡片添加复制按钮，点击后复制到剪贴板并显示轻量提示",
+      "转换结果使用等宽字体显示，方便阅读长数字",
+      "当结果过长时（如超过 30 字符），添加展开/收起功能，默认显示前 30 字符加省略号",
+      "无结果时显示占位提示「输入数字后点击转换」",
+      "确保组件在移动端与桌面端布局合理，支持滚动"
+    ],
+    "passes": true
+  },
+  {
+    "category": "页面开发",
+    "description": "实现进制转换工具主页面，集成配置面板与结果展示组件，完成完整交互流程。",
+    "steps": [
+      "在 src/app/base-converter/page.tsx 中创建进制转换页面，使用 'use client' 标记",
+      "页面顶部添加标题（进制转换）与简要说明，提示快捷键 Cmd/Ctrl + Enter",
+      "实现双栏布局：左侧输入配置区（进制选择器 + 数字输入框 + 转换按钮），右侧结果展示区（移动端上下布局）",
+      "管理页面状态：当前模式、源进制、输入值、转换结果、转换错误提示、复制提示等",
+      "实现转换逻辑：点击转换按钮或按快捷键时，调用 base-converter 工具函数进行转换，更新结果",
+      "监听 Cmd/Ctrl + Enter 快捷键触发转换操作",
+      "处理转换错误：当输入非法或为空时，显示非阻塞错误提示，不中断用户操作",
+      "集成埋点 SDK，上报 tool_open、base_convert、base_copy_result 事件（附带源进制、是否转换成功等元信息）",
+      "验证页面在不同设备尺寸下的响应式表现"
+    ],
+    "passes": true
+  },
+  {
+    "category": "配置更新",
+    "description": "更新工具列表配置，将进制转换工具添加到首页工具卡片列表。",
+    "steps": [
+      "在 src/config/tools.ts 中添加进制转换工具配置项",
+      "配置 id: 'base-converter'、name: '进制转换'、description: '二进制、八进制、十进制、十六进制互转'",
+      "配置路由 path: '/base-converter'，选择合适的图标（如计算器或数字图标）",
+      "根据需要设置 isHot 标记，决定是否在首页显示热门标签",
+      "验证首页工具卡片正确渲染进制转换入口，点击可跳转到工具页面",
+      "确保搜索功能可通过'进制'、'base'、'转换'等关键词找到该工具"
+    ],
+    "passes": true
+  },
+  {
+    "category": "公共方法开发",
+    "description": "实现时间戳与日期时间互转、时区格式化与日期字符串解析的核心工具函数。",
+    "steps": [
+      "在 src/lib/timestamp-utils.ts 中创建时间戳转换工具模块",
+      "定义 TimestampUnit 类型（'seconds' | 'milliseconds'）与 TimezoneOption 类型（'UTC' | 'local' | string）",
+      "实现 parseDateString 函数：支持 ISO 8601（如 2024-01-30T12:00:00、带 Z 或 +08:00）、常见格式（2024-01-30 12:00:00），返回 Date 或错误信息",
+      "实现 timestampToDate 函数：接收数字与单位（秒/毫秒），返回 Date 对象",
+      "实现 dateToTimestamp 函数：接收 Date，返回 { seconds, milliseconds } 对象",
+      "实现 formatDateInTimezone 函数：接收 Date 与时区（UTC/local/IANA 如 Asia/Shanghai），使用 Intl.DateTimeFormat 格式化为可读字符串",
+      "实现 getCurrentTimestamp 函数：返回当前时间的秒与毫秒；实现 getCurrentDateString 函数：返回当前时间的 ISO 字符串",
+      "处理边界与错误：无效时间戳、无法解析的日期字符串、超出安全范围数字，返回统一错误结构",
+      "为上述函数编写单元测试，覆盖正常解析、多种日期格式、时区输出与边界场景"
+    ],
+    "passes": true
+  },
+  {
+    "category": "组件开发",
+    "description": "实现时间戳单位选择器与时区选择器组件，供时间戳转换页面使用。",
+    "steps": [
+      "在 src/components/timestamp/ 目录下创建 unit-selector.tsx，实现秒/毫秒单选按钮组，受控模式 value/onChange",
+      "创建 timezone-selector.tsx：支持选项「本地」「UTC」与常用时区下拉（如 Asia/Shanghai、America/New_York），可使用 Intl.supportedValuesOf('timeZone') 或预设列表",
+      "时区选择器为受控组件，与全站 Input/Select 样式一致，带 label 与键盘可访问性",
+      "两个组件均支持 disabled 与 aria-label，移动端布局紧凑"
+    ],
+    "passes": true
+  },
+  {
+    "category": "组件开发",
+    "description": "实现时间戳输入框与日期时间输入框组件，支持校验与当前时间快捷填入。",
+    "steps": [
+      "在 src/components/timestamp/timestamp-input.tsx 中创建时间戳输入组件：纯数字输入，配合单位选择器（秒/毫秒），实时校验非法字符与超出安全范围",
+      "在 src/components/timestamp/date-string-input.tsx 中创建日期时间输入组件：多行或单行文本，支持粘贴 ISO 8601 及常见格式，解析失败时显示非阻塞错误提示",
+      "为两个输入组件提供「当前时间」快捷按钮：时间戳输入时填入当前秒或毫秒；日期输入时填入当前时间的 ISO 字符串",
+      "输入组件受控、带清空与 placeholder，错误状态与现有设计系统一致"
+    ],
+    "passes": true
+  },
+  {
+    "category": "组件开发",
+    "description": "实现时间戳转换结果展示组件，多时区日期与双单位时间戳展示，带复制按钮。",
+    "steps": [
+      "在 src/components/timestamp/conversion-result.tsx 中创建结果展示组件",
+      "时间戳→日期模式：接收 Date 与所选时区列表，展示各时区下的格式化日期时间字符串，每行带复制按钮",
+      "日期→时间戳模式：接收 seconds 与 milliseconds，以卡片或列表展示两种单位的结果，各带复制按钮",
+      "无结果时显示占位文案「输入后点击转换」；错误时显示友好错误信息",
+      "结果区域使用等宽字体，复制成功后轻量 toast 提示，布局支持响应式与滚动"
+    ],
+    "passes": true
+  },
+  {
+    "category": "页面开发",
+    "description": "实现时间戳转换工具主页面，双模式（时间戳→日期、日期→时间戳）与完整交互流程。",
+    "steps": [
+      "在 src/app/timestamp/page.tsx 中创建时间戳转换页面，使用 'use client' 标记",
+      "页面顶部：标题（时间戳转换）、简要说明、快捷键提示 Cmd/Ctrl + Enter",
+      "模式切换按钮组：时间戳 → 日期时间 | 日期时间 → 时间戳，与进制转换/Base64 风格一致",
+      "时间戳→日期模式：左侧单位选择器 + 时间戳输入框 + 当前时间按钮 + 时区选择器 + 转换按钮；右侧展示所选时区下的日期时间结果与复制",
+      "日期→时间戳模式：左侧日期时间输入框 + 当前时间按钮 + 时区选择器（解释输入时间的时区）+ 转换按钮；右侧展示秒/毫秒时间戳与复制",
+      "管理页面状态：模式、单位、输入值、时区、转换结果、错误信息、复制提示；切换模式时保留各自状态",
+      "实现转换逻辑：调用 timestamp-utils，根据模式更新结果；监听 Cmd/Ctrl + Enter 触发展示；输入为空或非法时禁用主按钮并显示提示",
+      "验证桌面双栏与移动端上下堆叠的响应式布局"
+    ],
+    "passes": true
+  },
+  {
+    "category": "页面开发",
+    "description": "在时间戳转换工具页面集成埋点 SDK，上报核心用户行为事件。",
+    "steps": [
+      "页面挂载时上报 tool_open 事件，附带 tool_name: 'timestamp-converter'",
+      "执行转换时上报 timestamp_convert 事件，附带 mode（to_date | to_timestamp）、unit（若适用）、timezone、success",
+      "复制结果时上报 timestamp_copy 事件，附带 copy_target（date_string | seconds | milliseconds）",
+      "点击当前时间按钮时上报 timestamp_current_time 事件，附带 mode",
+      "模式切换时上报 timestamp_mode_switch 事件，附带 from_mode、to_mode",
+      "所有埋点仅上传元信息，不上传用户输入的具体时间戳或日期字符串"
+    ],
+    "passes": true
+  },
+  {
+    "category": "配置更新",
+    "description": "更新工具列表配置，将时间戳转换工具添加到首页工具卡片列表。",
+    "steps": [
+      "在 src/config/tools.ts 中添加时间戳转换工具配置项",
+      "配置 id: 'timestamp-converter'、name: '时间戳转换'、description: '时间戳与日期时间互转，支持秒/毫秒、多时区与复制'",
+      "配置路由 path: '/timestamp'，选择合适图标（如 Clock 或 CalendarClock）",
+      "根据需要设置 isHot 标记，验证首页卡片与搜索可通过「时间戳」「timestamp」「日期」等关键词命中"
+    ],
+    "passes": true
+  },
+  {
+    "category": "公共方法开发",
+    "description": "实现信息编码/解码核心工具函数，支持 Unicode、URL、UTF16、Base64 文本、MD5、SHA1、HTML 编码与对应解码、URL 参数解析、JWT 解码。",
+    "steps": [
+      "在 src/lib/encoding-utils.ts 中创建编码工具模块，定义 EncodingType 与 DecodingType 联合类型",
+      "实现 Unicode 编码：encodeToUnicodeEscaped(str) 将字符转为 \\uXXXX 形式；实现 decodeFromUnicodeEscaped(str) 解码",
+      "实现 URL 编码：封装 encodeURIComponent 与 decodeURIComponent，或提供百分号形式（%XX）的编解码",
+      "实现 UTF16/十六进制编码：encodeToHexEscaped(str) 转为 \\xXX 形式（按 UTF-8 或 Latin1 字节）；实现对应解码",
+      "实现 Base64 文本编解码：encodeBase64Text(str) 与 decodeBase64Text(str)，使用 btoa/atob 或 Buffer，处理 UTF-8 与错误输入",
+      "实现 MD5 计算：使用 Web Crypto 或安装轻量库（如 js-md5），导出 md5Hash(str) 返回十六进制字符串",
+      "实现 SHA1 加密：使用 Web Crypto API subtle.digest('SHA-1')，导出 sha1Hash(str) 返回十六进制字符串",
+      "实现 HTML 深度编码：encodeHtmlDeep(str) 将字符转为 &#xXXXX; 或 &amp;/&lt;/&gt; 等实体；实现 decodeHtmlEntities(str) 解码",
+      "实现 URL 参数解析：parseQueryString(queryString) 解析 ?key=value&a=b 为键值对对象，支持重复键与 decodeURIComponent",
+      "实现 JWT 解码：decodeJwtPayload(token) 仅解析 Base64Url 的 header 与 payload 并返回可读对象，不验证签名，非法输入返回错误结构",
+      "为上述函数编写单元测试，覆盖正常输入、空输入、非法字符、超长输入与边界场景"
+    ],
+    "passes": true
+  },
+  {
+    "category": "组件开发",
+    "description": "实现信息编码工具的类型选择器与输入输出区域组件。",
+    "steps": [
+      "在 src/components/encoding/ 目录下创建 encoding-type-selector.tsx",
+      "实现编码/解码大模式切换按钮组（编码 | 解码），与现有工具页面风格一致",
+      "编码模式下子类型选项：Unicode(\\u)、URL(%)、UTF16(\\x)、Base64、MD5、SHA1、HTML 深度编码；解码模式下：Unicode、URL、UTF16、Base64、URL 参数解析、JWT 解码",
+      "根据大模式动态展示对应子类型单选或下拉，受控组件 value/onChange，带简短说明或示例文案",
+      "创建 encoding-io.tsx：左侧多行文本输入框（placeholder 随类型变化）、右侧结果展示区（只读多行或结构化展示）",
+      "输入框支持清空、粘贴；结果区在 JWT 解码与 URL 参数解析时展示结构化键值或 JSON 树形展示",
+      "确保所有控件有 label、aria-label 与键盘可访问性，移动端布局紧凑"
+    ],
+    "passes": true
+  },
+  {
+    "category": "组件开发",
+    "description": "实现信息编码结果展示与复制组件，支持纯文本与结构化结果。",
+    "steps": [
+      "在 src/components/encoding/encoding-result.tsx 中创建结果展示组件",
+      "接收 result 与 resultType（'text' | 'keyValue' | 'jwt'）作为 props",
+      "纯文本结果：等宽字体、可滚动、支持全选，下方提供「复制」按钮",
+      "URL 参数解析结果：以键值对列表或表格形式展示，支持「复制为 JSON」与「复制为 query string」",
+      "JWT 解码结果：展示 header 与 payload 的格式化 JSON，可折叠/展开，提供「复制 payload」等操作",
+      "错误状态：输入非法或解码失败时显示友好错误信息与可能原因，不阻塞界面",
+      "复制成功后显示轻量 toast 提示，与全站反馈一致"
+    ],
+    "passes": true
+  },
+  {
+    "category": "页面开发",
+    "description": "实现信息编码工具主页面，集成编码/解码双模式与全部编码类型，完成完整交互流程。",
+    "steps": [
+      "在 src/app/encoding/page.tsx 中创建信息编码工具页面，使用 'use client' 标记",
+      "页面顶部：标题（信息编码工具）、简要说明（编码：Unicode/URL/UTF16/Base64/MD5/SHA1/HTML；解码：Unicode/URL/UTF16/Base64/URL 参数/JWT）、快捷键提示 Cmd/Ctrl + Enter",
+      "实现双栏布局：左侧类型选择器 + 输入区域 + 执行按钮，右侧结果展示组件（移动端上下堆叠）",
+      "管理页面状态：编码或解码模式、当前子类型、输入文本、输出结果、错误信息、复制提示",
+      "实现执行逻辑：点击执行或 Cmd/Ctrl + Enter 时根据当前类型调用 encoding-utils 对应函数，更新结果区域；MD5/SHA1 为异步，需处理 loading 状态",
+      "输入为空时禁用执行按钮并给出提示；解码类操作失败时在结果区展示错误信息",
+      "切换编码类型时保留输入内容，便于同一段文本尝试多种编码；切换编码/解码模式时可清空结果或保留输入",
+      "验证桌面双栏与移动端响应式布局，确保长文本与结构化结果滚动正常"
+    ],
+    "passes": true
+  },
+  {
+    "category": "页面开发",
+    "description": "在信息编码工具页面集成埋点 SDK，上报核心用户行为事件。",
+    "steps": [
+      "页面挂载时上报 tool_open 事件，附带 tool_name: 'encoding-tool'",
+      "执行编码时上报 encoding_encode 事件，附带 encoding_type（unicode/url/utf16/base64/md5/sha1/html）、success",
+      "执行解码时上报 encoding_decode 事件，附带 decoding_type（unicode/url/utf16/base64/query_string/jwt）、success",
+      "复制结果时上报 encoding_copy 事件，附带 result_type（text/key_value/jwt）",
+      "模式切换时上报 encoding_mode_switch 事件，附带 from_mode、to_mode",
+      "所有埋点仅上传元信息与类型，不上传用户输入或输出的具体内容"
+    ],
+    "passes": true
+  },
+  {
+    "category": "配置更新",
+    "description": "更新工具列表配置，将信息编码工具添加到首页工具卡片列表。",
+    "steps": [
+      "在 src/config/tools.ts 中添加信息编码工具配置项",
+      "配置 id: 'encoding-tool'、name: '信息编码工具'、description: 'Unicode/URL/UTF16/Base64/MD5/SHA1/HTML 编码与解码，URL 参数解析、JWT 解码'",
+      "配置路由 path: '/encoding'，选择合适图标（如 Lock、Code 或 Binary）",
+      "根据需要设置 isHot 标记，验证首页工具卡片正确渲染并可跳转",
+      "确保搜索功能可通过「编码」「解码」「Unicode」「URL 编码」「Base64」「MD5」「JWT」等关键词命中"
+    ],
+    "passes": true
+  },
+  {
+    "category": "公共方法开发",
+    "description": "实现正则表达式测试与校验核心工具函数，支持匹配、捕获组与多标志位。",
+    "steps": [
+      "在 src/lib/regex-utils.ts 中创建正则工具模块，定义 RegexFlags 类型（g、i、m、s、u、y）与 MatchResult 接口（match、index、groups、input）",
+      "实现 buildRegex 函数：接收模式字符串与标志位对象，返回 RegExp 实例或错误信息，非法正则时返回统一错误结构",
+      "实现 testRegex 函数：接收正则与测试字符串，返回是否匹配的布尔值",
+      "实现 execAll 函数：使用 matchAll 或循环 exec，返回全部匹配结果数组，每项包含 match、index、groups",
+      "实现 getMatchResults 函数：统一入口，接收模式、标志、测试字符串，返回 { ok, matches, error } 结构",
+      "处理边界情况：空模式、空字符串、非法正则（如未闭合括号）、超大输入时的性能保护",
+      "为上述函数编写单元测试，覆盖正常匹配、捕获组、零宽断言、非法正则与边界输入"
+    ],
+    "passes": true
+  },
+  {
+    "category": "公共方法开发",
+    "description": "实现正则替换核心工具函数，支持替换字符串与 $1、$& 等占位符。",
+    "steps": [
+      "在 src/lib/regex-utils.ts 中扩展替换能力，实现 replaceByRegex 函数",
+      "接收参数：模式字符串、标志位、源字符串、替换字符串（支持 $1-$9、$&、$`、$' 等）",
+      "使用 String.prototype.replace 或 RegExp 实现替换，返回 { ok, result, error } 结构",
+      "非法正则或替换过程中异常时返回错误信息，不抛未捕获异常",
+      "为 replaceByRegex 编写单元测试，覆盖普通替换、捕获组引用、全局替换与非法输入"
+    ],
+    "passes": true
+  },
+  {
+    "category": "公共方法开发",
+    "description": "实现正则特殊字符转义与反转义工具函数，便于将用户输入安全嵌入正则。",
+    "steps": [
+      "实现 escapeForRegex 函数：将字符串中的 . * + ? ^ $ { } [ ] ( ) | \\ 等转义，使其在正则中作为字面量匹配",
+      "实现 unescapeRegex 函数：将 \\x 形式的转义还原为字面量（可选，用于「从正则中提取字面量」场景）",
+      "定义 EscapeResult 类型，返回 { ok, value } 或错误信息",
+      "为转义与反转义函数编写单元测试，覆盖常见特殊字符与边界输入"
+    ],
+    "passes": true
+  },
+  {
+    "category": "公共方法开发",
+    "description": "实现正则表达式解析与「解释」工具函数，输出结构化的片段说明供 UI 展示。",
+    "steps": [
+      "选型：使用 @eslint-community/regexpp 解析正则 AST，或自研简单 token 解析（仅支持常用语法）",
+      "实现 explainRegex 函数：接收模式字符串与标志位，返回 { ok, parts } 或错误信息",
+      "parts 为数组，每项包含 type（literal、characterClass、quantifier、anchor、group 等）、raw、description（简短中文描述）",
+      "对非法正则返回统一错误结构，不抛未捕获异常",
+      "为 explainRegex 编写单元测试，覆盖简单模式、字符类、量词、分组与非法语法"
+    ],
+    "passes": true
+  },
+  {
+    "category": "公共方法开发",
+    "description": "定义常用正则预设（邮箱、手机、URL、身份证等）与预设列表接口，供 UI 快速插入。",
+    "steps": [
+      "在 src/lib/regex-utils.ts 或 src/config/regex-presets.ts 中定义 RegexPreset 接口：id、name、pattern、description、flags（可选）",
+      "实现 getRegexPresets 函数，返回预设数组，包含常见场景：邮箱、手机号（中国大陆）、URL、IPv4、身份证、中文、数字、空白行等",
+      "预设的 pattern 与 description 需准确且注明「仅供参考」，避免用户误用于生产校验",
+      "为预设列表编写简单测试或快照，确保导出结构稳定"
+    ],
+    "passes": true
+  },
+  {
+    "category": "组件开发",
+    "description": "实现正则标志位选择器组件，支持 g、i、m、s、u、y 多选与受控。",
+    "steps": [
+      "在 src/components/regex/ 目录下创建 regex-flags-selector.tsx",
+      "使用复选框组或标签组展示六种标志：全局(g)、忽略大小写(i)、多行(m)、dotAll(s)、unicode(u)、粘性(y)",
+      "每个选项带简短 tooltip 说明（如 g：全局匹配）",
+      "受控组件：value 为标志位对象或字符串，onChange 回调更新",
+      "样式与现有工具页面的选择器一致，支持键盘可访问与 aria-label"
+    ],
+    "passes": true
+  },
+  {
+    "category": "组件开发",
+    "description": "实现正则表达式输入框与测试文本输入区域组件，支持语法高亮与错误状态。",
+    "steps": [
+      "在 src/components/regex/regex-input.tsx 中创建正则输入组件，使用 Input 或 Textarea",
+      "支持受控 value/onChange，placeholder 为「输入正则表达式，如 \\d+」",
+      "非法正则输入时在下方或右侧显示非阻塞错误提示（如「未闭合的括号」），不阻止输入",
+      "可选：集成轻量语法高亮（如正则字面量、字符类高亮），或保持纯文本以降低依赖",
+      "在 src/components/regex/test-string-input.tsx 中创建测试文本输入组件，多行 Textarea，placeholder 随模式变化"
+    ],
+    "passes": true
+  },
+  {
+    "category": "组件开发",
+    "description": "实现正则测试结果展示组件，展示匹配列表、捕获组与在原文中的位置。",
+    "steps": [
+      "在 src/components/regex/match-result-view.tsx 中创建匹配结果展示组件",
+      "接收 matches 数组（match、index、groups）与原始 input 字符串作为 props",
+      "以列表或表格形式展示：序号、匹配内容、起始索引、捕获组（$1、$2…）",
+      "无匹配时显示「无匹配」占位文案；正则非法时显示错误信息",
+      "每行提供「复制」按钮，复制该条匹配或整组结果",
+      "可选：在测试文本上高亮显示匹配区间（通过切片与 span 实现）"
+    ],
+    "passes": true
+  },
+  {
+    "category": "组件开发",
+    "description": "实现正则替换结果展示组件，展示替换后的完整文本与替换次数。",
+    "steps": [
+      "在 src/components/regex/replace-result-view.tsx 中创建替换结果展示组件",
+      "接收替换后的 result 字符串、替换次数（可选）、错误信息作为 props",
+      "使用只读 Textarea 或等宽代码块展示替换结果，支持滚动与全选",
+      "顶部或底部显示「共替换 N 处」等统计信息",
+      "提供「复制结果」按钮，复制成功后轻量 toast 提示",
+      "错误时显示友好错误信息，与全站错误展示风格一致"
+    ],
+    "passes": true
+  },
+  {
+    "category": "组件开发",
+    "description": "实现正则解释结果展示组件，以结构化方式展示正则各片段说明。",
+    "steps": [
+      "在 src/components/regex/explain-result-view.tsx 中创建解释结果展示组件",
+      "接收 explainRegex 返回的 parts 数组作为 props",
+      "以列表或树形展示每个片段：raw 文本 + type + description（中文简短说明）",
+      "可使用卡片、表格或折叠面板区分「字面量」「字符类」「量词」等类型",
+      "非法正则或解析失败时显示错误信息区域",
+      "确保长列表可滚动，移动端布局紧凑"
+    ],
+    "passes": true
+  },
+  {
+    "category": "组件开发",
+    "description": "实现常用正则预设选择器组件，支持下拉选择并插入到输入框。",
+    "steps": [
+      "在 src/components/regex/regex-preset-selector.tsx 中创建预设选择组件",
+      "使用 Select 或下拉列表展示 getRegexPresets() 返回的预设（名称 + 简短描述）",
+      "选择某一预设时，通过 onChange 回调将 pattern 与可选 flags 传给父组件，由父组件填入正则输入框",
+      "不替代用户输入，仅「插入」或「替换」当前正则，具体行为由页面状态决定",
+      "样式与 encoding 类型选择器、base-converter 进制选择器保持一致"
+    ],
+    "passes": true
+  },
+  {
+    "category": "页面开发",
+    "description": "实现正则表达式工具主页面，集成测试、替换、解释三种模式与双栏布局。",
+    "steps": [
+      "在 src/app/regex/page.tsx 中创建正则工具页面，使用 'use client' 标记",
+      "页面顶部：标题（正则表达式工具）、简要说明、快捷键提示 Cmd/Ctrl + Enter",
+      "模式切换按钮组：测试匹配 / 替换 / 解释，与 JSON、编码工具风格一致",
+      "左侧：正则输入框 + 标志位选择器 + 预设选择器（可选）；测试/替换模式下增加测试文本输入框，替换模式下增加替换字符串输入框",
+      "右侧：根据模式展示 MatchResultView / ReplaceResultView / ExplainResultView",
+      "管理页面状态：模式、正则、标志位、测试文本、替换字符串、匹配/替换/解释结果、错误信息",
+      "实现执行逻辑：点击「执行」或 Cmd/Ctrl + Enter 时根据当前模式调用 regex-utils 对应函数并更新结果",
+      "正则或测试文本为空时禁用执行按钮并给出提示；非法正则在结果区展示错误"
+    ],
+    "passes": true
+  },
+  {
+    "category": "页面开发",
+    "description": "在正则工具页面集成键盘快捷键、输入校验与结果复制体验。",
+    "steps": [
+      "在正则工具页面中监听 Cmd/Ctrl + Enter 快捷键触发当前模式的主操作（测试/替换/解释）",
+      "正则输入框失焦或内容变更时可选做轻量校验，非法时在输入区下方显示非阻塞错误提示",
+      "结果区域提供「复制全部」「复制第一条」等操作，复制成功后统一 toast 提示",
+      "替换模式下列出「共替换 N 处」，便于用户确认预期",
+      "在移动端与桌面端分别验证快捷键、按钮状态与复制行为"
+    ],
+    "passes": true
+  },
+  {
+    "category": "页面开发",
+    "description": "在正则表达式工具页面集成埋点 SDK，上报核心用户行为事件。",
+    "steps": [
+      "页面挂载时上报 tool_open 事件，附带 tool_name: 'regex-tool'",
+      "执行测试时上报 regex_test 事件，附带 has_match（是否匹配）、match_count、success（正则是否合法）",
+      "执行替换时上报 regex_replace 事件，附带 replace_count、success",
+      "执行解释时上报 regex_explain 事件，附带 success",
+      "使用预设时上报 regex_preset_use 事件，附带 preset_id（如 email、phone），不上传具体 pattern",
+      "复制结果时上报 regex_copy 事件，附带 result_type（match_list、replace_result、explain）",
+      "模式切换时上报 regex_mode_switch 事件，附带 from_mode、to_mode",
+      "所有埋点仅上传元信息，不上传用户输入的正则或测试文本内容"
+    ],
+    "passes": true
+  },
+  {
+    "category": "页面布局开发",
+    "description": "正则工具页面响应式布局与移动端适配，与全站双栏/堆叠一致。",
+    "steps": [
+      "正则工具页在宽屏下采用左右双栏（左输入配置、右结果），窄屏下改为上下堆叠",
+      "输入区与结果区高度与内边距随断点调整，避免滚动条重叠或过于拥挤",
+      "标志位选择器在移动端可折叠为「高级选项」或横向滚动标签，保证触控区域足够",
+      "验证在 sm/lg 断点下布局正常，与 JSON、编码、进制转换等工具页体验一致"
+    ],
+    "passes": true
+  },
+  {
+    "category": "配置更新",
+    "description": "更新工具列表配置，将正则表达式工具添加到首页工具卡片列表。",
+    "steps": [
+      "在 src/config/tools.ts 中添加正则表达式工具配置项",
+      "配置 id: 'regex-tool'、name: '正则表达式'、description: '测试、替换与解释正则，支持标志位与常用预设'",
+      "配置 href: '/regex'，选择合适图标（如 Lucide 的 Regex 或 Code）",
+      "根据需要设置 isHot 标记，验证首页工具卡片正确渲染并可跳转",
+      "确保搜索功能可通过「正则」「regex」「匹配」「替换」等关键词命中"
+    ],
+    "passes": true
+  },
+  {
+    "category": "公共方法开发",
+    "description": "实现 Markdown 解析与 AST 转换核心工具函数，支持标准 GFM 与 Vue 风格自定义容器（::: tip / warning / danger / details）的解析。",
+    "steps": [
+      "安装 markdown 解析库：pnpm add marked 或 pnpm add remark remark-parse remark-gfm，并选型自定义容器扩展（如 remark-directive 或自研简单正则解析）",
+      "在 src/lib/markdown-utils.ts 中创建 Markdown 工具模块，定义 MarkdownParseResult 与 VueStyleBlock 等类型",
+      "实现 parseMarkdown 函数：将原始 Markdown 字符串解析为可渲染结构，支持标题、列表、代码块、表格、引用、自定义容器",
+      "实现 parseVueStyleContainers 函数：识别 ::: tip、::: warning、::: danger、::: details 等 VuePress 风格块，解析标题与内容",
+      "实现 markdownToHtml 或提供供 React 使用的节点树（若采用 remark-rehype 则输出 hast），便于与语法高亮管线衔接",
+      "处理边界情况：空输入、非法嵌套、未闭合块，返回统一结果结构（ok/error）",
+      "为解析与容器解析函数编写单元测试，覆盖常见 Markdown 与 Vue 风格块场景"
+    ],
+    "passes": true
+  },
+  {
+    "category": "公共方法开发",
+    "description": "实现 Markdown 代码块语法高亮工具函数，采用 Vue 文档风格配色（如浅色主题、多语言支持）。",
+    "steps": [
+      "安装语法高亮库：pnpm add highlight.js 或 pnpm add shiki（可选，更佳样式与 Vue 官网一致）",
+      "在 src/lib/markdown-utils.ts 或新建 src/lib/markdown-highlight.ts 中实现 highlightCode 函数",
+      "接收代码字符串与语言标识（如 js、ts、vue、bash、json），返回带 class 的 HTML 片段或 React 节点",
+      "注册 Vue 文档常用语言：JavaScript、TypeScript、Vue、HTML、CSS、JSON、Bash、Shell",
+      "若使用 highlight.js：应用 vue 或 github 主题的 CSS 变量/类名，与全站浅色风格统一；若使用 shiki：配置 vue-light 或自定义主题",
+      "实现 getHighlightCss 或导出预置 CSS 路径，供 Markdown 预览组件引入 Vue 风格代码块样式",
+      "为 highlightCode 编写单元测试，覆盖多语言与未知语言降级为纯文本的场景"
+    ],
+    "passes": true
+  },
+  {
+    "category": "公共方法开发",
+    "description": "定义 Vue 风格 Markdown 样式规范与工具类，包括排版、自定义容器、表格、引用块等 CSS。",
+    "steps": [
+      "在 src/app/globals.css 或新建 src/app/markdown-editor.css 中定义 Vue 风格 Markdown 作用域样式类（如 .md-vue）",
+      "标题：h1–h6 字号层级、字重、行高、与下方段落间距，与 Vue 文档视觉一致",
+      "段落与列表：行高 1.7、列表缩进、有序/无序列表样式",
+      "代码块：背景色（如 slate-100）、圆角、边框、内边距、语法高亮容器样式",
+      "行内代码：背景、圆角、字体（monospace）、字号略小",
+      "引用块：左边框、背景色、引用内代码与列表的嵌套样式",
+      "表格：边框、表头背景、斑马纹（可选）、响应式横向滚动",
+      "自定义容器：.tip / .warning / .danger / .details 的图标（或 emoji）、左边框色、背景色、标题加粗",
+      "导出 CSS 变量或类名清单，供组件与预览区复用"
+    ],
+    "passes": true
+  },
+  {
+    "category": "组件开发",
+    "description": "实现 Markdown 编辑区组件，支持多行输入、Tab 缩进、与预览联动（可选分栏同步滚动）。",
+    "steps": [
+      "在 src/components/markdown-editor/ 目录下创建 editor-area.tsx（或使用 CodeMirror 的 Markdown 模式）",
+      "若使用 CodeMirror：安装 @codemirror/lang-markdown，配置 GFM、缩进、括号匹配，与现有 JSON 编辑器风格统一",
+      "若使用 Textarea：实现 Tab 键插入空格、多行、等宽字体、最小高度与可伸缩高度",
+      "组件为受控组件，接收 value、onChange、placeholder、disabled 等 props",
+      "可选：实现编辑区与预览区的「同步滚动」占位接口，便于后续按行高映射联动",
+      "确保键盘可访问性、aria-label 与焦点状态符合全站规范"
+    ],
+    "passes": true
+  },
+  {
+    "category": "组件开发",
+    "description": "实现 Markdown 预览组件，渲染 HTML 并应用 Vue 风格样式与代码高亮。",
+    "steps": [
+      "在 src/components/markdown-editor/preview-panel.tsx 中创建预览组件",
+      "接收 markdown 字符串（或已解析的 HTML/节点树）作为 props",
+      "使用 markdown-utils 的解析与高亮管线输出 HTML，通过 dangerouslySetInnerHTML 或 react-markdown + 自定义组件渲染",
+      "根容器添加 Vue 风格类名（如 md-vue），应用公共方法开发中定义的 CSS",
+      "代码块：调用 highlightCode 注入高亮后的 HTML，并包裹在带语言 class 的 pre/code 中",
+      "自定义容器（tip/warning/danger/details）：渲染为带图标与标题的块级元素，details 支持折叠",
+      "确保预览区可滚动、支持响应式宽度，并防止 XSS（仅渲染信任的解析结果，不直接插入用户原始输入）"
+    ],
+    "passes": true
+  },
+  {
+    "category": "组件开发",
+    "description": "实现 Markdown 编辑器工具栏组件，提供常用语法快捷插入与导出操作。",
+    "steps": [
+      "在 src/components/markdown-editor/toolbar.tsx 中创建工具栏组件",
+      "提供快捷按钮：标题（H1–H3）、加粗、斜体、行内代码、链接、图片、引用、无序列表、有序列表、代码块、表格（插入表格模板）、分割线",
+      "点击按钮时通过回调向编辑区当前光标位置插入对应语法（或选中文本包裹），需接收 textarea/editor 的 ref 或由父组件传入 insertAtCursor 方法",
+      "提供「导出」区域：导出为 HTML、导出为 .md 文件，通过回调交由页面或工具函数处理",
+      "工具栏样式与 JSON/编码工具页的操作栏一致，移动端可折叠为「更多」下拉",
+      "所有按钮具备 aria-label 与键盘可访问性"
+    ],
+    "passes": true
+  },
+  {
+    "category": "页面开发",
+    "description": "实现 Markdown 编辑器主页面，双栏（编辑 | 预览）布局与模式切换，集成编辑、预览与工具栏。",
+    "steps": [
+      "在 src/app/markdown-editor/page.tsx 中创建页面，使用 'use client' 标记",
+      "页面顶部：标题（Markdown 编辑器）、简要说明（支持 Vue 风格排版与代码高亮）、快捷键提示 Cmd/Ctrl + Enter 执行预览刷新",
+      "实现双栏布局：左侧编辑区（Toolbar + EditorArea）、右侧预览区（PreviewPanel），桌面端 50/50 或可调比例；移动端上下堆叠，可切换「编辑」「预览」Tab",
+      "管理页面状态：原始 Markdown 内容、解析/高亮结果、编辑/预览模式（移动端）、错误信息",
+      "编辑内容变更时实时或防抖（如 300ms）更新预览，无需单独「执行」按钮；保留 Cmd/Ctrl + Enter 作为刷新预览快捷键",
+      "集成埋点 SDK：上报 tool_open（tool_name: 'markdown-editor'）、markdown_export_html、markdown_export_md、markdown_toolbar_insert 等事件（仅元信息）",
+      "验证桌面双栏与移动端 Tab 切换的响应式表现"
+    ],
+    "passes": true
+  },
+  {
+    "category": "页面开发",
+    "description": "在 Markdown 编辑器页面中集成导出为 HTML / 导出为 .md 文件功能与复制 HTML 能力。",
+    "steps": [
+      "在 src/lib/markdown-utils.ts 或 src/lib/markdown-export.ts 中实现 exportMarkdownAsHtml 函数：将当前 Markdown 转为完整 HTML 文档（含 Vue 风格内联或链接的 CSS 摘要），返回 Blob 或 Data URL",
+      "实现 exportMarkdownAsFile 函数：将当前原始 Markdown 文本转为 .md 文件并触发下载，文件名可带时间戳",
+      "在页面或工具栏中提供「导出 HTML」「导出 .md」「复制 HTML」按钮，复制 HTML 时将预览区渲染结果转为 HTML 字符串写入剪贴板（需包含样式类名，或提示用户另存为文件以保留样式）",
+      "导出与复制成功后显示轻量 toast 提示，失败时显示错误信息",
+      "埋点：上报 markdown_export_html、markdown_export_md、markdown_copy_html，附带 success 与格式类型"
+    ],
+    "passes": true
+  },
+  {
+    "category": "页面布局开发",
+    "description": "Markdown 编辑器页面响应式布局与移动端适配，与全站双栏/堆叠一致。",
+    "steps": [
+      "宽屏下采用左右双栏（编辑 | 预览），可为预览区设置最小宽度避免过窄",
+      "窄屏下改为上下堆叠，顶部 Tab 切换「编辑」「预览」，保证单栏时编辑与预览均可全宽使用",
+      "编辑区与预览区高度使用 min-height + 弹性高度或固定视口比例，避免折叠后高度为 0",
+      "工具栏在移动端可横向滚动或折叠为图标+下拉，触控区域不小于 44px",
+      "在 sm/lg 断点验证与 JSON、编码等工具页体验一致"
+    ],
+    "passes": true
+  },
+  {
+    "category": "配置更新",
+    "description": "更新工具列表配置，将 Markdown 编辑器添加到首页工具卡片列表。",
+    "steps": [
+      "在 src/config/tools.ts 中添加 Markdown 编辑器配置项",
+      "配置 id: 'markdown-editor'、name: 'Markdown 编辑器'、description: '编辑与预览 Markdown，Vue 风格排版与代码高亮，支持导出 HTML/MD'",
+      "配置 href: '/markdown-editor'，选择合适图标（如 Lucide 的 FileText、PenLine 或 Markdown）",
+      "根据需要设置 isHot 标记，验证首页工具卡片正确渲染并可跳转",
+      "确保搜索功能可通过「Markdown」「md」「编辑器」「Vue」等关键词命中"
+    ],
+    "passes": true
+  }
+]
