@@ -7,9 +7,10 @@ import { generateGridCSS, generateGridTailwind } from "@/lib/grid-utils";
 interface GridCodePreviewProps {
   config: GridConfig;
   mergedAreas: MergedArea[];
+  onCopy?: (format: "css" | "tailwind") => void;
 }
 
-export function GridCodePreview({ config, mergedAreas }: GridCodePreviewProps) {
+export function GridCodePreview({ config, mergedAreas, onCopy }: GridCodePreviewProps) {
   const [format, setFormat] = useState<"css" | "tailwind">("css");
   const [copied, setCopied] = useState(false);
 
@@ -23,6 +24,7 @@ export function GridCodePreview({ config, mergedAreas }: GridCodePreviewProps) {
       await navigator.clipboard.writeText(currentCode);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
+      onCopy?.(format);
     } catch {
       console.error("复制失败");
     }

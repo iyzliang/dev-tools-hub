@@ -213,7 +213,7 @@
       "步骤5：添加预设应用埋点（preset_apply）",
       "步骤6：测试埋点事件上报"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "页面布局开发",

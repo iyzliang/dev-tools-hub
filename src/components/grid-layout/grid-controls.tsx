@@ -1,20 +1,27 @@
 "use client";
 
 import type { GridConfig } from "@/lib/grid-utils";
+import type { GridPreset } from "@/lib/grid-presets";
+import { GridPresetSelector } from "./grid-preset-selector";
 
 interface GridControlsProps {
   config: GridConfig;
   onChange: (config: GridConfig) => void;
   onReset: () => void;
+  onPresetSelect?: (preset: GridPreset) => void;
 }
 
-export function GridControls({ config, onChange, onReset }: GridControlsProps) {
+export function GridControls({ config, onChange, onReset, onPresetSelect }: GridControlsProps) {
   const handleChange = (key: keyof GridConfig, value: number) => {
     onChange({ ...config, [key]: value });
   };
 
   return (
     <div className="space-y-4">
+      {onPresetSelect && (
+        <GridPresetSelector onSelect={onPresetSelect} />
+      )}
+
       <div className="grid grid-cols-2 gap-3">
         <div className="space-y-1.5">
           <label className="text-xs font-medium text-slate-700">行数</label>

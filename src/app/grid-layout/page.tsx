@@ -6,6 +6,7 @@ import { GridControls } from "@/components/grid-layout/grid-controls";
 import { GridCodePreview } from "@/components/grid-layout/grid-code-preview";
 import { trackEvent } from "@/lib/analytics";
 import type { GridConfig, MergedArea } from "@/lib/grid-utils";
+import type { GridPreset } from "@/lib/grid-presets";
 
 const GRID_LAYOUT_TOOL_NAME = "grid-layout";
 
@@ -89,6 +90,24 @@ export default function GridLayoutPage() {
     setMergedAreas([]);
   };
 
+  const handleCodeCopy = (format: "css" | "tailwind") => {
+    trackEvent(
+      "code_copy",
+      { format },
+      { toolName: GRID_LAYOUT_TOOL_NAME }
+    );
+  };
+
+  const handlePresetSelect = (preset: GridPreset) => {
+    setConfig(preset.config);
+    setMergedAreas(preset.mergedAreas);
+    trackEvent(
+      "preset_apply",
+      { preset_name: preset.name },
+      { toolName: GRID_LAYOUT_TOOL_NAME }
+    );
+  };
+
   return (
     <div className="flex h-full flex-col overflow-hidden">
       <header className="shrink-0 space-y-4 pb-4">
@@ -106,7 +125,7 @@ export default function GridLayoutPage() {
         <div className="shrink-0 lg:col-span-1">
           <div className="rounded-lg border border-slate-200 bg-white p-4 shadow-sm">
             <h2 className="mb-3 text-sm font-semibold text-slate-700">配置参数</h2>
-            <GridControls config={config} onChange={handleConfigChange} onReset={handleReset} />
+            <GridControls config={config} onChange={handleConfigChange} onReset={handleReset} onPresetSelect={handlePresetSelect} />
           </div>
         </div>
 
@@ -131,7 +150,7 @@ export default function GridLayoutPage() {
           <div className="h-2 w-2 rounded-full bg-emerald-500" />
           <span className="text-xs font-medium text-slate-700">代码输出</span>
         </div>
-        <GridCodePreview config={config} mergedAreas={mergedAreas} />
+        <GridCodePreview config={config} mergedAreas={mergedAreas} onCopy={handleCodeCopy} />
       </section>
     </div>
   );

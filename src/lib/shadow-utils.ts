@@ -121,7 +121,7 @@ export function generateTailwindShadow(params: ShadowParams): string {
 
 export function parseBoxShadow(cssString: string): ShadowParams[] {
   const shadows: ShadowParams[] = [];
-  const boxShadowMatch = cssString.match(/box-shadow:\s*(.+?);?$/s);
+  const boxShadowMatch = cssString.match(/box-shadow:\s*([\s\S]+?);?$/);
 
   if (!boxShadowMatch || !boxShadowMatch[1]) {
     return shadows;
