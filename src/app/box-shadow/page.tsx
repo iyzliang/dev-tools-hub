@@ -55,6 +55,14 @@ export default function BoxShadowPage() {
     setParams(DEFAULT_PARAMS);
   };
 
+  const handleCodeCopy = (format: "css" | "tailwind") => {
+    trackEvent(
+      "code_copy",
+      { format },
+      { toolName: BOX_SHADOW_TOOL_NAME }
+    );
+  };
+
   return (
     <div className="flex h-full flex-col overflow-hidden">
       <header className="shrink-0 space-y-4 pb-4">
@@ -108,7 +116,7 @@ export default function BoxShadowPage() {
               <div className="h-2 w-2 rounded-full bg-blue-500" />
               <span className="text-xs font-medium text-slate-700">代码输出</span>
             </div>
-            <ShadowCodeOutput params={params} />
+            <ShadowCodeOutput params={params} onCopy={handleCodeCopy} />
           </div>
         </div>
       </section>

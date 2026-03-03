@@ -6,9 +6,10 @@ import { useState } from "react";
 
 interface ShadowCodeOutputProps {
   params: ShadowParams;
+  onCopy?: (format: "css" | "tailwind") => void;
 }
 
-export function ShadowCodeOutput({ params }: ShadowCodeOutputProps) {
+export function ShadowCodeOutput({ params, onCopy }: ShadowCodeOutputProps) {
   const [format, setFormat] = useState<"css" | "tailwind">("css");
   const [copied, setCopied] = useState(false);
 
@@ -22,6 +23,7 @@ export function ShadowCodeOutput({ params }: ShadowCodeOutputProps) {
       await navigator.clipboard.writeText(currentCode);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
+      onCopy?.(format);
     } catch {
       console.error("复制失败");
     }

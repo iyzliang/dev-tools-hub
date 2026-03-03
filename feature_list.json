@@ -225,7 +225,7 @@
       "步骤4：添加代码复制埋点（code_copy）",
       "步骤5：测试埋点事件上报"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "公共方法开发",
