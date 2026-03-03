@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { AnalyticsPageView } from "@/components/analytics-page-view";
+import { FootprintProvider } from "@/components/footprint-provider";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { SearchProvider } from "@/contexts/search-context";
@@ -37,8 +38,9 @@ export default function RootLayout({
   return (
     <html lang="zh-CN">
       <body className={`${geistSans.variable} ${geistMono.variable} app-shell`}>
-        <AnalyticsPageView />
-        <SearchProvider>
+        <FootprintProvider>
+          <AnalyticsPageView />
+          <SearchProvider>
           <SiteHeader />
 
           <main className="app-main flex flex-col">
@@ -49,6 +51,7 @@ export default function RootLayout({
 
           <SiteFooter />
         </SearchProvider>
+        </FootprintProvider>
       </body>
     </html>
   );
