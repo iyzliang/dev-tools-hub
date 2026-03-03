@@ -1,0 +1,440 @@
+import type { ShadowParams } from "./shadow-utils";
+
+export interface ShadowPreset {
+  name: string;
+  nameEn: string;
+  category: "material" | "neumorphism" | "common";
+  description: string;
+  params: ShadowParams;
+}
+
+export const MATERIAL_ELEVATION_PRESETS: ShadowPreset[] = [
+  {
+    name: "Elevation 1",
+    nameEn: "Elevation 1",
+    category: "material",
+    description: "卡片阴影 - 最低层级",
+    params: {
+      x: 0,
+      y: 1,
+      blur: 3,
+      spread: 0,
+      color: "#000000",
+      opacity: 0.12,
+      inset: false,
+    },
+  },
+  {
+    name: "Elevation 2",
+    nameEn: "Elevation 2",
+    category: "material",
+    description: "卡片阴影 - 低层级",
+    params: {
+      x: 0,
+      y: 1,
+      blur: 5,
+      spread: 0,
+      color: "#000000",
+      opacity: 0.16,
+      inset: false,
+    },
+  },
+  {
+    name: "Elevation 3",
+    nameEn: "Elevation 3",
+    category: "material",
+    description: "卡片阴影 - 中低层级",
+    params: {
+      x: 0,
+      y: 1,
+      blur: 8,
+      spread: 0,
+      color: "#000000",
+      opacity: 0.18,
+      inset: false,
+    },
+  },
+  {
+    name: "Elevation 4",
+    nameEn: "Elevation 4",
+    category: "material",
+    description: "卡片阴影 - 中层级",
+    params: {
+      x: 0,
+      y: 1,
+      blur: 10,
+      spread: 0,
+      color: "#000000",
+      opacity: 0.2,
+      inset: false,
+    },
+  },
+  {
+    name: "Elevation 6",
+    nameEn: "Elevation 6",
+    category: "material",
+    description: "按钮阴影 - 中高层级",
+    params: {
+      x: 0,
+      y: 3,
+      blur: 5,
+      spread: -1,
+      color: "#000000",
+      opacity: 0.2,
+      inset: false,
+    },
+  },
+  {
+    name: "Elevation 8",
+    nameEn: "Elevation 8",
+    category: "material",
+    description: "菜单阴影 - 高层级",
+    params: {
+      x: 0,
+      y: 5,
+      blur: 5,
+      spread: -3,
+      color: "#000000",
+      opacity: 0.2,
+      inset: false,
+    },
+  },
+  {
+    name: "Elevation 9",
+    nameEn: "Elevation 9",
+    category: "material",
+    description: "菜单阴影 - 较高层级",
+    params: {
+      x: 0,
+      y: 5,
+      blur: 6,
+      spread: -3,
+      color: "#000000",
+      opacity: 0.2,
+      inset: false,
+    },
+  },
+  {
+    name: "Elevation 12",
+    nameEn: "Elevation 12",
+    category: "material",
+    description: "浮动按钮阴影 - 高层级",
+    params: {
+      x: 0,
+      y: 7,
+      blur: 8,
+      spread: -4,
+      color: "#000000",
+      opacity: 0.2,
+      inset: false,
+    },
+  },
+  {
+    name: "Elevation 16",
+    nameEn: "Elevation 16",
+    category: "material",
+    description: "对话框阴影 - 很高层级",
+    params: {
+      x: 0,
+      y: 8,
+      blur: 10,
+      spread: -5,
+      color: "#000000",
+      opacity: 0.2,
+      inset: false,
+    },
+  },
+  {
+    name: "Elevation 24",
+    nameEn: "Elevation 24",
+    category: "material",
+    description: "导航抽屉阴影 - 最高层级",
+    params: {
+      x: 0,
+      y: 11,
+      blur: 15,
+      spread: -7,
+      color: "#000000",
+      opacity: 0.2,
+      inset: false,
+    },
+  },
+];
+
+export const NEUMORPHISM_PRESETS: ShadowPreset[] = [
+  {
+    name: "凸起效果 - 浅色",
+    nameEn: "Raised Light",
+    category: "neumorphism",
+    description: "Neumorphism 凸起效果 - 浅色背景",
+    params: {
+      x: -5,
+      y: -5,
+      blur: 10,
+      spread: 0,
+      color: "#ffffff",
+      opacity: 0.8,
+      inset: false,
+    },
+  },
+  {
+    name: "凸起效果 - 深色",
+    nameEn: "Raised Dark",
+    category: "neumorphism",
+    description: "Neumorphism 凸起效果 - 深色背景",
+    params: {
+      x: 5,
+      y: 5,
+      blur: 10,
+      spread: 0,
+      color: "#000000",
+      opacity: 0.15,
+      inset: false,
+    },
+  },
+  {
+    name: "凹陷效果",
+    nameEn: "Pressed",
+    category: "neumorphism",
+    description: "Neumorphism 凹陷效果",
+    params: {
+      x: 4,
+      y: 4,
+      blur: 8,
+      spread: 0,
+      color: "#000000",
+      opacity: 0.1,
+      inset: true,
+    },
+  },
+  {
+    name: "平滑凸起",
+    nameEn: "Soft Raised",
+    category: "neumorphism",
+    description: "Neumorphism 平滑凸起效果",
+    params: {
+      x: 6,
+      y: 6,
+      blur: 12,
+      spread: 0,
+      color: "#b8b8b8",
+      opacity: 0.6,
+      inset: false,
+    },
+  },
+  {
+    name: "平滑凹陷",
+    nameEn: "Soft Pressed",
+    category: "neumorphism",
+    description: "Neumorphism 平滑凹陷效果",
+    params: {
+      x: -4,
+      y: -4,
+      blur: 8,
+      spread: 0,
+      color: "#ffffff",
+      opacity: 0.7,
+      inset: true,
+    },
+  },
+  {
+    name: "柔和阴影",
+    nameEn: "Soft Shadow",
+    category: "neumorphism",
+    description: "Neumorphism 柔和阴影效果",
+    params: {
+      x: 0,
+      y: 8,
+      blur: 16,
+      spread: 0,
+      color: "#000000",
+      opacity: 0.08,
+      inset: false,
+    },
+  },
+];
+
+export const COMMON_SHADOW_PRESETS: ShadowPreset[] = [
+  {
+    name: "卡片阴影",
+    nameEn: "Card Shadow",
+    category: "common",
+    description: "常用的卡片阴影效果",
+    params: {
+      x: 0,
+      y: 4,
+      blur: 6,
+      spread: -1,
+      color: "#000000",
+      opacity: 0.1,
+      inset: false,
+    },
+  },
+  {
+    name: "悬浮效果",
+    nameEn: "Hover Effect",
+    category: "common",
+    description: "鼠标悬浮时的阴影效果",
+    params: {
+      x: 0,
+      y: 10,
+      blur: 15,
+      spread: -3,
+      color: "#000000",
+      opacity: 0.1,
+      inset: false,
+    },
+  },
+  {
+    name: "边框阴影",
+    nameEn: "Border Shadow",
+    category: "common",
+    description: "轻微的边框阴影效果",
+    params: {
+      x: 0,
+      y: 1,
+      blur: 3,
+      spread: 0,
+      color: "#000000",
+      opacity: 0.08,
+      inset: false,
+    },
+  },
+  {
+    name: "柔和发光",
+    nameEn: "Soft Glow",
+    category: "common",
+    description: "柔和的发光阴影效果",
+    params: {
+      x: 0,
+      y: 0,
+      blur: 20,
+      spread: 0,
+      color: "#2563eb",
+      opacity: 0.3,
+      inset: false,
+    },
+  },
+  {
+    name: "深色卡片",
+    nameEn: "Dark Card",
+    category: "common",
+    description: "深色主题的卡片阴影",
+    params: {
+      x: 0,
+      y: 4,
+      blur: 20,
+      spread: 0,
+      color: "#000000",
+      opacity: 0.25,
+      inset: false,
+    },
+  },
+  {
+    name: "轻微阴影",
+    nameEn: "Subtle Shadow",
+    category: "common",
+    description: "非常轻微的阴影效果",
+    params: {
+      x: 0,
+      y: 1,
+      blur: 2,
+      spread: 0,
+      color: "#000000",
+      opacity: 0.05,
+      inset: false,
+    },
+  },
+  {
+    name: "强调阴影",
+    nameEn: "Sharp Shadow",
+    category: "common",
+    description: "清晰明确的阴影效果",
+    params: {
+      x: 0,
+      y: 4,
+      blur: 0,
+      spread: 0,
+      color: "#000000",
+      opacity: 0.1,
+      inset: false,
+    },
+  },
+  {
+    name: "按钮阴影",
+    nameEn: "Button Shadow",
+    category: "common",
+    description: "按钮的阴影效果",
+    params: {
+      x: 0,
+      y: 2,
+      blur: 4,
+      spread: 0,
+      color: "#000000",
+      opacity: 0.15,
+      inset: false,
+    },
+  },
+  {
+    name: "内阴影按钮",
+    nameEn: "Inset Button",
+    category: "common",
+    description: "按钮按下时的内阴影效果",
+    params: {
+      x: 0,
+      y: 1,
+      blur: 3,
+      spread: 0,
+      color: "#000000",
+      opacity: 0.1,
+      inset: true,
+    },
+  },
+  {
+    name: "浮动卡片",
+    nameEn: "Floating Card",
+    category: "common",
+    description: "浮动卡片阴影效果",
+    params: {
+      x: 0,
+      y: 8,
+      blur: 24,
+      spread: 0,
+      color: "#000000",
+      opacity: 0.12,
+      inset: false,
+    },
+  },
+];
+
+export const ALL_SHADOW_PRESETS: ShadowPreset[] = [
+  ...MATERIAL_ELEVATION_PRESETS,
+  ...NEUMORPHISM_PRESETS,
+  ...COMMON_SHADOW_PRESETS,
+];
+
+export const SHADOW_CATEGORIES = {
+  material: {
+    name: "Material Design",
+    description: "Google Material Design 规范阴影",
+    presets: MATERIAL_ELEVATION_PRESETS,
+  },
+  neumorphism: {
+    name: "Neumorphism",
+    description: "新拟态设计风格阴影",
+    presets: NEUMORPHISM_PRESETS,
+  },
+  common: {
+    name: "常用效果",
+    description: "常见的阴影效果",
+    presets: COMMON_SHADOW_PRESETS,
+  },
+} as const;
+
+export function getPresetByName(name: string): ShadowPreset | undefined {
+  return ALL_SHADOW_PRESETS.find((preset) => preset.name === name || preset.nameEn === name);
+}
+
+export function getPresetsByCategory(category: ShadowPreset["category"]): ShadowPreset[] {
+  return ALL_SHADOW_PRESETS.filter((preset) => preset.category === category);
+}
