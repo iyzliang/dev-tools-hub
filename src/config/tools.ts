@@ -52,7 +52,7 @@ export const tools: Tool[] = [
     name: "Base64 转换",
     description: "图片↔Base64/DataURL 互转，支持复制与下载",
     icon: Binary,
-    isHot: false,
+    isHot: true,
     href: "/base64",
   },
   {
@@ -60,7 +60,7 @@ export const tools: Tool[] = [
     name: "进制转换",
     description: "二进制、八进制、十进制、十六进制互转",
     icon: Hash,
-    isHot: true,
+    isHot: false,
     href: "/base-converter",
   },
   {
@@ -74,7 +74,8 @@ export const tools: Tool[] = [
   {
     id: "encoding-tool",
     name: "信息编码工具",
-    description: "Unicode/URL/UTF16/Base64/MD5/SHA1/HTML 编码与解码，URL 参数解析、JWT 解码",
+    description:
+      "Unicode/URL/UTF16/Base64/MD5/SHA1/HTML 编码与解码，URL 参数解析、JWT 解码",
     icon: Code,
     isHot: false,
     href: "/encoding",
@@ -90,7 +91,8 @@ export const tools: Tool[] = [
   {
     id: "markdown-editor",
     name: "Markdown 编辑器",
-    description: "编辑与预览 Markdown，Vue 风格排版与代码高亮，支持导出 HTML/MD",
+    description:
+      "编辑与预览 Markdown，Vue 风格排版与代码高亮，支持导出 HTML/MD",
     icon: FileText,
     isHot: false,
     href: "/markdown-editor",

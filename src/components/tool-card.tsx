@@ -1,9 +1,11 @@
 "use client";
 
 import Link from "next/link";
+import { useContext } from "react";
 import type { Tool } from "@/config/tools";
 import { Card } from "@/components/ui/card";
 import { trackEvent } from "@/lib/analytics";
+import { FootprintContext } from "@footprint/react";
 
 interface ToolCardProps {
   tool: Tool;
@@ -11,7 +13,7 @@ interface ToolCardProps {
 
 export function ToolCard({ tool }: ToolCardProps) {
   const isPlaceholder = tool.href === "#";
-
+  const fp = useContext(FootprintContext);
   const content = (
     <>
       {/* 热门标签 */}
@@ -57,11 +59,8 @@ export function ToolCard({ tool }: ToolCardProps) {
   }
 
   function handleClick() {
-    trackEvent(
-      "tool_open",
-      { tool_name: tool.id },
-      { toolName: tool.id },
-    );
+    fp?.track("tool_open", { tool_name: tool.id });
+    trackEvent("tool_open", { tool_name: tool.id }, { toolName: tool.id });
   }
 
   return (
@@ -77,4 +76,3 @@ export function ToolCard({ tool }: ToolCardProps) {
     </Link>
   );
 }
-
