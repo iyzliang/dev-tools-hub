@@ -49,12 +49,10 @@ function ResultCard({
           </span>
         </div>
 
-        <div className="flex min-h-[72px] flex-1 items-center justify-between px-3 py-3">
-          <div className="min-w-0 flex-1">
-            <code className="block truncate font-mono text-sm text-slate-900">
-              {value || "-"}
-            </code>
-          </div>
+        <div className="flex flex-col gap-2 px-3 py-3">
+          <code className="block break-all font-mono text-sm text-slate-900">
+            {value || "-"}
+          </code>
 
           <Button
             type="button"
@@ -62,7 +60,7 @@ function ResultCard({
             size="sm"
             onClick={handleCopy}
             disabled={!value || copied}
-            className="ml-2 shrink-0 gap-1.5"
+            className="self-start gap-1.5"
           >
             {copied ? (
               <>
