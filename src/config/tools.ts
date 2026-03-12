@@ -8,6 +8,7 @@ import {
   Hash,
   KeyRound,
   Layers,
+  Palette,
   QrCode,
   Regex,
   type LucideIcon,
@@ -112,5 +113,13 @@ export const tools: Tool[] = [
     icon: Layers,
     isHot: false,
     href: "/box-shadow",
+  },
+  {
+    id: "color-converter",
+    name: "颜色转换器",
+    description: "Hex、RGB、HSL 等多种颜色格式互转，支持透明度",
+    icon: Palette,
+    isHot: false,
+    href: "/color-converter",
   },
 ];
